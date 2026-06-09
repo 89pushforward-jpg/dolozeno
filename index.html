@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DOLOŽENO — UFO, spisy a vesmírné záhady česky</title>
+<meta name="description" content="UFO, vládní spisy a vesmírné záhady česky, čtivě a narovinu. Fakta oddělíme od blbostí. A občas dorazí Franta.">
+<meta name="theme-color" content="#0a0c10">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0c10; --bg-soft:#11141b; --bg-card:#13171f; --line:#222836;
+    --ink:#e8ecf3; --ink-dim:#9aa2b2; --ink-faint:#5a6172;
+    --signal:#f5a623; --cyan:#36d6e7; --franta:#f2c40f; --pepa:#c77dff;
+    --ok:#3ecf8e; --warn:#ff9d4d; --spec:#ff6b6b;
+    --mono:'IBM Plex Mono',ui-monospace,monospace; --sans:'IBM Plex Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  body.locked{overflow:hidden}
+  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:radial-gradient(900px 500px at 50% -10%, rgba(245,166,35,.10), transparent 60%),
+      radial-gradient(700px 600px at 110% 10%, rgba(54,214,231,.06), transparent 55%)}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+    background-image:repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 1px, transparent 1px 3px)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+  .status{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-faint);padding:10px 0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .status .live{color:var(--signal)}
+  .status .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--spec);
+    margin-right:6px;vertical-align:middle;box-shadow:0 0 8px var(--spec);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+  .highlight{width:100%;text-align:left;cursor:pointer;border:1px solid rgba(245,166,35,.35);
+    background:linear-gradient(90deg, rgba(245,166,35,.10), rgba(245,166,35,.02));
+    border-radius:12px;padding:12px 14px;display:flex;gap:12px;align-items:center;color:var(--ink);
+    font-family:var(--sans);transition:border-color .15s,transform .12s}
+  .highlight:hover{border-color:var(--signal);transform:translateY(-1px)}
+  .highlight .count{font-family:var(--mono);font-weight:700;font-size:22px;color:var(--signal);line-height:1;white-space:nowrap}
+  .highlight .ht{font-size:13.5px;line-height:1.4}
+  .highlight .ht b{color:var(--signal)}
+  .highlight .ht small{display:block;color:var(--ink-dim);font-size:12px;margin-top:2px}
+  .highlight .go{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--cyan);white-space:nowrap}
+
+  header{padding:40px 22px 32px;margin-top:8px;border-radius:0 0 16px 16px;background:linear-gradient(to bottom,rgba(10,12,16,0.05) 0%,rgba(10,12,16,0.08) 55%,rgba(10,12,16,0.8) 80%,rgba(10,12,16,0.95) 100%),url('img/hero-bg.jpg') center 30%/cover no-repeat;border-bottom:1px solid var(--line)}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
+  .brand{font-family:var(--mono);font-weight:700;font-size:clamp(48px,13vw,81px);letter-spacing:.04em;line-height:.95;color:var(--signal)}
+  .tag-line{margin-top:14px;color:var(--ink-dim);font-size:15px;max-width:48ch}
+
+  .hero{padding:24px 0 28px;border-bottom:1px solid var(--line)}
+  .franta-bar{display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:18px 0 14px;position:relative}
+  .franta-bubble{background:var(--surface);border:3px solid var(--franta);border-radius:16px 16px 4px 16px;padding:10px 16px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--franta);max-width:260px;line-height:1.4;position:relative}
+  .franta-bubble::after{content:"";position:absolute;right:-10px;bottom:10px;width:0;height:0;border-left:10px solid var(--franta);border-top:7px solid transparent;border-bottom:7px solid transparent}
+  .franta-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;border:3px solid var(--franta);flex-shrink:0}
+  .franta-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 20%}
+  .hero h2{font-size:18px;font-weight:600;margin-bottom:6px}
+  .hero p{color:var(--ink-dim);font-size:14px;margin-bottom:16px;max-width:50ch}
+  form{display:flex;gap:8px;flex-wrap:wrap}
+  input[type=email]{flex:1 1 220px;min-width:0;background:var(--bg-soft);border:1px solid var(--line);
+    color:var(--ink);font-family:var(--sans);font-size:15px;padding:13px 14px;border-radius:10px}
+  input[type=email]:focus{outline:none;border-color:var(--signal);box-shadow:0 0 0 3px rgba(245,166,35,.15)}
+  button.cta{background:var(--signal);color:#1a1304;border:none;font-family:var(--mono);font-weight:700;
+    font-size:14px;letter-spacing:.04em;padding:13px 20px;border-radius:10px;cursor:pointer;flex:0 0 auto;transition:transform .12s,filter .12s}
+  button.cta:hover{filter:brightness(1.08)}button.cta:active{transform:translateY(1px)}
+  .form-note{margin-top:10px;font-size:11.5px;color:var(--ink-faint);line-height:1.5}
+  .form-msg{margin-top:12px;font-family:var(--mono);font-size:13px;color:var(--ok);display:none}
+  .form-msg.show{display:block}.form-msg.err{color:var(--spec)}
+
+  .legend{display:block;padding:18px 0;border-bottom:1px solid var(--line)}
+  .frow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+  .frow-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--ink-faint);width:62px;flex:0 0 auto}
+  .chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    padding:5px 9px;border-radius:6px;border:1px solid;font-weight:600;white-space:nowrap}
+  .chip-overeno{color:var(--ok);border-color:rgba(62,207,142,.4);background:rgba(62,207,142,.08)}
+  .chip-svedectvi{color:var(--warn);border-color:rgba(255,157,77,.4);background:rgba(255,157,77,.08)}
+  .chip-spekulace{color:var(--spec);border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.08)}
+  .chip-topic{color:var(--cyan);border-color:rgba(54,214,231,.32);background:rgba(54,214,231,.06)}
+  .chip-franta{color:var(--franta);border-color:rgba(242,196,15,.45);background:rgba(242,196,15,.10)}
+  .legend-help{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+  .filter{cursor:pointer;font-family:var(--mono);transition:transform .12s,box-shadow .15s}
+  .filter:hover{transform:translateY(-1px)}
+  .filter.active.chip-overeno{box-shadow:0 0 0 2px rgba(62,207,142,.55) inset,0 0 14px rgba(62,207,142,.3)}
+  .filter.active.chip-svedectvi{box-shadow:0 0 0 2px rgba(255,157,77,.55) inset,0 0 14px rgba(255,157,77,.3)}
+  .filter.active.chip-spekulace{box-shadow:0 0 0 2px rgba(255,107,107,.55) inset,0 0 14px rgba(255,107,107,.3)}
+  .filter.active.chip-topic{box-shadow:0 0 0 2px rgba(54,214,231,.55) inset,0 0 14px rgba(54,214,231,.3)}
+  .filter.active.chip-franta{box-shadow:0 0 0 2px rgba(242,196,15,.6) inset,0 0 14px rgba(242,196,15,.35)}
+
+  .feed-head{padding:26px 0 2px}
+  .feed-head h3{font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
+  .feed-head span{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+
+  .card{border:1px solid var(--line);background:var(--bg-card);border-radius:16px;margin:16px 0;
+    overflow:hidden;cursor:pointer;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:#33394a;transform:translateY(-1px)}
+  .card.kind-franta{border-color:rgba(242,196,15,.3)}
+  .card.kind-franta:hover{border-color:rgba(242,196,15,.6)}
+  .cover{position:relative;height:140px;overflow:hidden;border-bottom:1px solid var(--line)}
+  .cover svg,.cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 25%}
+  .cover .imgtag{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-dim);background:rgba(10,12,16,.7);padding:3px 7px;border-radius:5px;border:1px solid var(--line)}
+  .card-body{padding:16px 18px 18px}
+  .hook{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--signal);margin-bottom:11px;line-height:1.45}
+  .hook b{color:var(--cyan);letter-spacing:.12em}
+  .kind-franta .hook{color:var(--franta)} .kind-franta .hook b{color:var(--franta)}
+  .card h4{font-size:19px;font-weight:600;line-height:1.28;margin:9px 0 9px;letter-spacing:-.01em}
+  .teaser{color:var(--ink-dim);font-size:14.5px}
+  .card-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+    margin-top:14px;padding-top:13px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--ink-faint)}
+  .card-meta .more{color:var(--cyan)}
+
+  .overlay{position:fixed;inset:0;z-index:100;background:rgba(5,6,9,.82);backdrop-filter:blur(4px);
+    display:none;justify-content:center;align-items:flex-start;overflow-y:auto}
+  .overlay.open{display:flex}
+  .sheet{background:var(--bg);width:100%;max-width:720px;min-height:100%;position:relative;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  .close{position:fixed;top:14px;right:14px;z-index:110;width:40px;height:40px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(10,12,16,.85);color:var(--ink);font-size:18px;cursor:pointer;font-family:var(--mono)}
+  .close:hover{border-color:var(--signal);color:var(--signal)}
+  .d-cover{position:relative;height:210px;border-bottom:1px solid var(--line);overflow:hidden}
+  .d-cover svg,.d-cover img{width:100%;height:100%;display:block;object-fit:cover;object-position:center 30%}
+  .d-cover .imgtag{position:absolute;left:14px;bottom:10px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    color:var(--ink-dim);background:rgba(10,12,16,.7);padding:4px 8px;border-radius:5px;border:1px solid var(--line)}
+  .sheet-body{padding:24px 22px 70px}
+  .d-caption{font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-bottom:16px;line-height:1.5}
+  .d-caption a{color:var(--cyan);text-decoration:none}
+  .d-caption a:hover{text-decoration:underline}
+  .sheet-body h2{font-size:26px;font-weight:700;line-height:1.18;letter-spacing:-.02em;margin:10px 0 16px}
+  .video{position:relative;width:100%;aspect-ratio:16/9;margin:6px 0 18px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#000}
+  .video iframe{width:100%;height:100%;border:0;display:block}
+  .fact{border:1px solid rgba(54,214,231,.3);background:rgba(54,214,231,.06);border-radius:12px;padding:14px 16px;margin:0 0 18px;font-size:14px;color:var(--ink-dim)}
+  .fact b{color:var(--cyan);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;display:block;margin-bottom:6px}
+  .fact.fikce{border-color:rgba(242,196,15,.32);background:rgba(242,196,15,.07)} .fact.fikce b{color:var(--franta)}
+  .d-body p{font-size:16px;color:var(--ink);opacity:.92;margin-bottom:14px;line-height:1.7}
+  .d-body .spk{font-family:var(--mono);font-weight:700;font-size:1em;letter-spacing:.03em;margin-right:6px}
+  .d-body .spk.f{color:var(--franta)} .d-body .spk.p{color:var(--pepa)}
+  .sources{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+  .sources h5{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:12px}
+  .sources a{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);color:var(--cyan);text-decoration:none;font-size:14px}
+  .sources a:hover{color:var(--signal)} .sources a span{color:var(--ink-faint);font-family:var(--mono);font-size:11px;white-space:nowrap}
+  .premium{margin-top:24px;padding:18px;border:1px solid rgba(245,166,35,.35);border-radius:14px;
+    background:linear-gradient(180deg, rgba(245,166,35,.08), rgba(245,166,35,.02))}
+  .premium-lock{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--signal);margin-bottom:10px}
+  .buybtn{width:100%;background:var(--signal);color:#1a1304;border:none;font-family:var(--mono);font-weight:700;
+    font-size:14px;letter-spacing:.03em;padding:14px 18px;border-radius:10px;cursor:pointer;transition:filter .12s,transform .12s}
+  .buybtn:hover{filter:brightness(1.08)} .buybtn:active{transform:translateY(1px)}
+  .premium-info{margin-top:14px}
+  .premium-info h5{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+  .premium-info p{font-size:14px;color:var(--ink-dim);margin-bottom:8px}
+  .premium-info .price{color:var(--signal);font-family:var(--mono);font-weight:700}
+  .premium-info .soon{font-size:12.5px;color:var(--ink-faint)}
+  .wlbtn{margin-top:4px;background:transparent;border:1px solid var(--signal);color:var(--signal);
+    font-family:var(--mono);font-weight:600;font-size:13px;padding:10px 16px;border-radius:9px;cursor:pointer}
+  .wlbtn:hover{background:rgba(245,166,35,.1)}
+  .glosa{margin-top:22px;padding:14px 16px;border:2px solid rgba(242,196,15,.4);border-radius:12px;background:rgba(242,196,15,.07);display:flex;gap:14px;align-items:flex-start}
+  .glosa-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--franta);flex-shrink:0}
+  .glosa-ava img{width:100%;height:100%;object-fit:cover}
+  .glosa-text b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--franta);margin-bottom:6px}
+  .glosa-text p{font-size:14.5px;color:var(--ink-dim);font-style:italic;margin:0}
+
+  footer{padding:34px 0 60px;margin-top:30px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:12px;line-height:1.7}
+  footer .mono{font-family:var(--mono);letter-spacing:.04em} footer strong{color:var(--ink-dim)}
+  .disclaim{margin-top:14px;padding:14px 16px;border:1px dashed var(--line);border-radius:10px;background:rgba(255,255,255,.015)}
+  @media(max-width:480px){.brand{font-size:59px}button.cta{flex:1 1 100%}.sheet-body h2{font-size:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="status">
+    <span><span class="dot"></span><span class="live">nejžhavější událost</span></span>
+    <span id="status-right">— · —</span>
+  </div>
+
+  <button class="highlight" id="filmBanner">
+    <span class="count" id="filmCount">4</span>
+    <span class="ht"><b>Disclosure Day</b> — nový sci-fi film Stevena Spielberga
+      <small>12. 6. v kinech · proč to souvisí s odtajňováním spisů?</small></span>
+    <span class="go">číst →</span>
+  </button>
+
+  <header>
+    <div class="kicker">UAP/UFO · VLÁDNÍ SPISY · VESMÍRNÉ ZÁHADY</div>
+    <div class="brand">DOLOŽENO</div>
+    <p class="tag-line">Jediné české místo, kde se o UFO mluví narovinu — s vtipem, s důkazy a s Frantou, co si nebere servítky.</p>
+  </header>
+
+  <div class="franta-bar">
+    <div class="franta-bubble"><strong>Franta</strong><br><em>„Tak se na to podíváme!"</em></div>
+    <div class="franta-avatar"><img src="img/franta-avatar.jpg" alt="Franta" loading="lazy"></div>
+  </div>
+
+  <section class="hero">
+    <h2>Spouštíme. Chceš být u toho?</h2>
+    <p>Nech nám e-mail a dáme ti vědět, až pustíme plnou verzi s pravidelnými novinkami a Frantovými díly. Žádný spam — jen oznámení o spuštění.</p>
+    <form id="waitlist" name="waitlist" data-netlify="true" novalidate>
+      <input type="hidden" name="form-name" value="waitlist">
+      <input type="email" id="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required>
+      <button type="submit" class="cta">CHCI VĚDĚT</button>
+    </form>
+    <div class="form-msg" id="formMsg"></div>
+    <p class="form-note">Odesláním souhlasíš se zpracováním e-mailu za účelem oznámení o spuštění (GDPR). E-mail nikomu nepředáváme a kdykoli se můžeš odhlásit.</p>
+  </section>
+
+  <section class="legend" aria-label="Filtry">
+    <div class="frow">
+      <span class="frow-lbl">DŮVĚRA</span>
+      <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">OVĚŘENO</button>
+      <button class="chip chip-svedectvi filter" data-group="tag" data-val="svedectvi" aria-pressed="false">SVĚDECTVÍ</button>
+      <button class="chip chip-spekulace filter" data-group="tag" data-val="spekulace" aria-pressed="false">SPEKULACE</button>
+    </div>
+    <div class="frow">
+      <span class="frow-lbl">TÉMA</span>
+      <button class="chip chip-topic filter" data-group="topic" data-val="uap" aria-pressed="false">UAP/UFO</button>
+      <button class="chip chip-topic filter" data-group="topic" data-val="disclosure" aria-pressed="false">DISCLOSURE</button>
+      <button class="chip chip-topic filter" data-group="topic" data-val="zahady" aria-pressed="false">ZÁHADY</button>
+    </div>
+    <div class="frow">
+      <span class="frow-lbl">RUBRIKA</span>
+      <button class="chip chip-franta filter" data-group="tag" data-val="franta" aria-pressed="false">FRANTA</button>
+    </div>
+    <span class="legend-help">klikni a filtruj, co chceš číst</span>
+  </section>
+
+  <div class="feed-head">
+    <h3>Nejnovější</h3>
+    <span>Krátké zprávy — rozklikni pro celý článek · <span id="feed-count"></span></span>
+  </div>
+
+  <div id="feed"></div>
+
+  <footer>
+    <div class="mono"><strong>DOLOŽENO</strong> — testovací verze</div>
+    <div class="disclaim">
+      Píšeme <strong>vlastní zpracování v češtině</strong> z více zdrojů a vždy odkazujeme na originál — necitujeme cizí články ani fotky.
+      Reálné fotky používáme jen z volných zdrojů a vždy uvádíme zdroj; ilustrace vytvořené umělou inteligencí vždy označujeme jako „Ilustrace (AI)“.
+      Nepotvrzená tvrzení nevydáváme za fakta, proto má každá zpráva štítek důvěry.
+      <strong>Franta</strong> je satirická rubrika s fiktivními postavami — utahujeme si z absurdních názorů, ne z konkrétních lidí.
+      Netvrdíme, že mimozemšťané existují; sledujeme téma a poctivě označujeme, co je ověřené a co ne.
+    </div>
+    <div style="margin-top:14px" class="mono">© 2026 · dolozeno.cz</div>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="sheet">
+    <button class="close" id="closeBtn" aria-label="Zavřít">✕</button>
+    <div class="d-cover" id="d-cover"></div>
+    <div class="sheet-body">
+      <div class="d-caption" id="d-caption"></div>
+      <div class="hook" id="d-hook"></div>
+      <span id="d-chip"></span>
+      <h2 id="d-title"></h2>
+      <div id="d-video"></div>
+      <div id="d-fact"></div>
+      <div class="d-body" id="d-body"></div>
+      <div id="d-glosa"></div>
+      <div id="d-premium"></div>
+      <div class="sources" id="d-sources"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   OBSAH.
+   kind  : "zprava" (běžná zpráva) | "franta" (satirická rubrika)
+   tag   : zprava -> "overeno"|"svedectvi"|"spekulace" ; franta -> "franta"
+   topic : "uap" | "disclosure" | "zahady"   (POVINNÉ u každého článku)
+   teaser: krátká zpráva (domovská stránka)
+   body  : pole odstavců (PLNÝ článek; u Franty je to dialog s <span class="spk f/p">)
+   fact  : volitelný box ; factLabel volitelně přepíše nadpis boxu (default "Zajímavost")
+   video : volitelné YouTube ID ; image: "" => ilustrace, jinak URL volného obrázku
+   ========================================================================= */
+const FEED = [
+  /* ---------- FRANTA — díl 1 ---------- */
+  { kind:"franta", tag:"franta", topic:"zahady", id:"franta1",
+    hook:"Pepa tvrdí, že Země je placka. Franta si bere klacek, stín a kýbl faktů.",
+    title:"Franta vs. Plochozemec Pepa: kam se ztratila ta loď?",
+    teaser:"První díl. Franta griluje Pepu plochozemce — bez urážek, jen s fakty. Pepa to nemá lehký.",
+    factLabel:"FIKCE",
+    fact:"Pepa je vymyšlená postava — archetyp, ne konkrétní člověk. Utahujeme si z absurdního názoru, ne z lidí. Fakta v rozhovoru ale sedí.",
+    body:[
+      "<span class='spk f'>Franta:</span> Tak Pepo, Země placka. Dobrý. Začnem lehce: proč loď na obzoru mizí odspoda? Nejdřív trup, pak komín, naposled stěžeň.",
+      "<span class='spk p'>Pepa:</span> Perspektiva, Franto! Je daleko, tak ji vidíš menší!",
+      "<span class='spk f'>Franta:</span> Aha. Tak na ni vem dalekohled a přibliž si ji. Kdyby to byla jen vzdálenost, dalekohled ti ji zas ukáže celou. Jenže neukáže — spodek je za hranou. Za tím zakřivením, co podle tebe není.",
+      "<span class='spk p'>Pepa:</span> To je foceno rybím okem! Zakřivuje to čočka!",
+      "<span class='spk f'>Franta:</span> Pepo, Eratosthenes to změřil dvě stě let před Kristem. Klackem a stínem ve dvou městech. Žádná čočka, žádná NASA, žádnej dron. Klacek, stín a mozek. Doporučuju aspoň ten třetí.",
+      "<span class='spk p'>Pepa:</span> A proč teda nespadnem dolů, co?!",
+      "<span class='spk f'>Franta:</span> Gravitace tě tahá do středu koule, ne „dolů“ k nějakýmu okraji. „Dolů“ je prostě směr do středu. Proto Australani nevisí hlavou dolů a nepadaj do vesmíru — i když by se ti to do tý placky hodilo.",
+      "<span class='spk p'>Pepa:</span> Hrana! Kde je hrana? Antarktida je ledová zeď!",
+      "<span class='spk f'>Franta:</span> Tak schválně: kdyby byla Antarktida zeď kolem placky, jak to, že letadla normálně lítaj z Jihoafriky do Austrálie po jižní trase? Na placce by ta cesta byla třikrát delší. Letenky by stály jak křídlo. A nestojej.",
+      "<span class='spk p'>Pepa:</span> …To všechno tají!",
+      "<span class='spk f'>Franta:</span> Jasně. Miliony pilotů, námořníků, satelitů, vědců i tvůj soused s dronem — všichni v jednom spiknutí, sto let, a nikdo to neproflákne. Pepo, lidi neudržej v tajnosti ani to, kdo v práci snědl cizí jogurt. A ty jim věříš utajení celý planety.",
+      "<span class='spk f'>Franta:</span> A teď vážně, ať to není jen výsměch: nejde o to, že seš blbej. Jde o to, žes uvěřil videu na internetu víc než klacku, stínu a vlastním očím. A to se dá spravit. Příště si vem ten klacek."
+    ],
+    source:"Franta", date:"díl 1", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[
+      {name:"Eratosthenes — měření obvodu Země (Wikipedia)", url:"https://en.wikipedia.org/wiki/Eratosthenes", lang:"anglicky"},
+      {name:"NASA — snímky Země", url:"https://www.nasa.gov/", lang:"anglicky"}
+    ] },
+
+  /* ---------- ZPRÁVY ---------- */
+  { kind:"zprava", tag:"overeno", topic:"disclosure", id:"film",
+    hook:"Spielberg se k UFO vrací po dvou dekádách — a svět zrovna otevírá skutečné spisy.",
+    title:"Disclosure Day: Spielberg, mimozemšťané a podivně reálné načasování",
+    teaser:"Steven Spielberg natočil film o odhalení mimozemské existence. Do kin jde 12. června — pár týdnů po tom, co Pentagon začal pouštět reálné UFO spisy.",
+    body:[
+      "Steven Spielberg se k tématu mimozemšťanů vrací poprvé od War of the Worlds (2005) — a poprvé od svých klasik Blízká setkání třetího druhu a E.T. jde takhle přímo po otázce „co když nejsme sami“.",
+      "Příběh sleduje okamžik, kdy svět dostane důkaz mimozemské existence, a hlavně strach, který takové odhalení spustí. Scénář napsal David Koepp (Jurský park, War of the Worlds), v hlavních rolích jsou Emily Blunt, Josh O’Connor a Colin Firth, hudbu složil John Williams.",
+      "Marketing byl od začátku záměrně tajemný: billboard na Times Square jen se sloganem „all will be disclosed“ a datem, spot o Super Bowlu a heslo, že pravda patří sedmi miliardám lidí.",
+      "A teď to napínavé propojení. Film jde do kin 12. června 2026 — jen pár týdnů po tom, co americká vláda spustila systém PURSUE a začala uvolňovat skutečné utajené UFO spisy. Fikce a realita se potkávají ve stejném měsíci a je těžké říct, co tu táhne co.",
+      "Spielberg podle médií prohlásil, že má silné podezření, že na Zemi nejsme sami. Jestli má pravdu, nevíme. Ale jako kulturní moment je to událost roku."
+    ],
+    fact:"Spielberg natáčel o UFO naposledy v roce 2005 (War of the Worlds). Předtím definoval žánr filmy Blízká setkání třetího druhu (1977) a E.T. (1982).",
+    video:"B3FHIY2zfc4",
+    source:"Wikipedia / Universal", date:"12. 6. 2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[
+      {name:"Wikipedia — Disclosure Day", url:"https://en.wikipedia.org/wiki/Disclosure_Day", lang:"anglicky"},
+      {name:"Oficiální web filmu", url:"https://www.disclosuredaymovie.com/", lang:"anglicky"},
+      {name:"FirstShowing — final trailer", url:"https://www.firstshowing.net/2026/one-more-major-trailer-for-spielbergs-disclosure-day-sci-fi-thriller/", lang:"anglicky"}
+    ] },
+
+  { kind:"zprava", tag:"overeno", topic:"disclosure",
+    hook:"Vláda fakt otevřela trezor s UFO spisy. Než ale začneš balit kufr na Mars — počkej.",
+    title:"Pentagon spustil PURSUE a začal pouštět utajené UFO spisy",
+    teaser:"8. května 2026 začal Pentagon pouštět utajený UFO spisy. Velká věc. Důkaz mimozemšťanů to ale není — a vysvětlíme si proč.",
+    body:[
+      "Tak se to fakt stalo. 8. května 2026 spustila americká vláda systém s názvem PURSUE (Presidential Unsealing and Reporting System for UAP Encounters – vládní program USA na zveřejňování UFO spisů) a začala veřejnosti pouštět dokumenty o UAP (Unidentified Anomalous Phenomena – neidentifikované jevy na obloze, dřív se jim říkalo UFO čili Unidentified Flying Object – neidentifikovaný létající objekt), který do tý doby ležely v šuplíku.",
+      "A není to žádná troška. Zprávy, fotky, videa, výpovědi svědků i vojenský dokumenty od čtyřicátých let až do dneška. Po desetiletích mlžení je tohle vážně velká věc — to jim nikdo nevezme.",
+      "Teď ale chladnou hlavu, ať si nepřisadíme do party „oni nám tajili mimozemšťany“. Pentagon sám rovnou dodal: tohle není důkaz, že existujou mimozemšťani. Jsou to případy, který zatím nikdo neumí vysvětlit. A „neumíme to vysvětlit“ není totéž co „byli to ufouni“ — stejně jako když ti v noci zavrže půda, není to rovnou duch, ale nejspíš jen dřevo, co pracuje.",
+      "Druhá strana mince, ať nejsme jen ta otravná chytrá hlava v rohu: úřad AARO (All-domain Anomaly Resolution Office – americký vládní úřad, který tyhle jevy zkoumá) dlouhodobě říká, že žádnej důkaz mimozemský techniky nenašel. Jenže když dáš lidem hromadu materiálu a řekneš „udělejte si názor sami“, tak si ho udělají — a teď je na nás všech to číst s mozkem zapnutým.",
+      "Pointa: je to historickej krok ke transparentnosti, žádnej kanadskej žertík. Důkaz, že nejsme sami, to ale zatím není. A obojí může platit naráz — tak to taky budeme psát."
+    ],
+    fact:"„Udělejte si názor sami“ zní vstřícně, ale je to i šikovnej trik: vláda tím hodí výklad na veřejnost. Když nic nepotvrdíš ani nevyvrátíš, vznikne z toho tisíc verzí — a každej si najde tu svou.",
+    source:"PBS / CBS", date:"8. 5. 2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[
+      {name:"PBS NewsHour — UAP", url:"https://www.pbs.org/newshour/tag/uap", lang:"anglicky"},
+      {name:"CBS News — UFO", url:"https://www.cbsnews.com/tag/ufo", lang:"anglicky"},
+      {name:"DefenseScoop — PURSUE", url:"https://defensescoop.com/2026/05/14/uap-trump-first-pursue-ufo-file-drop/", lang:"anglicky"}
+    ] },
+
+  { kind:"zprava", tag:"overeno", topic:"uap",
+    hook:"Přes 40 videí a archivy NASA, které armáda roky držela pod zámkem.",
+    title:"Ve spisech je přes 40 videí i materiály z misí Apollo",
+    teaser:"Mezi zveřejněnými materiály je víc než 40 videí, snímky z vojenských hlášení a archivní záběry z misí Apollo.",
+    body:[
+      "Mezi zveřejněnými materiály je víc než 40 videí, fotografie z vojenských hlášení o UAP (Unidentified Anomalous Phenomena – neidentifikované jevy na obloze, dřív UFO) a archivní záběry z amerických vesmírných misí.",
+      "Část pochází z programu Apollo — z dob, kdy astronauti mířili k Měsíci. Objevují se i pozorování, která posádky tehdy nahlásily.",
+      "Důležité: zveřejnění neznamená vysvětlení. Většina případů zůstává otevřená — a právě to téma drží naživu."
+    ],
+    source:"CBS News", date:"květen 2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"CBS News — UFO", url:"https://www.cbsnews.com/tag/ufo", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"svedectvi", topic:"disclosure",
+    hook:"Muž, který přísahal před Kongresem, se vrací. A tvrdí, že viděl víc.",
+    title:"Whistleblower David Grusch promluvil u Kapitolu",
+    teaser:"Bývalý zpravodajský důstojník chce popsat důkazy o UAP a ne-lidské inteligenci. Skupina v Kongresu tlačí na zákon o odtajnění.",
+    body:[
+      "David Grusch, bývalý zpravodajský důstojník, má 9. června 2026 vystoupit u Kapitolu. Chce popsat důkazy o UAP (Unidentified Anomalous Phenomena – neidentifikované jevy na obloze, dřív UFO) a takzvané ne-lidské inteligenci, na které podle svých slov narazil v hluboce utajených kanálech.",
+      "Grusch už dřív svědčil před Kongresem pod přísahou. Skupina zákonodárců teď tlačí na přijetí zákona UAP Disclosure Act, který by vynutil další odtajňování.",
+      "Pozor — tohle je svědectví, ne ověřený fakt. Grusch popisuje, co podle něj viděl; veřejné důkazy zatím nepředložil. Proto štítek SVĚDECTVÍ."
+    ],
+    source:"PR Newswire", date:"9. 6. 2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"PR Newswire — výzva ke transparentnosti", url:"https://www.prnewswire.com/news-releases/push-for-uap-ufo-transparency-intensifies-as-members-of-congress-and-whistleblowers-call-for-release-of-groundbreaking-conclusive-files-302784861.html", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"svedectvi", topic:"uap",
+    hook:"Tři světla. Jiskry jako ohňostroj. A posádka mířící k Měsíci.",
+    title:"Posádka Apolla 17 hlásila záhadná světla",
+    teaser:"Podle nově zveřejněných spisů popsali astronauti Apolla 17 tři záhadné body a jiskry připomínající ohňostroj.",
+    body:[
+      "Podle nově zveřejněných spisů popsala posádka mise Apollo 17 tři záhadné body a jiskry připomínající ohňostroj.",
+      "Jde o dobové svědectví z archivu — záznam toho, co astronauti tehdy nahlásili. Není to potvrzení, co přesně viděli.",
+      "Podobných hlášení je v materiálech víc. Skeptici upozorňují, že odlesky a částice prachu mají ve vesmíru řadu běžných vysvětlení."
+    ],
+    source:"CBS News", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"CBS News — UFO", url:"https://www.cbsnews.com/tag/ufo", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"svedectvi", topic:"uap",
+    hook:"Stíhací pilotka. Výcvikový let. A něco, co nemělo být na obloze.",
+    title:"Bývalá pilotka Navy znovu mluví o svém setkání",
+    teaser:"Vysloužilá stíhací pilotka amerického námořnictva opět veřejně popisuje setkání s UAP během výcviku.",
+    body:[
+      "Alex Dietrich, vysloužilá stíhací pilotka amerického námořnictva, opět veřejně popisuje setkání s UAP (Unidentified Anomalous Phenomena – neidentifikované jevy na obloze, dřív UFO) během výcvikového letu.",
+      "Patří mezi piloty, jejichž hlášení pomohla dostat téma UAP z okraje až před Kongres.",
+      "Její výpověď je svědectví zkušené pozorovatelky — bere se vážně, ale stále jde o to, co viděla, ne o uzavřený důkaz."
+    ],
+    source:"CBS News", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"CBS News — UFO", url:"https://www.cbsnews.com/tag/ufo", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"spekulace", topic:"uap",
+    hook:"Harvardskej fyzik kouká na slavný fotky a říká: lidi, to bude odlesk satelitu.",
+    title:"Avi Loeb: část slavných snímků je nejspíš jen optický klam",
+    teaser:"Vědec, co sám hledá mimozemskou techniku, tentokrát chladí vášně — pár nejznámějších snímků prý bude obyčejný odlesk.",
+    body:[
+      "Avi Loeb není žádnej skeptik od válu, co všechno shazuje z principu. Ten chlap vede vlastní vědeckej projekt, kterej doslova hledá mimozemskou techniku. Takže když zrovna ON řekne „hele, tyhle konkrétní fotky budou nejspíš odlesk satelitu“, vyplatí se nastražit uši.",
+      "Je to jako se sousedem myslivcem: když ti zrovna on řekne, že to v křoví nebyl srnec, ale sousedovic kočka, asi na tom něco bude.",
+      "Druhá strana mince: Loeb se může mýlit a sám to přiznává. Pár snímků z prvního balíku tím nevysvětlíš úplně všechno, něco zůstává otevřený.",
+      "Takže žádný „vědci to potvrdili“ ani „vědci to vyvrátili“. Spíš „jeden chytrej vědec má zatraceně dobrej důvod pochybovat“. A to je úplně poctivá odpověď."
+    ],
+    source:"NewsNation", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"NewsNation — UFO", url:"https://www.newsnationnow.com/space/ufo/", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"spekulace", topic:"uap",
+    hook:"Internet z toho měl mimozemskou loď. Byl to pták. Fakt, racek.",
+    title:"Slavná „záhadná tečka“ z videa? Nejspíš jen racek",
+    teaser:"Video se svítící tečkou rozjelo vlnu „tají nám mimozemšťany“. Pak to někdo změřil — a vyšel z toho pták.",
+    body:[
+      "Tak schválně. Pustí se video, na něm svítící tečka, a půlka internetu hned: „Mimozemská technologie! Tají nám to!“ Klid, lidi, nadechnem se.",
+      "Někdo si dal tu práci a tu tečku změřil. Kmitá zhruba třikrát za vteřinu. A víš, co taky kmitá třikrát za vteřinu? Křídla racka. Jako toho, co ti na pláži šlohne hranolky.",
+      "A teď to důležitý, ať mě nikdo neobviní, že kopu jen do jedný strany: je to jedna analýza, ne rozsudek. Nikdo nepřísahá, že je to na sto procent pták. Ale mezi „možná racek“ a „určitě vesmírná loď“ je sakra rozdíl — a kdo křičí o mimozemšťanech, ten to musí taky dokázat.",
+      "Pointa: nevysvětlená tečka ještě není ufo. Někdy je to prostě pták, co má hlad."
+    ],
+    fact:"Většina „záhadných“ záběrů má nudný vysvětlení — ptáci, drony, balony, odlesk čočky. Že je něco nuda ale neznamená, že nudný je všechno. Jen je rozumný začít u toho nejjednoduššího.",
+    source:"r/UFOs", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"r/UFOs", url:"https://www.reddit.com/r/UFOs/", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"spekulace", topic:"disclosure",
+    hook:"„Tohle je teprve začátek,“ tvrdí muž od slavných UFO videí.",
+    title:"Další vlna odhalení prý přijde brzy",
+    teaser:"UAP badatel Jeremy Corbell tvrdí, že další dávka odhalení může přijít už brzy. Jistota to ale není.",
+    body:[
+      "Filmař a badatel kolem UAP (Unidentified Anomalous Phenomena – neidentifikované jevy na obloze, dřív UFO) Jeremy Corbell, spojený s několika slavnými uniklými videi, tvrdí, že další dávka odhalení může přijít už brzy.",
+      "Corbell má v komunitě velký vliv, jeho předpovědi se ale v minulosti ne vždy naplnily.",
+      "Bereme to jako tip, ne jako jistotu. Štítek SPEKULACE."
+    ],
+    source:"NewsNation", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"NewsNation — UFO", url:"https://www.newsnationnow.com/space/ufo/", lang:"anglicky"}] },
+
+  { kind:"zprava", tag:"spekulace", topic:"zahady",
+    hook:"Co když jsme život ve vesmíru roky hledali úplně špatně?",
+    title:"Vědci varují: známky života jsme možná přehlíželi",
+    teaser:"Astrobiologové upozorňují, že kvůli mezerám v metodách detekce mohli badatelé přehlížet možné známky života.",
+    body:[
+      "Skupina astrobiologů upozorňuje, že kvůli mezerám v metodách detekce mohli badatelé roky přehlížet možné známky mimozemského života.",
+      "Nejde o tvrzení „život existuje“ — jde o sebekritiku oboru: hledáme tam, kde umíme, a možná míjíme zbytek.",
+      "Vědecká hypotéza, která posouvá téma od „talířů na obloze“ k seriózní otázce, jak vůbec život poznat."
+    ],
+    source:"The Debrief", date:"2026", image:"", imgType:"ilustrace", imgCredit:"",
+    sources:[{name:"The Debrief", url:"https://thedebrief.org", lang:"anglicky"}] },
+
+  /* ---------- FRANTA — díl 2 ---------- */
+  { kind:"franta", tag:"franta", topic:"zahady", id:"franta2",
+    image:"", imgType:"ai", imgCredit:"", imgSource:"",
+    aiPrompt:"Dark cinematic editorial illustration: the Great Pyramid of Giza at dusk under a starry sky with a faint mysterious light above, slightly humorous tone questioning alien involvement, no text, no real people, 16:9.",
+    hook:"Pepan tvrdí, že pyramidy stavěli ufouni. Franta mu podává měděný dláto a starý papyrus.",
+    title:"Franta vs. Pyramidovej Pepan: postavili je mimozemšťani?",
+    teaser:"Díl 2. Pepan je přesvědčenej, že lidi pyramidy nemohli zvládnout. Franta má jiný názor — a důkazy.",
+    factLabel:"FIKCE",
+    fact:"Pepan je vymyšlená postava — archetyp, ne konkrétní člověk. Utahujeme si z názoru, ne z lidí. Fakta v rozhovoru ale sedí.",
+    body:[
+      "<span class='spk f'>Franta:</span> Tak Pepane, pyramidy. Velký kameny, dávno postavený. Tvůj verdikt?",
+      "<span class='spk p'>Pepan:</span> Lidi to nemohli zvládnout, Franto! V tom musí bejt mimozemšťani!",
+      "<span class='spk f'>Franta:</span> Aha. Takže místo šikovnejch Egypťanů dáš zásluhy ufounům, který jsi nikdy neviděl. To je jak tvrdit, že chleba u pekaře pečou skřítci.",
+      "<span class='spk p'>Pepan:</span> Ale ty kvádry váží tuny! Bez mimozemský techniky to nejde!",
+      "<span class='spk f'>Franta:</span> Jde. Rampy, saně, páky, měděný dláta a tvrdej kámen na otloukání. Archeologové našli i lomy se stopama po nástrojích a nedokončenej obelisk, na kterým je přesně vidět, jak na to šli.",
+      "<span class='spk p'>Pepan:</span> A kdo to teda dřel, otroci bičovaný do krve?!",
+      "<span class='spk f'>Franta:</span> Taky ne. Našly se dělnický vesnice, pekárny i kosti se zahojenejma zlomeninama — někdo ty lidi léčil a krmil. Byli to placený, organizovaný dělníci. Ne otroci, ne ufouni.",
+      "<span class='spk p'>Pepan:</span> To si vymysleli, aby zakryli pravdu!",
+      "<span class='spk f'>Franta:</span> Pepane, existuje nejstarší dochovanej papyrus na světě — deník chlápka jménem Merer. Píše v něm, jak s partou vozili kameny na Velkou pyramidu. Účetnictví starý 4500 let. To jako taky napsali ufouni, aby tě zmátli?",
+      "<span class='spk f'>Franta:</span> A teď vážně: tvrdit, že to lidi nezvládli, je vlastně urážka. Ti Egypťani byli zatraceně chytrý. Nepotřebovali pomoc z vesmíru — stačil jim plán, čas a hromada fíků k obědu."
+    ],
+    source:"Franta", date:"díl 2",
+    sources:[
+      {name:"Deník Merera (Wikipedia)", url:"https://en.wikipedia.org/wiki/Diary_of_Merer", lang:"anglicky"},
+      {name:"Velká pyramida v Gíze (Wikipedia)", url:"https://en.wikipedia.org/wiki/Great_Pyramid_of_Giza", lang:"anglicky"}
+    ] },
+
+  /* ---------- ZPRÁVA — vyvážený rozbor skenů pod pyramidou ---------- */
+  { kind:"zprava", tag:"spekulace", topic:"zahady",
+    image:"", imgType:"ai", imgCredit:"", imgSource:"",
+    aiPrompt:"Dark cinematic editorial illustration: the Giza pyramids at night with a subtle glowing scan-grid revealing faint geometric voids beneath the sand, mysterious yet scientific mood, no text, no real people, 16:9.",
+    hook:"Sken ukázal struktury hluboko pod pyramidou. Senzace, nebo přání? Bereme obě strany.",
+    title:"Pod pyramidami něco je — ale co? Skeny, spory a jedno poctivé „nevíme“",
+    teaser:"Italský tým tvrdí, že našel obří struktury pod pyramidou. Skeptici kroutí hlavou. Pravda je někde mezi — projdeme, co se ví a co ne.",
+    body:[
+      "V březnu 2025 italský tým oznámil, že pomocí SARu (Synthetic Aperture Radar — radar, který skenuje povrch z dálky, třeba z družice) našel pod Chefrénovou pyramidou pět struktur a osm svislých šachet sahajících stovky metrů hluboko, dole prý spojených do velkých krychlí. Internet to hned bral jako důkaz ztraceného podzemního města.",
+      "Brzdi. Tahle konkrétní tvrzení neprošla recenzí (kontrolou jinými vědci) a egyptolog Zahi Hawass je odmítl jako nepodložená — radar prý tak hluboko vůbec nevidí a uvnitř pyramidy žádný povolen nebyl. Jeden z nejsdílenějších „důkazů“ byl navíc obrázek vygenerovaný umělou inteligencí.",
+      "Tady ale přichází druhá strana, na kterou se rádo zapomíná: jinou, ověřenou metodou se v pyramidách opravdu našly do té doby neznámé prostory. Mionový sken (zobrazování pomocí částic z kosmického záření, které procházejí kamenem) odhalil v roce 2017 velkou dutinu nad Velkou galerií. V roce 2023 ji vědci upřesnili na zhruba 9 metrů dlouhou chodbu a nahlédli do ní endoskopem (ohebnou kamerou). Tohle je doložené a recenzované. Pyramidy tedy skutečně skrývají neznámá místa.",
+      "A pozor i na automatické „nic tam není“. Když ScanPyramids v roce 2017 tu dutinu ohlásil, Hawass to shodil slovy, že nenašli vůbec nic. Po potvrzení chodby ale otočil a mluvil o velkém objevu. Zdravá skepse platí na obě strany — i na paušální popírání.",
+      "Takže kde jsme? Že pyramidy mají neznámé dutiny, je jisté. Že je pod Chefrénem „podzemní město“, jisté není — ta metoda je sporná. A hlavně: nic z toho nebude potvrzené, dokud se tam někdo nepodívá a nevykope to. Do té doby je nejpoctivější říct: něco možná ano, ale zatím nevíme co."
+    ],
+    fact:"Mionový sken funguje, i když pyramidu nikdo neotevře — částice z vesmíru prochází kamenem a tam, kde je dutina, jich projde víc. Tak se dá zmapovat nitro, aniž by se kopalo.",
+    source:"National Geographic / Nature", date:"2025",
+    frantaGlosa:"Jedni křičí „podzemní město!“, druzí „nic tam není, nula!“. Pravda je nudnější i zajímavější zároveň: něco tam nejspíš je, ale poctivej člověk řekne „zatím nevím co“. A to je úplně v pohodě odpověď.",
+    sources:[
+      {name:"National Geographic — tajné město pod Gízou?", url:"https://www.nationalgeographic.com/history/article/is-there-a-secret-city-under-the-pyramids-", lang:"anglicky"},
+      {name:"Nature — velká dutina v Chufuově pyramidě (miony)", url:"https://www.nature.com/articles/nature24647", lang:"anglicky"},
+      {name:"Live Science — potvrzená skrytá chodba (2023)", url:"https://www.livescience.com/cosmic-rays-reveal-hidden-30-foot-long-corridor-in-egypts-great-pyramid", lang:"anglicky"},
+      {name:"Snopes — k tvrzení o podzemním městě", url:"https://www.snopes.com/fact-check/pyramids-of-giza-new-discovery-structures/", lang:"anglicky"}
+    ] }
+];
+
+/* krátká glosa od Franty pod každou ZPRÁVOU (dle pořadí FEED; index 0 = díl Franty, ten glosu nemá) */
+const GLOSY=[
+  "",
+  "Spielberg pustí film o ufounech zrovna ve stejným měsíci, co vláda pustí spisy. Buď osud, nebo zatraceně dobrej marketing. Sázím na to druhý.",
+  "Vláda otevřela trezor a řekla „posuďte si to sami“. Chytrý — práci hodili na nás, zásluhy si nechají.",
+  "Čtyřicet videí a pořád žádnej ostrej záběr. To jako vážně nikdo z těch pilotů neměl pořádnej foťák?",
+  "Chlap tvrdí, že viděl důkazy. Super. Tak je ukaž — slovo pod přísahou je hezký, ale fotka by byla lepší.",
+  "Jiskry jak ohňostroj u Měsíce. Možná ufoun, možná odlesk. Akorát „byl to prach“ by znělo dost blbě, co?",
+  "Stíhací pilotka, co lítá rychlejc, než ty stihneš dopít pivo, říká, že něco viděla. Tý věřím spíš než strejdovi s dalekohledem z balkonu.",
+  "Když zrovna chlap, co sám hledá mimozemšťany, řekne „tohle je jen odlesk“, tak to není otravnej skeptik. To je někdo, kdo nechce vypadat blbě.",
+  "Mimozemská loď, nebo hladovej racek? Vesmír je velkej, ale racků je víc. Vsadím na racka.",
+  "„Brzy přijde další vlna.“ Tohle slýchám pořád. Až fakt přijde, ozvu se. Do tý doby si beru rezervu.",
+  "Vědci přiznali, že možná hledali špatně. To je vzácnej druh — chytrej člověk, co řekne „možná jsem se sekl“. Klobouk dolů."
+];
+FEED.forEach((it,i)=>{ if(GLOSY[i]) it.frantaGlosa=GLOSY[i]; });
+
+/* obrázky z veřejných zdrojů (NASA = volné dílo) přes oficiální odkaz Wikimedia Commons.
+   Pro ostrý provoz je ideální stáhnout a hostovat u sebe; volné dílo atribuci nevyžaduje, my ji uvádíme slušně. */
+/* OBRÁZKY — všechny AI ilustrace (generuje se přes GPT image, soubory v img/).
+   Styl: dark cinematic, documentary, 16:9, no text, no real people, amber + deep-blue palette.
+   Viz PRAVIDLA-PSANI.md, sekce Obrázky. */
+const IMAGES=[
+  {f:"img/franta-vs-pepa.jpg", p:"Photorealistic cinematic scene: two men in a dark podcast studio, left man bald with full beard and black sunglasses laughing hard, right man with messy hair arms crossed and offended, warm amber lighting, humorous contrast, 16:9."},
+  {f:"img/film.jpg", p:"Dark cinematic illustration: a vintage movie projector casting a beam of light that transforms into a starfield with a distant UFO silhouette, film noir atmosphere, amber and deep blue palette, no text, no real people, 16:9."},
+  {f:"img/pursue.jpg",p:"Dark cinematic illustration: a stack of classified government folders with redacted stamps being opened under dramatic spotlight, pages floating upward, tense office atmosphere, amber accent light, no text, no real people, no real logos, 16:9."},
+  {f:"img/apollo-videa.jpg",p:"Dark cinematic illustration: old film reels and a vintage CRT monitor showing a blurry lunar surface, retro space-age atmosphere, grainy film texture, moody warm lighting, no text, no real people, 16:9."},
+  {f:"img/grusch.jpg",p:"Dark cinematic illustration: a lone faceless silhouette speaking at a microphone in a dim government hearing room, dramatic side light, anonymous figure, no identifiable face, no logos, no text, 16:9."},
+  {f:"img/apollo-svetla.jpg",p:"Dark cinematic illustration: the lunar surface at night with mysterious small bright flashes of light near the horizon, deep black space above, eerie and beautiful, no text, no real people, 16:9."},
+  {f:"img/navy-pilot.jpg",p:"Dark cinematic illustration: view from inside a fighter-jet cockpit at dusk with a small unidentified glowing object on the horizon, atmospheric, documentary feel, no text, no real people, no real insignia, 16:9."},
+  {f:"img/loeb.jpg",p:"Dark cinematic illustration: a large telescope observatory dome under a starry night sky with a faint anomalous streak of light crossing the sky, scientific and mysterious mood, no text, no real people, 16:9."},
+  {f:"img/racek.jpg",p:"Slightly humorous dark cinematic illustration: a single seagull flying through a moody twilight sky beside a faint blurry light, hinting the UFO is just a bird, no text, no real people, 16:9."},
+  {f:"img/corbell.jpg",p:"Dark suspenseful cinematic illustration: a folder of redacted documents on a desk under a single spotlight with more files hidden in shadow behind, tense atmosphere, no text, no real people, no logos, 16:9."},
+  {f:"img/astrobiologie.jpg",p:"Dark cinematic illustration: a microscope view blending seamlessly into a deep starfield, suggesting the connection between microbial life and cosmic origins, deep blue and amber palette, scientific mood, no text, no real people, 16:9."},
+  {f:"img/franta-vs-pepa.jpg",p:"Photorealistic cinematic scene: two men in a dark podcast studio, left man bald with full beard and black sunglasses laughing hard, right man with messy hair arms crossed and offended, warm amber lighting, humorous contrast, 16:9."},
+  {f:"img/pyramidy-sken.jpg",p:"Dark cinematic editorial illustration: the Giza pyramids at night with a subtle glowing scan-grid overlay revealing faint geometric voids beneath the sand, mysterious yet scientific mood, no text, no real people, 16:9."}
+];
+FEED.forEach((it,i)=>{ const m=IMAGES[i]; if(!m)return;
+  it.image=m.f; it.imgType="ai"; it.imgCredit="Ilustrace (AI)"; it.imgSource=""; it.aiPrompt=m.p;
+});
+
+const TAGCOL = { overeno:"#3ecf8e", svedectvi:"#ff9d4d", spekulace:"#ff6b6b", franta:"#f2c40f" };
+const LABELS = { overeno:"OVĚŘENO", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
+
+function coverSVG(tag,i){
+  const c=TAGCOL[tag], stamp = (tag==="franta") ? "SATIRA" : "SPIS";
+  const rows=[28,52,76,100,124], widths=[560,640,300,600,420];
+  const lines=rows.map((y,k)=>`<rect x="40" y="${y}" width="${widths[k]}" height="10" rx="3" fill="#2a3242"/>`).join("");
+  const bars=[`<rect x="40" y="52" width="230" height="10" rx="3" fill="#0a0c10"/>`,
+              `<rect x="300" y="100" width="190" height="10" rx="3" fill="#0a0c10"/>`,
+              `<rect x="40" y="124" width="120" height="10" rx="3" fill="#0a0c10"/>`].join("");
+  return `<svg viewBox="0 0 720 160" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="g${i}" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="${c}" stop-opacity="0.10"/><stop offset="100%" stop-color="#0a0c10" stop-opacity="0"/></linearGradient></defs>
+    <rect width="720" height="160" fill="#0d1017"/><rect width="720" height="160" fill="url(#g${i})"/>
+    ${lines}${bars}
+    <rect x="540" y="20" width="148" height="40" rx="6" fill="none" stroke="${c}" stroke-width="2" opacity="0.85"/>
+    <text x="614" y="46" font-family="monospace" font-size="16" fill="${c}" text-anchor="middle" letter-spacing="3" opacity="0.9">${stamp}</text>
+  </svg>`;
+}
+function coverHTML(item,i){
+  if(item.image){const cap=item.imgCredit||(item.imgType==="foto"?"Foto":"Ilustrace");
+    return `<img src="${item.image}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="imgFallback(this,'${item.tag}',${i})"><span class="imgtag">${cap}</span>`;}
+  const lbl = item.imgType==="ai" ? "Ilustrace (AI)" : "Ilustrace";
+  return coverSVG(item.tag,i)+`<span class="imgtag">${lbl}</span>`;
+}
+function imgFallback(img,tag,i){ try{ img.parentNode.innerHTML = coverSVG(tag,i)+'<span class="imgtag">Ilustrace</span>'; }catch(e){} }
+
+const feedEl=document.getElementById("feed");
+feedEl.innerHTML=FEED.map((item,i)=>`
+  <article class="card kind-${item.kind}" data-i="${i}" data-tag="${item.tag}" data-topic="${item.topic}">
+    <div class="cover">${coverHTML(item,i)}</div>
+    <div class="card-body">
+      <div class="hook"><b>REDAKCE:</b> ${item.hook}</div>
+      <span class="chip chip-${item.tag}">${LABELS[item.tag]}</span>
+      <h4>${item.title}</h4>
+      <p class="teaser">${item.teaser}</p>
+      <div class="card-meta"><span>Zdroj: ${item.source} · ${item.date}</span><span class="more">číst celé →</span></div>
+    </div>
+  </article>`).join("");
+document.getElementById("feed-count").textContent=FEED.length+" článků";
+
+/* ---- filtry: dvě skupiny (tag + topic), OR uvnitř, AND napříč ---- */
+(function(){
+  const fc=document.getElementById("feed-count");
+  const sel={tag:new Set(),topic:new Set()};
+  function apply(){
+    let vis=0;
+    feedEl.querySelectorAll(".card").forEach(c=>{
+      const okTag=sel.tag.size===0||sel.tag.has(c.dataset.tag);
+      const okTopic=sel.topic.size===0||sel.topic.has(c.dataset.topic);
+      const show=okTag&&okTopic; c.style.display=show?"":"none"; if(show)vis++;
+    });
+    fc.textContent=(sel.tag.size||sel.topic.size)?(vis+" z "+FEED.length):(FEED.length+" článků");
+  }
+  document.querySelectorAll(".filter").forEach(b=>b.addEventListener("click",()=>{
+    const g=b.dataset.group,v=b.dataset.val,on=b.classList.toggle("active");
+    b.setAttribute("aria-pressed",on?"true":"false"); on?sel[g].add(v):sel[g].delete(v); apply();
+  }));
+})();
+
+/* ---- detail ---- */
+const overlay=document.getElementById("overlay");
+function openArticle(i){
+  const it=FEED[i];
+  document.getElementById("d-cover").innerHTML=coverHTML(it,i);
+  document.getElementById("d-caption").innerHTML = it.imgType==="ai"
+    ? "Ilustrace vygenerovaná umělou inteligencí (AI)"
+    : (it.image ? `Foto: ${it.imgCredit||"zdroj"}${it.imgSource?` · <a href="${it.imgSource}" target="_blank" rel="noopener noreferrer">zdroj ↗</a>`:""}` : "Ilustrace");
+  document.getElementById("d-hook").innerHTML=`<b>REDAKCE:</b> ${it.hook}`;
+  document.getElementById("d-chip").outerHTML=`<span id="d-chip" class="chip chip-${it.tag}">${LABELS[it.tag]}</span>`;
+  document.getElementById("d-title").textContent=it.title;
+  document.getElementById("d-video").innerHTML=it.video?`<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${it.video}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:"";
+  document.getElementById("d-fact").innerHTML=it.fact?`<div class="fact ${it.factLabel==="FIKCE"?"fikce":""}"><b>${it.factLabel||"Zajímavost"}</b>${it.fact}</div>`:"";
+  document.getElementById("d-body").innerHTML=it.body.map(p=>`<p>${p}</p>`).join("");
+  document.getElementById("d-glosa").innerHTML = (it.kind!=="franta" && it.frantaGlosa) ?
+    `<div class="glosa"><div class="glosa-ava"><img src="img/franta-avatar.jpg" alt="Franta"></div><div class="glosa-text"><b>Franta dodává</b><p>„${it.frantaGlosa}“</p></div></div>` : "";
+  document.getElementById("d-premium").innerHTML = (it.kind!=="franta") ? `
+    <div class="premium">
+      <span class="premium-lock">Plná verze</span>
+      <button class="buybtn" onclick="var i=this.parentNode.querySelector('.premium-info');i.hidden=!i.hidden;">Kup plnou verzi článku →</button>
+      <div class="premium-info" hidden>
+        <h5>Co je v plné verzi</h5>
+        <p>Hlubší rozbor problematiky, vědecký pohled, argumenty pro i proti, možné závěry a shrnutí — vše s doloženými zdroji.</p>
+        <p class="price">Součást předplatného · 49 Kč / měsíc</p>
+        <p class="soon">Plnou verzi teprve připravujeme. Přihlas se do čekačky a dáme ti vědět, jakmile spustíme.</p>
+        <button class="wlbtn" onclick="goWaitlist()">Přihlásit do čekačky →</button>
+      </div>
+    </div>` : "";
+  document.getElementById("d-sources").innerHTML=`<h5>Zdroje</h5>`+it.sources.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.name}<span>${s.lang} ↗</span></a>`).join("");
+  overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.classList.add("locked");overlay.scrollTop=0;
+}
+function closeArticle(){overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("locked");document.getElementById("d-video").innerHTML="";}
+function goWaitlist(){closeArticle();const el=document.getElementById("email");el.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>el.focus(),450);}
+feedEl.addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openArticle(+c.dataset.i);});
+document.getElementById("filmBanner").addEventListener("click",()=>{const idx=FEED.findIndex(x=>x.id==="film");openArticle(idx<0?0:idx);});
+document.getElementById("closeBtn").addEventListener("click",closeArticle);
+overlay.addEventListener("click",e=>{if(e.target===overlay)closeArticle();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeArticle();});
+
+/* ---- countdown ---- */
+(function(){
+  const film=new Date("2026-06-12T00:00:00");const days=Math.ceil((film-new Date())/86400000);
+  const sr=document.getElementById("status-right"),fc=document.getElementById("filmCount");
+  if(days>0){sr.innerHTML=`Disclosure Day za <span class="live">${days} dní</span>`;fc.textContent=days;}
+  else if(days===0){sr.innerHTML=`Disclosure Day <span class="live">dnes v kinech</span>`;fc.textContent="0";}
+  else{sr.innerHTML=`Disclosure Day <span class="live">už v kinech</span>`;fc.textContent="★";}
+})();
+
+/* ---- waitlist (Netlify Forms) ---- */
+const form=document.getElementById("waitlist"),msg=document.getElementById("formMsg");
+form.addEventListener("submit",async e=>{
+  e.preventDefault();const email=document.getElementById("email").value.trim();
+  const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);msg.className="form-msg show";
+  if(!ok){msg.classList.add("err");msg.textContent="✗ Zkontroluj prosím e-mail.";return;}
+  try{const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({"form-name":"waitlist","email":email}).toString()});
+    if(r.ok){msg.textContent="✓ Díky! Dáme ti vědět, až spustíme.";form.reset();}else throw new Error();
+  }catch(_){msg.classList.add("err");msg.textContent="✗ Něco se nepovedlo, zkus to prosím znovu.";}
+});
+
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+</script>
+</body>
+</html>
