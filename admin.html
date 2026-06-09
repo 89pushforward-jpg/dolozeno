@@ -99,10 +99,27 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">
+  <div style="width:100%;max-width:360px">
+    <h1 style="text-align:center;font:700 24px var(--sans);color:var(--ink);margin-bottom:8px">Přihlášení</h1>
+    <p style="text-align:center;font:400 14px var(--sans);color:var(--ink-dim);margin-bottom:32px">Pouze pro oprávněné osoby.</p>
+    <label>Jméno</label>
+    <input type="text" id="loginUser" placeholder="Uživatel" autocomplete="username">
+    <label>Heslo</label>
+    <input type="password" id="loginPass" placeholder="Heslo" autocomplete="current-password">
+    <button class="btn btn-primary" onclick="tryLogin()" style="margin-top:20px">Přihlásit se</button>
+    <div id="loginErr" class="status" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<!-- MAIN APP (hidden until login) -->
+<div id="mainApp" style="display:none">
+
 <nav class="nav">
   <button class="active" onclick="showPage('settings')">⚙️ Nastavení</button>
-  <button onclick="showPage('article')">✏️ Článek</button>
-  <button onclick="showPage('publish')">🚀 Publikuj</button>
+  <button id="navArticle" onclick="showPage('article')" style="opacity:.3;pointer-events:none">🔒 Článek</button>
+  <button id="navPublish" onclick="showPage('publish')" style="opacity:.3;pointer-events:none">🔒 Publikuj</button>
 </nav>
 
 <!-- ===== SETTINGS ===== -->
@@ -273,8 +290,40 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   </div>
   <button class="btn btn-secondary" onclick="copyCaption()">📋 Kopírovat caption</button>
 </div>
+</div> <!-- /mainApp -->
 
 <script>
+// ========== LOGIN ==========
+const AUTH_HASH="f2b4ed834ea78cf5b9e3fa4d4603f944e532be2d2a77e3ad6fe38f15012b2b25";
+
+async function sha256(text){
+  const data=new TextEncoder().encode(text);
+  const buf=await crypto.subtle.digest("SHA-256",data);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+
+async function tryLogin(){
+  const u=document.getElementById("loginUser").value.trim();
+  const p=document.getElementById("loginPass").value;
+  const hash=await sha256(u+":"+p);
+  if(hash===AUTH_HASH){
+    sessionStorage.setItem("dolozeno_auth","1");
+    showApp();
+  }else{
+    const el=document.getElementById("loginErr");
+    el.className="status show err";
+    el.textContent="Špatné jméno nebo heslo.";
+  }
+}
+
+function showApp(){
+  document.getElementById("loginScreen").style.display="none";
+  document.getElementById("mainApp").style.display="block";
+}
+
+if(sessionStorage.getItem("dolozeno_auth")==="1") showApp();
+document.getElementById("loginPass").addEventListener("keydown",e=>{if(e.key==="Enter")tryLogin();});
+
 // ========== STATE ==========
 let GH = { token:"", owner:"89pushforward-jpg", repo:"dolozeno" };
 let articleCode = "";
@@ -321,6 +370,7 @@ async function saveSettings(){
     const r=await ghAPI(`/repos/${GH.owner}/${GH.repo}`);
     if(r.full_name){
       el.innerHTML=`<div class="conn ok"><div class="dot"></div>Připojeno k ${r.full_name} ✓</div>`;
+      unlockTabs();
     }else throw new Error();
   }catch(e){
     el.innerHTML='<div class="conn err"><div class="dot"></div>Nepodařilo se připojit. Zkontroluj token a repozitář.</div>';
@@ -594,7 +644,17 @@ function copyCaption(){
 }
 
 // ========== INIT ==========
+function unlockTabs(){
+  const a=document.getElementById("navArticle");
+  const p=document.getElementById("navPublish");
+  a.style.opacity="1";a.style.pointerEvents="auto";a.textContent="✏️ Článek";
+  p.style.opacity="1";p.style.pointerEvents="auto";p.textContent="🚀 Publikuj";
+}
 loadSettings();
+if(GH.token){
+  // Auto-verify on load
+  ghAPI(`/repos/${GH.owner}/${GH.repo}`).then(r=>{if(r.full_name)unlockTabs();}).catch(()=>{});
+}
 addPara();addPara();addPara();
 addSource();
 </script>
