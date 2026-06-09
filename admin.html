@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DOLOŽENO — Redakce</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0c10;--surface:#161920;--surface2:#1e222b;--ink:#e0e2e8;--ink-dim:#9ca0ab;--amber:#f5a623;--cyan:#36d6e7;--red:#ff6b6b;--green:#3ecf8e;--line:#1f2430;--sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:var(--cyan)}
+
+/* NAV */
+.nav{display:flex;gap:0;background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:100;overflow-x:auto}
+.nav button{flex:1;padding:14px 8px;font:600 13px var(--mono);color:var(--ink-dim);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;min-width:0}
+.nav button.active{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* PAGES */
+.page{display:none;padding:20px 16px 80px;max-width:700px;margin:0 auto}
+.page.active{display:block}
+h1{font:700 22px var(--sans);color:var(--amber);margin-bottom:6px}
+h2{font:700 17px var(--sans);margin:24px 0 10px;color:var(--ink)}
+.subtitle{font:400 14px var(--sans);color:var(--ink-dim);margin-bottom:24px}
+
+/* FORM */
+label{display:block;font:500 12px var(--mono);color:var(--ink-dim);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.1em}
+input,select,textarea{width:100%;padding:12px 14px;font:400 15px var(--sans);color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:8px;outline:none;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--amber)}
+textarea{min-height:100px;font-family:var(--sans)}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ca0ab' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 24px;font:700 14px var(--sans);border:none;border-radius:8px;cursor:pointer;width:100%;margin-top:12px}
+.btn-primary{background:var(--amber);color:var(--bg)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-secondary{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-small{padding:8px 16px;font-size:12px;width:auto;margin-top:0}
+
+/* STATUS */
+.status{padding:12px 16px;border-radius:8px;font:500 14px var(--sans);margin:12px 0;display:none}
+.status.show{display:block}
+.status.ok{background:rgba(62,207,142,.12);color:var(--green);border:1px solid rgba(62,207,142,.3)}
+.status.err{background:rgba(255,107,107,.12);color:var(--red);border:1px solid rgba(255,107,107,.3)}
+.status.info{background:rgba(54,214,231,.1);color:var(--cyan);border:1px solid rgba(54,214,231,.2)}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:12px 0}
+.card h3{font:600 15px var(--sans);margin-bottom:8px}
+.card p{font:400 13px var(--sans);color:var(--ink-dim)}
+
+/* CHIP */
+.chip{display:inline-block;padding:3px 10px;border-radius:20px;font:700 11px var(--mono);text-transform:uppercase;letter-spacing:.1em}
+.chip-green{background:rgba(62,207,142,.15);color:var(--green)}
+.chip-amber{background:rgba(245,166,35,.15);color:var(--amber)}
+.chip-red{background:rgba(255,107,107,.15);color:var(--red)}
+
+/* PREVIEW */
+.preview-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin:16px 0;max-height:400px;overflow-y:auto}
+.preview-box h3{color:var(--amber);font-size:16px;margin-bottom:8px}
+.preview-box p{color:var(--ink-dim);font-size:14px;line-height:1.6;margin-bottom:8px}
+
+/* SOURCES */
+.source-row{display:flex;gap:8px;margin-bottom:8px;align-items:end}
+.source-row input{flex:1}
+.source-row button{flex-shrink:0;padding:8px 12px}
+
+/* PARAGRAPH EDITOR */
+.para-list{margin:8px 0}
+.para-item{display:flex;gap:8px;margin-bottom:8px;align-items:start}
+.para-item textarea{flex:1;min-height:60px}
+.para-item button{flex-shrink:0;padding:8px;margin-top:0}
+
+/* TOKEN DISPLAY */
+.token-display{font:400 13px var(--mono);color:var(--ink-dim);word-break:break-all;background:var(--surface2);padding:8px;border-radius:6px;margin:8px 0}
+
+/* CONNECTION STATUS */
+.conn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:8px;margin:12px 0;font:500 13px var(--sans)}
+.conn.ok{background:rgba(62,207,142,.1);color:var(--green)}
+.conn.err{background:rgba(255,107,107,.1);color:var(--red)}
+.conn .dot{width:8px;height:8px;border-radius:50%}
+.conn.ok .dot{background:var(--green)}
+.conn.err .dot{background:var(--red)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin:12px 0}
+.tabs button{flex:1;padding:10px;font:600 13px var(--sans);background:var(--surface2);color:var(--ink-dim);border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.tabs button.active{background:var(--amber);color:var(--bg);border-color:var(--amber)}
+
+/* IMAGE UPLOAD */
+.img-drop{border:2px dashed var(--line);border-radius:var(--radius);padding:30px;text-align:center;color:var(--ink-dim);cursor:pointer;transition:border-color .2s}
+.img-drop:hover,.img-drop.drag{border-color:var(--amber)}
+.img-drop img{max-width:100%;max-height:200px;margin-top:12px;border-radius:8px}
+
+/* GENERATED CODE */
+.code-box{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:14px;margin:12px 0;font:13px/1.5 var(--mono);color:#c9d1d9;overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-height:300px;overflow-y:auto}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <button class="active" onclick="showPage('settings')">⚙️ Nastavení</button>
+  <button onclick="showPage('article')">✏️ Článek</button>
+  <button onclick="showPage('publish')">🚀 Publikuj</button>
+</nav>
+
+<!-- ===== SETTINGS ===== -->
+<div id="pg-settings" class="page active">
+  <h1>Nastavení</h1>
+  <p class="subtitle">Propoj panel s GitHubem (jednou).</p>
+
+  <label>GitHub Personal Access Token</label>
+  <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+  <p style="font:400 12px var(--sans);color:var(--ink-dim);margin-top:6px">
+    Vytvoříš na <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a> → zaškrtni <b>repo</b> → Generate. Token zůstává jen v tvém prohlížeči.
+  </p>
+
+  <label>Repozitář</label>
+  <div style="display:flex;gap:8px">
+    <input id="ghOwner" placeholder="89pushforward-jpg" style="flex:1">
+    <span style="padding:12px 4px;color:var(--ink-dim)">/</span>
+    <input id="ghRepo" placeholder="dolozeno" style="flex:1">
+  </div>
+
+  <button class="btn btn-primary" onclick="saveSettings()" style="margin-top:20px">Uložit a ověřit</button>
+  <div id="connStatus"></div>
+
+  <h2>Jak získat token (30 vteřin)</h2>
+  <div class="card">
+    <p>1. Jdi na <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a></p>
+    <p>2. Note: „DOLOŽENO redakce"</p>
+    <p>3. Expiration: „No expiration" (nebo 90 dní)</p>
+    <p>4. Zaškrtni <b>repo</b> (celý blok)</p>
+    <p>5. Generate token → zkopíruj → vlož sem</p>
+  </div>
+</div>
+
+<!-- ===== NEW ARTICLE ===== -->
+<div id="pg-article" class="page">
+  <h1>Nový článek</h1>
+  <p class="subtitle">Vyplň nebo vlož text od Clauda.</p>
+
+  <div class="tabs">
+    <button class="active" onclick="switchMode('form')">📝 Formulář</button>
+    <button onclick="switchMode('paste')">📋 Vlož kód</button>
+  </div>
+
+  <!-- FORM MODE -->
+  <div id="mode-form">
+    <label>Typ</label>
+    <select id="artKind" onchange="toggleFranta()">
+      <option value="zprava">Zpráva</option>
+      <option value="franta">Franta díl</option>
+    </select>
+
+    <div style="display:flex;gap:8px">
+      <div style="flex:1">
+        <label>Štítek</label>
+        <select id="artTag">
+          <option value="ověřeno">✅ Ověřeno</option>
+          <option value="svědectví">🟠 Svědectví</option>
+          <option value="spekulace">🔴 Spekulace</option>
+          <option value="franta">🟡 Franta</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <label>Téma</label>
+        <select id="artTopic">
+          <option value="uap">UAP/UFO</option>
+          <option value="disclosure">Disclosure</option>
+          <option value="zahady">Záhady</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Titulek</label>
+    <input id="artTitle" placeholder="Název článku">
+
+    <label>Hook (clickbait úvod)</label>
+    <input id="artHook" placeholder="REDAKCE: Krátký provokativní hook...">
+
+    <label>Teaser (popis na kartě)</label>
+    <textarea id="artTeaser" rows="2" placeholder="2–3 věty shrnutí"></textarea>
+
+    <label>Tělo článku (odstavce)</label>
+    <div id="paraList" class="para-list"></div>
+    <button class="btn btn-secondary btn-small" onclick="addPara()">+ Přidat odstavec</button>
+
+    <label>Zajímavost (box)</label>
+    <textarea id="artFact" rows="2" placeholder="Jeden zajímavý fakt k tématu"></textarea>
+
+    <label id="lblGlosa">Frantova glosa</label>
+    <textarea id="artGlosa" rows="2" placeholder="Frantův komentář k článku (2–4 věty)"></textarea>
+
+    <label>Zdroje</label>
+    <div id="sourceList"></div>
+    <button class="btn btn-secondary btn-small" onclick="addSource()">+ Přidat zdroj</button>
+
+    <label>Zdroj (autor / médium)</label>
+    <input id="artSourceName" placeholder="National Geographic">
+
+    <label>Datum</label>
+    <input id="artDate" placeholder="2025">
+
+    <h2>Obrázek</h2>
+    <label>Název souboru</label>
+    <input id="imgName" placeholder="nazev-tematu.jpg">
+
+    <label>AI Prompt (pro GPT agenta)</label>
+    <textarea id="artPrompt" rows="2" placeholder="Dark cinematic illustration..."></textarea>
+
+    <label>Obrázek (nahraj z počítače)</label>
+    <div class="img-drop" id="imgDrop" onclick="document.getElementById('imgFile').click()">
+      📷 Klikni nebo přetáhni obrázek
+      <input type="file" id="imgFile" accept="image/*" style="display:none" onchange="handleImage(this)">
+    </div>
+
+    <button class="btn btn-primary" onclick="generateCode()" style="margin-top:24px">Vygenerovat kód →</button>
+  </div>
+
+  <!-- PASTE MODE -->
+  <div id="mode-paste" style="display:none">
+    <label>Vlož kód článku od Clauda</label>
+    <textarea id="pasteCode" rows="15" placeholder="Vlož sem celý objekt článku z Clauda (ten co začíná { kind:&quot;zprava&quot;, ...})"></textarea>
+
+    <label>Obrázek (nahraj z počítače)</label>
+    <div class="img-drop" id="imgDrop2" onclick="document.getElementById('imgFile2').click()">
+      📷 Klikni nebo přetáhni obrázek
+      <input type="file" id="imgFile2" accept="image/*" style="display:none" onchange="handleImage(this)">
+    </div>
+
+    <label>Název souboru obrázku</label>
+    <input id="imgName2" placeholder="nazev-tematu.jpg">
+
+    <button class="btn btn-primary" onclick="usePastedCode()" style="margin-top:24px">Použít kód →</button>
+  </div>
+
+  <div id="codePreview" style="display:none">
+    <h2>Vygenerovaný kód</h2>
+    <div class="code-box" id="codeBox"></div>
+    <button class="btn btn-secondary" onclick="copyCode()">📋 Kopírovat kód</button>
+  </div>
+</div>
+
+<!-- ===== PUBLISH ===== -->
+<div id="pg-publish" class="page">
+  <h1>Publikovat</h1>
+  <p class="subtitle">Nahraj článek + obrázek na GitHub → web se aktualizuje.</p>
+
+  <div id="pubCheck"></div>
+
+  <div class="card">
+    <h3>Co se stane</h3>
+    <p>1. Nahraje se obrázek do <code>img/</code></p>
+    <p>2. Článek se vloží do index.html</p>
+    <p>3. GitHub Pages web automaticky aktualizuje</p>
+  </div>
+
+  <div id="pubPreview" class="preview-box" style="display:none">
+    <h3 id="pubTitle"></h3>
+    <p id="pubHook"></p>
+    <p id="pubTeaser" style="font-style:italic"></p>
+  </div>
+
+  <button class="btn btn-primary" id="btnPublish" onclick="publish()" disabled>🚀 Publikovat na web</button>
+  <div id="pubStatus"></div>
+
+  <h2 style="margin-top:32px">Instagram</h2>
+  <div class="card">
+    <h3>Caption (zkopíruj na IG)</h3>
+    <div id="igCaption" style="font:14px var(--sans);color:var(--ink-dim);white-space:pre-wrap;margin-top:8px">Nejdřív vytvoř článek...</div>
+  </div>
+  <button class="btn btn-secondary" onclick="copyCaption()">📋 Kopírovat caption</button>
+</div>
+
+<script>
+// ========== STATE ==========
+let GH = { token:"", owner:"89pushforward-jpg", repo:"dolozeno" };
+let articleCode = "";
+let imageData = null;
+let imageName = "";
+
+// ========== NAVIGATION ==========
+function showPage(id){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("pg-"+id).classList.add("active");
+  event.target.classList.add("active");
+  if(id==="publish") checkPublishReady();
+}
+
+function switchMode(mode){
+  document.getElementById("mode-form").style.display = mode==="form"?"block":"none";
+  document.getElementById("mode-paste").style.display = mode==="paste"?"block":"none";
+  document.querySelectorAll("#pg-article .tabs button").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+}
+
+// ========== SETTINGS ==========
+function loadSettings(){
+  try{
+    const s=JSON.parse(localStorage.getItem("dolozeno_gh")||"{}");
+    if(s.token)document.getElementById("ghToken").value=s.token;
+    if(s.owner)document.getElementById("ghOwner").value=s.owner;
+    if(s.repo)document.getElementById("ghRepo").value=s.repo;
+    GH=Object.assign(GH,s);
+  }catch(e){}
+}
+
+async function saveSettings(){
+  GH.token=document.getElementById("ghToken").value.trim();
+  GH.owner=document.getElementById("ghOwner").value.trim()||"89pushforward-jpg";
+  GH.repo=document.getElementById("ghRepo").value.trim()||"dolozeno";
+  localStorage.setItem("dolozeno_gh",JSON.stringify(GH));
+
+  const el=document.getElementById("connStatus");
+  el.innerHTML='<div class="conn info"><div class="dot" style="background:var(--cyan)"></div>Ověřuji spojení...</div>';
+
+  try{
+    const r=await ghAPI(`/repos/${GH.owner}/${GH.repo}`);
+    if(r.full_name){
+      el.innerHTML=`<div class="conn ok"><div class="dot"></div>Připojeno k ${r.full_name} ✓</div>`;
+    }else throw new Error();
+  }catch(e){
+    el.innerHTML='<div class="conn err"><div class="dot"></div>Nepodařilo se připojit. Zkontroluj token a repozitář.</div>';
+  }
+}
+
+// ========== GITHUB API ==========
+async function ghAPI(path, method="GET", body=null){
+  const opt = {method, headers:{"Authorization":`token ${GH.token}`,"Accept":"application/vnd.github.v3+json"}};
+  if(body)opt.body=JSON.stringify(body);
+  const r=await fetch("https://api.github.com"+path,opt);
+  return r.json();
+}
+
+async function ghGetFile(path){
+  return ghAPI(`/repos/${GH.owner}/${GH.repo}/contents/${path}`);
+}
+
+async function ghPutFile(path, content, sha, msg){
+  return ghAPI(`/repos/${GH.owner}/${GH.repo}/contents/${path}`, "PUT", {
+    message:msg, content:btoa(unescape(encodeURIComponent(content))), sha
+  });
+}
+
+async function ghUploadBinary(path, base64, msg){
+  // Check if file exists first
+  let sha = undefined;
+  try{const existing=await ghGetFile(path);sha=existing.sha;}catch(e){}
+  const body = {message:msg, content:base64};
+  if(sha)body.sha=sha;
+  return ghAPI(`/repos/${GH.owner}/${GH.repo}/contents/${path}`, "PUT", body);
+}
+
+// ========== PARAGRAPHS ==========
+let paraCount=0;
+function addPara(text=""){
+  paraCount++;
+  const div=document.getElementById("paraList");
+  const id=`para_${paraCount}`;
+  const row=document.createElement("div");
+  row.className="para-item";
+  row.id=id;
+  row.innerHTML=`<textarea placeholder="Odstavec ${paraCount}...">${text}</textarea><button class="btn btn-secondary" style="padding:8px;margin:0" onclick="document.getElementById('${id}').remove()">✕</button>`;
+  div.appendChild(row);
+}
+
+// ========== SOURCES ==========
+let srcCount=0;
+function addSource(name="",url="",lang="anglicky"){
+  srcCount++;
+  const div=document.getElementById("sourceList");
+  const id=`src_${srcCount}`;
+  const row=document.createElement("div");
+  row.className="source-row";
+  row.id=id;
+  row.innerHTML=`<input placeholder="Název" value="${name}" style="flex:2"><input placeholder="URL" value="${url}" style="flex:3"><input placeholder="jazyk" value="${lang}" style="flex:1"><button class="btn btn-secondary" style="padding:8px;margin:0" onclick="document.getElementById('${id}').remove()">✕</button>`;
+  div.appendChild(row);
+}
+
+// ========== FRANTA TOGGLE ==========
+function toggleFranta(){
+  const isFranta=document.getElementById("artKind").value==="franta";
+  document.getElementById("artTag").value=isFranta?"franta":"ověřeno";
+  document.getElementById("lblGlosa").style.display=isFranta?"none":"block";
+  document.getElementById("artGlosa").style.display=isFranta?"none":"block";
+}
+
+// ========== IMAGE HANDLING ==========
+function handleImage(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    imageData=e.target.result.split(",")[1]; // base64 without prefix
+    // Show preview in both drop zones
+    document.querySelectorAll(".img-drop").forEach(d=>{
+      d.innerHTML=`<img src="${e.target.result}">`;
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+// ========== GENERATE CODE ==========
+function generateCode(){
+  const kind=document.getElementById("artKind").value;
+  const tag=document.getElementById("artTag").value;
+  const topic=document.getElementById("artTopic").value;
+  const title=document.getElementById("artTitle").value;
+  const hook=document.getElementById("artHook").value;
+  const teaser=document.getElementById("artTeaser").value;
+  const fact=document.getElementById("artFact").value;
+  const glosa=document.getElementById("artGlosa").value;
+  const srcName=document.getElementById("artSourceName").value;
+  const date=document.getElementById("artDate").value;
+  const prompt=document.getElementById("artPrompt").value;
+  const imgFile=document.getElementById("imgName").value||"placeholder.jpg";
+  imageName=imgFile.startsWith("img/")?imgFile:`img/${imgFile}`;
+
+  // Collect paragraphs
+  const paras=[];
+  document.querySelectorAll("#paraList textarea").forEach(t=>{
+    if(t.value.trim())paras.push(t.value.trim());
+  });
+
+  // Collect sources
+  const sources=[];
+  document.querySelectorAll("#sourceList .source-row").forEach(row=>{
+    const inputs=row.querySelectorAll("input");
+    if(inputs[0].value&&inputs[1].value)
+      sources.push({name:inputs[0].value,url:inputs[1].value,lang:inputs[2].value||"anglicky"});
+  });
+
+  const id=title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").substring(0,30);
+  const bodyStr=paras.map(p=>`      "${p.replace(/"/g,'\\"')}"`).join(",\n");
+  const srcStr=sources.map(s=>`{name:"${s.name}",url:"${s.url}",lang:"${s.lang}"}`).join(",\n      ");
+
+  let code = `  { kind:"${kind}", tag:"${tag}", topic:"${topic}", id:"${id}",
+    image:"${imageName}", imgType:"ai", imgCredit:"Ilustrace (AI)", imgSource:"",
+    aiPrompt:"${prompt.replace(/"/g,'\\"')}",
+    hook:"${hook.replace(/"/g,'\\"')}",
+    title:"${title.replace(/"/g,'\\"')}",
+    teaser:"${teaser.replace(/"/g,'\\"')}",
+    body:[
+${bodyStr}
+    ],
+    fact:"${fact.replace(/"/g,'\\"')}",`;
+
+  if(kind==="franta"){
+    code+=`\n    factLabel:"FIKCE",`;
+  }
+
+  code+=`\n    source:"${srcName}", date:"${date}",`;
+
+  if(kind!=="franta"&&glosa){
+    code+=`\n    frantaGlosa:"${glosa.replace(/"/g,'\\"')}",`;
+  }
+
+  code+=`\n    sources:[${srcStr}] }`;
+
+  articleCode=code;
+
+  document.getElementById("codePreview").style.display="block";
+  document.getElementById("codeBox").textContent=code;
+  updatePublishPreview(title,hook,teaser);
+  generateCaption(title,hook,teaser,tag,topic);
+}
+
+function usePastedCode(){
+  articleCode=document.getElementById("pasteCode").value.trim();
+  imageName=document.getElementById("imgName2").value||"";
+  if(imageName&&!imageName.startsWith("img/"))imageName="img/"+imageName;
+
+  document.getElementById("codePreview").style.display="block";
+  document.getElementById("codeBox").textContent=articleCode;
+
+  // Try to extract title/hook/teaser for preview
+  const titleMatch=articleCode.match(/title:"([^"]+)"/);
+  const hookMatch=articleCode.match(/hook:"([^"]+)"/);
+  const teaserMatch=articleCode.match(/teaser:"([^"]+)"/);
+  const tagMatch=articleCode.match(/tag:"([^"]+)"/);
+  const topicMatch=articleCode.match(/topic:"([^"]+)"/);
+
+  updatePublishPreview(
+    titleMatch?titleMatch[1]:"",
+    hookMatch?hookMatch[1]:"",
+    teaserMatch?teaserMatch[1]:""
+  );
+  generateCaption(
+    titleMatch?titleMatch[1]:"",
+    hookMatch?hookMatch[1]:"",
+    teaserMatch?teaserMatch[1]:"",
+    tagMatch?tagMatch[1]:"",
+    topicMatch?topicMatch[1]:""
+  );
+}
+
+function updatePublishPreview(title,hook,teaser){
+  document.getElementById("pubPreview").style.display="block";
+  document.getElementById("pubTitle").textContent=title;
+  document.getElementById("pubHook").textContent=hook;
+  document.getElementById("pubTeaser").textContent=teaser;
+  document.getElementById("btnPublish").disabled=false;
+}
+
+function generateCaption(title,hook,teaser,tag,topic){
+  const emoji = tag==="ověřeno"?"✅":tag==="spekulace"?"🔴":tag==="svědectví"?"🟠":"🟡";
+  const hashtags = "#ufo #uap #disclosure #dolozeno #česky"
+    + (topic==="zahady"?" #záhady #mystery":"")
+    + (topic==="uap"?" #ufosighting #pentagon":"")
+    + (topic==="disclosure"?" #odtajněno #whistleblower":"");
+
+  const caption=`${emoji} ${hook}\n\n${teaser}\n\n📖 Celý článek na dolozeno.cz (odkaz v bio)\n\n${hashtags}`;
+  document.getElementById("igCaption").textContent=caption;
+}
+
+// ========== PUBLISH ==========
+function checkPublishReady(){
+  const el=document.getElementById("pubCheck");
+  const issues=[];
+  if(!GH.token)issues.push("❌ Nastav GitHub token (záložka Nastavení)");
+  if(!articleCode)issues.push("❌ Vytvoř článek (záložka Článek)");
+  if(issues.length){
+    el.innerHTML=issues.map(i=>`<div class="status show err">${i}</div>`).join("");
+    document.getElementById("btnPublish").disabled=true;
+  }else{
+    el.innerHTML='<div class="status show ok">✓ Vše připraveno k publikaci</div>';
+    document.getElementById("btnPublish").disabled=false;
+  }
+}
+
+async function publish(){
+  const btn=document.getElementById("btnPublish");
+  const status=document.getElementById("pubStatus");
+  btn.disabled=true;
+  btn.textContent="⏳ Publikuji...";
+  status.innerHTML='<div class="status show info">Nahrávám...</div>';
+
+  try{
+    // 1. Upload image if present
+    if(imageData&&imageName){
+      status.innerHTML='<div class="status show info">📷 Nahrávám obrázek...</div>';
+      await ghUploadBinary(imageName, imageData, `Add image: ${imageName}`);
+    }
+
+    // 2. Get current index.html
+    status.innerHTML='<div class="status show info">📄 Stahuji index.html...</div>';
+    const file=await ghGetFile("index.html");
+    const content=decodeURIComponent(escape(atob(file.content.replace(/\n/g,""))));
+
+    // 3. Insert article before last ];
+    const marker="/* --- NEW ARTICLES ABOVE --- */";
+    let newContent;
+    if(content.includes(marker)){
+      newContent=content.replace(marker, articleCode+",\n\n"+marker);
+    }else{
+      // Find last ]; in FEED
+      const feedEnd=content.lastIndexOf("];");
+      if(feedEnd===-1)throw new Error("Nenašel jsem konec FEED pole");
+      newContent=content.substring(0,feedEnd)+",\n\n"+articleCode+"\n"+content.substring(feedEnd);
+    }
+
+    // 4. Commit updated index.html
+    status.innerHTML='<div class="status show info">📝 Ukládám článek...</div>';
+    await ghPutFile("index.html", newContent, file.sha, `Add article: ${document.getElementById("pubTitle").textContent||"new"}`);
+
+    status.innerHTML='<div class="status show ok">✅ Publikováno! Web se aktualizuje za ~1 minutu.</div>';
+    btn.textContent="✓ Publikováno";
+
+    // Reset
+    articleCode="";
+    imageData=null;
+    imageName="";
+  }catch(e){
+    status.innerHTML=`<div class="status show err">❌ Chyba: ${e.message||"Zkus to znovu."}</div>`;
+    btn.disabled=false;
+    btn.textContent="🚀 Publikovat na web";
+  }
+}
+
+// ========== COPY ==========
+function copyCode(){
+  navigator.clipboard.writeText(articleCode);
+  event.target.textContent="✓ Zkopírováno";
+  setTimeout(()=>event.target.textContent="📋 Kopírovat kód",2000);
+}
+function copyCaption(){
+  const t=document.getElementById("igCaption").textContent;
+  navigator.clipboard.writeText(t);
+  event.target.textContent="✓ Zkopírováno";
+  setTimeout(()=>event.target.textContent="📋 Kopírovat caption",2000);
+}
+
+// ========== INIT ==========
+loadSettings();
+addPara();addPara();addPara();
+addSource();
+</script>
+</body>
+</html>
