@@ -556,7 +556,8 @@ ${bodyStr}
     code+=`\n    factLabel:"FIKCE",`;
   }
 
-  code+=`\n    source:"${srcName}", date:"${date}",`;
+  const today=new Date();const pub=today.getDate()+". "+String(today.getMonth()+1)+". "+today.getFullYear();
+  code+=`\n    source:"${srcName}", date:"${date}", published:"${pub}",`;
 
   if(kind!=="franta"&&glosa){
     code+=`\n    frantaGlosa:"${glosa.replace(/"/g,'\\"')}",`;
@@ -654,17 +655,11 @@ async function publish(){
     const file=await ghGetFile("index.html");
     const content=decodeURIComponent(escape(atob(file.content.replace(/\n/g,""))));
 
-    // 3. Insert article before last ];
-    const marker="/* --- NEW ARTICLES ABOVE --- */";
-    let newContent;
-    if(content.includes(marker)){
-      newContent=content.replace(marker, articleCode+",\n\n"+marker);
-    }else{
-      // Find last ]; in FEED
-      const feedEnd=content.lastIndexOf("];");
-      if(feedEnd===-1)throw new Error("Nenašel jsem konec FEED pole");
-      newContent=content.substring(0,feedEnd)+",\n\n"+articleCode+"\n"+content.substring(feedEnd);
-    }
+    // 3. Insert article at BEGINNING of FEED (newest first)
+    const feedStart=content.indexOf("const FEED=[");
+    if(feedStart===-1)throw new Error("Nenašel jsem FEED pole");
+    const insertPos=content.indexOf("[",feedStart)+1;
+    const newContent=content.substring(0,insertPos)+"\n\n  "+articleCode+",\n"+content.substring(insertPos);
 
     // 4. Commit updated index.html
     status.innerHTML='<div class="status show info">📝 Ukládám článek...</div>';
