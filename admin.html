@@ -120,6 +120,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <button class="active" onclick="showPage('settings')">⚙️ Nastavení</button>
   <button id="navArticle" onclick="showPage('article')" style="opacity:.3;pointer-events:none">🔒 Článek</button>
   <button id="navPublish" onclick="showPage('publish')" style="opacity:.3;pointer-events:none">🔒 Publikuj</button>
+  <button id="navStats" onclick="showPage('stats')" style="opacity:.3;pointer-events:none">🔒 Statistiky</button>
 </nav>
 
 <!-- ===== SETTINGS ===== -->
@@ -290,6 +291,58 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   </div>
   <button class="btn btn-secondary" onclick="copyCaption()">📋 Kopírovat caption</button>
 </div>
+<!-- ===== STATS ===== -->
+<div id="pg-stats" class="page">
+  <h1>Statistiky</h1>
+  <p class="subtitle">Živý přehled návštěvnosti a obsahu.</p>
+
+  <button class="btn btn-secondary" onclick="loadStats()" style="margin-bottom:20px">🔄 Načíst data</button>
+  <div id="statsLoading" class="status" style="display:none"></div>
+
+  <!-- KPI CARDS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0">
+    <div class="card" style="text-align:center">
+      <div id="kpiViews" style="font:700 36px var(--sans);color:var(--amber)">—</div>
+      <p>Návštěvy webu</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div id="kpiEmails" style="font:700 36px var(--sans);color:var(--green)">—</div>
+      <p>E-maily</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div id="kpiArticles" style="font:700 36px var(--sans);color:var(--cyan)">—</div>
+      <p>Článků</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div id="kpiTime" style="font:700 36px var(--sans);color:var(--ink)">—</div>
+      <p>Ø čas na stránce</p>
+    </div>
+  </div>
+
+  <!-- TOP ARTICLE -->
+  <div class="card">
+    <h3>🏆 Nejčtenější článek</h3>
+    <p id="topArticleText" style="color:var(--amber);font-weight:600">Zatím žádná data</p>
+    <p id="topArticleCount" style="font:400 13px var(--sans);color:var(--ink-dim)"></p>
+  </div>
+
+  <!-- DAILY CHART -->
+  <h2>Návštěvy po dnech</h2>
+  <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto">
+    <canvas id="chartDaily" width="660" height="220"></canvas>
+  </div>
+
+  <!-- HOURLY CHART -->
+  <h2>Návštěvy podle hodin</h2>
+  <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto">
+    <canvas id="chartHourly" width="660" height="200"></canvas>
+  </div>
+
+  <!-- ARTICLE OPENS -->
+  <h2>Otevření článků</h2>
+  <div id="articleBars" style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px"></div>
+</div>
+
 </div> <!-- /mainApp -->
 
 <script>
@@ -325,6 +378,7 @@ if(sessionStorage.getItem("dolozeno_auth")==="1") showApp();
 document.getElementById("loginPass").addEventListener("keydown",e=>{if(e.key==="Enter")tryLogin();});
 
 // ========== STATE ==========
+const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbyLtTzOyEznjw7qngI2XXCmh1mb5RWYJTP_CO3TV3eM_yJrgaDgMUnszKbx0BRTgh2O/exec";
 let GH = { token:"", owner:"89pushforward-jpg", repo:"dolozeno" };
 let articleCode = "";
 let imageData = null;
@@ -647,14 +701,134 @@ function copyCaption(){
 function unlockTabs(){
   const a=document.getElementById("navArticle");
   const p=document.getElementById("navPublish");
+  const s=document.getElementById("navStats");
   a.style.opacity="1";a.style.pointerEvents="auto";a.textContent="✏️ Článek";
   p.style.opacity="1";p.style.pointerEvents="auto";p.textContent="🚀 Publikuj";
+  s.style.opacity="1";s.style.pointerEvents="auto";s.textContent="📊 Statistiky";
 }
 loadSettings();
 if(GH.token){
   // Auto-verify on load
   ghAPI(`/repos/${GH.owner}/${GH.repo}`).then(r=>{if(r.full_name)unlockTabs();}).catch(()=>{});
 }
+// ========== STATS ==========
+async function loadStats(){
+  const el=document.getElementById("statsLoading");
+  el.className="status show info";el.textContent="⏳ Načítám data...";
+  try{
+    const r=await fetch(WAITLIST_ENDPOINT);
+    const d=await r.json();
+
+    // KPI cards
+    document.getElementById("kpiViews").textContent=d.totalPageviews||0;
+    document.getElementById("kpiEmails").textContent=d.totalEmails||0;
+    document.getElementById("kpiTime").textContent=d.avgTimeSeconds?fmtTime(d.avgTimeSeconds):"—";
+
+    // Article count from FEED (via GitHub)
+    try{
+      const gh=await ghAPI(`/repos/${GH.owner}/${GH.repo}/contents/index.html`);
+      const html=decodeURIComponent(escape(atob(gh.content.replace(/\n/g,""))));
+      const m=html.match(/kind:"/g);
+      document.getElementById("kpiArticles").textContent=m?m.length:0;
+    }catch(e){document.getElementById("kpiArticles").textContent="?";}
+
+    // Top article
+    if(d.topArticle&&d.topArticle.id){
+      document.getElementById("topArticleText").textContent=d.topArticle.id.replace(/-/g," ");
+      document.getElementById("topArticleCount").textContent=d.topArticle.opens+" otevření";
+    }
+
+    // Daily chart
+    drawBarChart("chartDaily",d.dailyPageviews||{},{color:"#f5a623",label:"návštěvy"});
+
+    // Hourly chart
+    const hourly={};
+    for(let h=0;h<24;h++)hourly[String(h).padStart(2,"0")+":00"]=(d.hourlyPageviews||{})[h]||0;
+    drawBarChart("chartHourly",hourly,{color:"#36d6e7",label:"návštěvy"});
+
+    // Article opens bars
+    drawArticleBars(d.articleOpens||{});
+
+    el.className="status show ok";el.textContent="✓ Data načtena";
+    setTimeout(()=>{el.style.display="none"},2000);
+  }catch(e){
+    el.className="status show err";el.textContent="❌ Chyba: "+e.message;
+  }
+}
+
+function fmtTime(s){
+  if(s<60)return s+"s";
+  return Math.floor(s/60)+"m "+s%60+"s";
+}
+
+function drawBarChart(canvasId,data,opts){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  const ctx=canvas.getContext("2d");
+  const keys=Object.keys(data).sort();
+  const vals=keys.map(k=>data[k]||0);
+  const max=Math.max(...vals,1);
+  const W=canvas.width,H=canvas.height;
+  const pad={t:20,r:10,b:40,l:40};
+  const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+  const bw=Math.max(4,Math.min(30,(cw/keys.length)-4));
+
+  ctx.clearRect(0,0,W,H);
+
+  // Grid lines
+  ctx.strokeStyle="#1f2430";ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){
+    const y=pad.t+ch-(ch*i/4);
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle="#9ca0ab";ctx.font="11px IBM Plex Sans";ctx.textAlign="right";
+    ctx.fillText(Math.round(max*i/4),pad.l-6,y+4);
+  }
+
+  // Bars
+  keys.forEach((k,i)=>{
+    const x=pad.l+(i*(cw/keys.length))+(cw/keys.length-bw)/2;
+    const bh=(vals[i]/max)*ch;
+    const y=pad.t+ch-bh;
+
+    const grd=ctx.createLinearGradient(x,y,x,pad.t+ch);
+    grd.addColorStop(0,opts.color);
+    grd.addColorStop(1,opts.color+"33");
+    ctx.fillStyle=grd;
+    ctx.beginPath();
+    ctx.roundRect(x,y,bw,bh,3);
+    ctx.fill();
+
+    // Label
+    ctx.fillStyle="#9ca0ab";ctx.font="10px IBM Plex Mono";ctx.textAlign="center";
+    const label=k.length>5?k.slice(5):k;
+    ctx.save();
+    ctx.translate(x+bw/2,pad.t+ch+12);
+    ctx.rotate(keys.length>15?-0.6:0);
+    ctx.fillText(label,0,0);
+    ctx.restore();
+  });
+}
+
+function drawArticleBars(data){
+  const el=document.getElementById("articleBars");
+  const sorted=Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){el.innerHTML='<p style="color:var(--ink-dim)">Zatím žádná data</p>';return;}
+  const max=sorted[0][1];
+  el.innerHTML=sorted.map(([id,count])=>{
+    const pct=Math.round((count/max)*100);
+    const name=id.replace(/-/g," ");
+    return `<div style="margin:8px 0">
+      <div style="display:flex;justify-content:space-between;font:500 13px var(--sans);margin-bottom:4px">
+        <span style="color:var(--ink)">${name}</span>
+        <span style="color:var(--amber)">${count}×</span>
+      </div>
+      <div style="background:var(--line);border-radius:4px;height:8px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--amber),var(--cyan));border-radius:4px"></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
 addPara();addPara();addPara();
 addSource();
 </script>

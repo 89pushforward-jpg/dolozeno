@@ -622,6 +622,7 @@ document.getElementById("feed-count").textContent=FEED.length+" článků";
 const overlay=document.getElementById("overlay");
 function openArticle(i){
   const it=FEED[i];
+  track("article",{articleId:it.id||("article-"+i)});
   document.getElementById("d-cover").innerHTML=coverHTML(it,i);
   document.getElementById("d-caption").innerHTML = it.imgType==="ai"
     ? "Ilustrace vygenerovaná umělou inteligencí (AI)"
@@ -666,14 +667,21 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.c
   else{sr.innerHTML=`Disclosure Day <span class="live">už v kinech</span>`;fc.textContent="★";}
 })();
 
+/* ---- ANALYTICS TRACKING ---- */
+const TRACK_URL=WAITLIST_ENDPOINT;
+const _t0=Date.now();
+function track(type,extra){try{fetch(TRACK_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(Object.assign({type:type,page:location.pathname},extra||{}))});}catch(e){}}
+track("pageview");
+window.addEventListener("beforeunload",function(){track("time",{duration:Math.round((Date.now()-_t0)/1000)});});
+
 /* ---- waitlist (Google Sheets přes Apps Script) ---- */
-const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbyjHjLdQ45gJC-DDfd_ctto6SowGXAzY2ecKuBCq50eCgjqhzudOi0cfJxSPlRv6nBr/exec";
+const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbyLtTzOyEznjw7qngI2XXCmh1mb5RWYJTP_CO3TV3eM_yJrgaDgMUnszKbx0BRTgh2O/exec";
 const form=document.getElementById("waitlist"),msg=document.getElementById("formMsg");
 form.addEventListener("submit",async e=>{
   e.preventDefault();const email=document.getElementById("email").value.trim();
   const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);msg.className="form-msg show";
   if(!ok){msg.classList.add("err");msg.textContent="✗ Zkontroluj prosím e-mail.";return;}
-  try{await fetch(WAITLIST_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({email})});
+  try{await fetch(WAITLIST_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({type:"email",email})});
     msg.textContent="✓ Díky! Dáme ti vědět, až spustíme.";form.reset();
   }catch(_){msg.classList.add("err");msg.textContent="✗ Něco se nepovedlo, zkus to prosím znovu.";}
 });
