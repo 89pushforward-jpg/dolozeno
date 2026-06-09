@@ -196,8 +196,7 @@
   <section class="hero">
     <h2>Spouštíme. Chceš být u toho?</h2>
     <p>Nech nám e-mail a dáme ti vědět, až pustíme plnou verzi s pravidelnými novinkami a Frantovými díly. Žádný spam — jen oznámení o spuštění.</p>
-    <form id="waitlist" name="waitlist" data-netlify="true" novalidate>
-      <input type="hidden" name="form-name" value="waitlist">
+    <form id="waitlist" novalidate>
       <input type="email" id="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required>
       <button type="submit" class="cta">CHCI VĚDĚT</button>
     </form>
@@ -642,14 +641,15 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.c
   else{sr.innerHTML=`Disclosure Day <span class="live">už v kinech</span>`;fc.textContent="★";}
 })();
 
-/* ---- waitlist (Netlify Forms) ---- */
+/* ---- waitlist (Google Sheets přes Apps Script) ---- */
+const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbyjHjLdQ45gJC-DDfd_ctto6SowGXAzY2ecKuBCq50eCgjqhzudOi0cfJxSPlRv6nBr/exec";
 const form=document.getElementById("waitlist"),msg=document.getElementById("formMsg");
 form.addEventListener("submit",async e=>{
   e.preventDefault();const email=document.getElementById("email").value.trim();
   const ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);msg.className="form-msg show";
   if(!ok){msg.classList.add("err");msg.textContent="✗ Zkontroluj prosím e-mail.";return;}
-  try{const r=await fetch("/",{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:new URLSearchParams({"form-name":"waitlist","email":email}).toString()});
-    if(r.ok){msg.textContent="✓ Díky! Dáme ti vědět, až spustíme.";form.reset();}else throw new Error();
+  try{await fetch(WAITLIST_ENDPOINT,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({email})});
+    msg.textContent="✓ Díky! Dáme ti vědět, až spustíme.";form.reset();
   }catch(_){msg.classList.add("err");msg.textContent="✗ Něco se nepovedlo, zkus to prosím znovu.";}
 });
 
