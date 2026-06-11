@@ -675,7 +675,7 @@ track("pageview");
 window.addEventListener("beforeunload",function(){track("time",{duration:Math.round((Date.now()-_t0)/1000)});});
 
 /* ---- waitlist (Google Sheets přes Apps Script) ---- */
-const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbyLtTzOyEznjw7qngI2XXCmh1mb5RWYJTP_CO3TV3eM_yJrgaDgMUnszKbx0BRTgh2O/exec";
+const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbxA9GKuiTeKhcvLcJwEHfxiTdtSqjqHzYSXJ5bdOcIyLsNzwJMUA9pleh8SvBOA7taX/exec";
 const form=document.getElementById("waitlist"),msg=document.getElementById("formMsg");
 form.addEventListener("submit",async e=>{
   e.preventDefault();const email=document.getElementById("email").value.trim();
