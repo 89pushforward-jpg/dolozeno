@@ -158,15 +158,15 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <!-- ===== NEW ARTICLE ===== -->
 <div id="pg-article" class="page">
   <h1>Nový článek</h1>
-  <p class="subtitle">Vyplň nebo vlož text od Clauda.</p>
+  <p class="subtitle">Vlož kód od Clauda → Použít → admin tě hodí rovnou na Publikovat.</p>
 
   <div class="tabs">
-    <button class="active" onclick="switchMode('form')">📝 Formulář</button>
-    <button onclick="switchMode('paste')">📋 Vlož kód</button>
+    <button onclick="switchMode('form')">📝 Formulář</button>
+    <button class="active" onclick="switchMode('paste')">📋 Vlož kód</button>
   </div>
 
   <!-- FORM MODE -->
-  <div id="mode-form">
+  <div id="mode-form" style="display:none">
     <label>Typ</label>
     <select id="artKind" onchange="toggleFranta()">
       <option value="zprava">Zpráva</option>
@@ -239,7 +239,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   </div>
 
   <!-- PASTE MODE -->
-  <div id="mode-paste" style="display:none">
+  <div id="mode-paste">
     <label>Vlož kód článku od Clauda</label>
     <textarea id="pasteCode" rows="15" placeholder="Vlož sem celý objekt článku z Clauda (ten co začíná { kind:&quot;zprava&quot;, ...})"></textarea>
 
@@ -417,6 +417,16 @@ function showPage(id){
   event.target.classList.add("active");
   if(id==="publish") checkPublishReady();
   if(id==="queue" && !QUEUE) loadQueue();
+}
+
+// Přepnutí na Publikovat bez závislosti na event.target (volá se z tlačítek)
+function goPublish(){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  document.getElementById("pg-publish").classList.add("active");
+  document.getElementById("navPublish").classList.add("active");
+  checkPublishReady();
+  window.scrollTo(0,0);
 }
 
 function switchMode(mode){
@@ -597,6 +607,7 @@ ${bodyStr}
   document.getElementById("codeBox").textContent=code;
   updatePublishPreview(title,hook,teaser);
   generateCaption(title,hook,teaser,tag,topic);
+  goPublish();
 }
 
 function usePastedCode(){
@@ -626,6 +637,7 @@ function usePastedCode(){
     tagMatch?tagMatch[1]:"",
     topicMatch?topicMatch[1]:""
   );
+  goPublish();
 }
 
 function updatePublishPreview(title,hook,teaser){
@@ -775,7 +787,7 @@ async function loadQueue(){
 function renderQueue(){
   const box=document.getElementById("queueList");
   const rows=QUEUE.objs.map((o,idx)=>({o,idx}))
-    .sort((a,b)=>((czToDate(a.o.published)||0)-(czToDate(b.o.published)||0)));
+    .sort((a,b)=>((czToDate(b.o.published)||0)-(czToDate(a.o.published)||0)));
   box.innerHTML=rows.map(({o,idx})=>{
     const [lbl,col]=qBadge(o.published);
     return `<div class="qrow" data-idx="${idx}" style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)">
