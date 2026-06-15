@@ -121,6 +121,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <button id="navArticle" onclick="showPage('article')" style="opacity:.3;pointer-events:none">🔒 Článek</button>
   <button id="navPublish" onclick="showPage('publish')" style="opacity:.3;pointer-events:none">🔒 Publikuj</button>
   <button id="navStats" onclick="showPage('stats')" style="opacity:.3;pointer-events:none">🔒 Statistiky</button>
+  <button id="navQueue" onclick="showPage('queue')" style="opacity:.3;pointer-events:none">🔒 Fronta</button>
 </nav>
 
 <!-- ===== SETTINGS ===== -->
@@ -343,6 +344,29 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <div id="articleBars" style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px"></div>
 </div>
 
+<!-- ===== FRONTA / PLÁNOVÁNÍ ===== -->
+<div id="pg-queue" class="page">
+  <h1>Fronta článků</h1>
+  <p class="subtitle">Naplánuj, kdy se články objeví na webu. Článek s budoucím datem je skrytý a odhalí se sám v ten den.</p>
+
+  <button class="btn btn-secondary" onclick="loadQueue()" style="margin-bottom:8px">🔄 Načíst frontu</button>
+  <div id="queueStatus"></div>
+
+  <div class="card" style="margin:14px 0">
+    <h2 style="margin-top:0">⚡ Rozházet po dnech</h2>
+    <p style="font:400 13px var(--sans);color:var(--ink-dim);margin-bottom:10px">Zaškrtni články dole, vyber start a klikni — dostanou data den po dni (1./den) v pořadí, jak jsou v seznamu.</p>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <label style="margin:0">Start:</label>
+      <input type="date" id="queueStart" style="width:auto">
+      <button class="btn btn-secondary" onclick="autoStagger()">Rozházet zaškrtnuté</button>
+    </div>
+  </div>
+
+  <div id="queueList"></div>
+
+  <button class="btn btn-primary" id="btnSaveQueue" onclick="saveQueue()" style="margin-top:14px;display:none">💾 Uložit frontu na web</button>
+</div>
+
 </div> <!-- /mainApp -->
 
 <script>
@@ -383,6 +407,7 @@ let GH = { token:"", owner:"89pushforward-jpg", repo:"dolozeno" };
 let articleCode = "";
 let imageData = null;
 let imageName = "";
+let QUEUE = null;
 
 // ========== NAVIGATION ==========
 function showPage(id){
@@ -391,6 +416,7 @@ function showPage(id){
   document.getElementById("pg-"+id).classList.add("active");
   event.target.classList.add("active");
   if(id==="publish") checkPublishReady();
+  if(id==="queue" && !QUEUE) loadQueue();
 }
 
 function switchMode(mode){
@@ -655,11 +681,18 @@ async function publish(){
     const file=await ghGetFile("index.html");
     const content=decodeURIComponent(escape(atob(file.content.replace(/\n/g,""))));
 
-    // 3. Insert article at BEGINNING of FEED (newest first)
-    const feedStart=content.indexOf("const FEED=[");
-    if(feedStart===-1)throw new Error("Nenašel jsem FEED pole");
-    const insertPos=content.indexOf("[",feedStart)+1;
-    const newContent=content.substring(0,insertPos)+"\n\n  "+articleCode+",\n"+content.substring(insertPos);
+    // 3. Insert article at END of FEED (newest shows on top via reverse render)
+    const fm=content.match(/const FEED\s*=\s*\[/);
+    if(!fm)throw new Error("Nenašel jsem FEED pole");
+    let p=fm.index+fm[0].length, depth=1, instr=false, esc=false, qc="";
+    while(p<content.length&&depth>0){const c=content[p];
+      if(instr){if(esc)esc=false;else if(c==="\\")esc=true;else if(c===qc)instr=false;}
+      else{if(c==='"'||c==="'"){instr=true;qc=c;}else if(c==="[")depth++;else if(c==="]")depth--;}
+      p++;}
+    const closeIdx=p-1;
+    let j=closeIdx-1; while(j>0 && /\s/.test(content[j])) j--;
+    const lead=content[j]===","?"":",";
+    const newContent=content.slice(0,closeIdx)+lead+"\n\n  "+articleCode+",\n"+content.slice(closeIdx);
 
     // 4. Commit updated index.html
     status.innerHTML='<div class="status show info">📝 Ukládám článek...</div>';
@@ -692,6 +725,108 @@ function copyCaption(){
   setTimeout(()=>event.target.textContent="📋 Kopírovat caption",2000);
 }
 
+// ========== FRONTA / PLÁNOVÁNÍ ==========
+function czToISO(s){const m=(s||"").match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/);return m?`${m[3]}-${String(+m[2]).padStart(2,"0")}-${String(+m[1]).padStart(2,"0")}`:"";}
+function isoToCz(s){const m=(s||"").match(/(\d{4})-(\d{2})-(\d{2})/);return m?`${+m[3]}. ${+m[2]}. ${m[1]}`:"";}
+function czToDate(s){const m=(s||"").match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/);return m?new Date(+m[3],+m[2]-1,+m[1]):null;}
+function qToday(){const t=new Date();t.setHours(0,0,0,0);return t;}
+function qBadge(pub){const d=czToDate(pub);if(!d)return["— bez data","var(--ink-dim)"];
+  const diff=Math.round((d-qToday())/86400000);
+  if(diff<=0)return["🟢 Živé","#3ecf8e"];
+  if(diff===1)return["🗓️ zítra","#f5a623"];
+  return["🗓️ za "+diff+" dní","#f5a623"];}
+
+async function loadQueue(){
+  const el=document.getElementById("queueStatus");
+  el.className="status show info";el.textContent="⏳ Načítám frontu z webu...";
+  try{
+    const file=await ghGetFile("index.html");
+    if(!file||!file.content)throw new Error("Nepřipojeno k GitHubu (záložka Nastavení).");
+    const content=decodeURIComponent(escape(atob(file.content.replace(/\n/g,""))));
+    const mm=content.match(/const FEED\s*=\s*\[/);
+    if(!mm)throw new Error("Nenašel jsem pole FEED v index.html");
+    const start=mm.index+mm[0].length;
+    // brace-match konce pole
+    let i=start,depth=1,instr=false,esc=false,q="";
+    while(i<content.length&&depth>0){const c=content[i];
+      if(instr){if(esc)esc=false;else if(c==="\\")esc=true;else if(c===q)instr=false;}
+      else{if(c==='"'||c==="'"){instr=true;q=c;}else if(c==="[")depth++;else if(c==="]")depth--;}
+      i++;}
+    const arr=content.slice(start,i-1);
+    // top-level objekty
+    const objs=[];let d=0,os=null;instr=false;esc=false;q="";
+    for(let k=0;k<arr.length;k++){const c=arr[k];
+      if(instr){if(esc)esc=false;else if(c==="\\")esc=true;else if(c===q)instr=false;continue;}
+      if(c==='"'||c==="'"){instr=true;q=c;continue;}
+      if(c==="{"){if(d===0)os=k;d++;}
+      else if(c==="}"){d--;if(d===0)objs.push({absStart:start+os,absEnd:start+k+1,text:arr.slice(os,k+1)});}
+    }
+    const fld=(o,n)=>{const r=o.match(new RegExp(n+':"((?:[^"\\\\]|\\\\.)*)"'));return r?r[1]:null;};
+    QUEUE={content,sha:file.sha,objs:objs.map(o=>({absStart:o.absStart,absEnd:o.absEnd,
+      kind:fld(o.text,"kind"),id:fld(o.text,"id"),title:fld(o.text,"title"),published:fld(o.text,"published")}))};
+    if(!document.getElementById("queueStart").value){const t=new Date();
+      document.getElementById("queueStart").value=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")}`;}
+    renderQueue();
+    document.getElementById("btnSaveQueue").style.display="block";
+    el.className="status show ok";el.textContent="✓ Načteno "+QUEUE.objs.length+" článků";
+  }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
+}
+
+function renderQueue(){
+  const box=document.getElementById("queueList");
+  const rows=QUEUE.objs.map((o,idx)=>({o,idx}))
+    .sort((a,b)=>((czToDate(a.o.published)||0)-(czToDate(b.o.published)||0)));
+  box.innerHTML=rows.map(({o,idx})=>{
+    const [lbl,col]=qBadge(o.published);
+    return `<div class="qrow" data-idx="${idx}" style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)">
+      <input type="checkbox" class="qcheck" style="width:auto;margin:0">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(o.title||"(bez názvu)").replace(/</g,"&lt;")}</div>
+        <div style="font:400 11px var(--sans);color:var(--ink-dim)">${o.kind||"?"}${o.id?" · "+o.id:""}</div>
+      </div>
+      <span style="font:600 12px var(--sans);color:${col};white-space:nowrap">${lbl}</span>
+      <input type="date" class="qdate" value="${czToISO(o.published)}" style="width:auto">
+    </div>`;}).join("");
+}
+
+function autoStagger(){
+  if(!QUEUE){alert("Nejdřív načti frontu.");return;}
+  const startISO=document.getElementById("queueStart").value;
+  if(!startISO){alert("Vyber datum startu.");return;}
+  const checked=[...document.querySelectorAll("#queueList .qrow")].filter(r=>r.querySelector(".qcheck").checked);
+  if(checked.length===0){alert("Zaškrtni aspoň jeden článek.");return;}
+  let d=new Date(startISO);
+  checked.forEach(row=>{
+    row.querySelector(".qdate").value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    d.setDate(d.getDate()+1);
+  });
+}
+
+async function saveQueue(){
+  if(!QUEUE)return;
+  const el=document.getElementById("queueStatus");
+  const changes={};
+  document.querySelectorAll("#queueList .qrow").forEach(row=>{
+    const idx=+row.dataset.idx, cz=isoToCz(row.querySelector(".qdate").value);
+    if(cz&&cz!==QUEUE.objs[idx].published)changes[idx]=cz;
+  });
+  const idxs=Object.keys(changes).map(Number).sort((a,b)=>b-a); // od konce, pozice zůstanou platné
+  if(idxs.length===0){el.className="status show info";el.textContent="Nic se nezměnilo.";return;}
+  if(!confirm("Uložit "+idxs.length+" změn na web?"))return;
+  el.className="status show info";el.textContent="⏳ Ukládám frontu...";
+  try{
+    let content=QUEUE.content;
+    idxs.forEach(idx=>{const o=QUEUE.objs[idx];
+      const oldText=content.slice(o.absStart,o.absEnd);
+      const newText=oldText.replace(/(published:")[^"]*(")/,`$1${changes[idx]}$2`);
+      content=content.slice(0,o.absStart)+newText+content.slice(o.absEnd);
+    });
+    await ghPutFile("index.html",content,QUEUE.sha,"Aktualizace fronty článků (admin)");
+    el.className="status show ok";el.textContent="✅ Fronta uložena! Web se aktualizuje za ~1 min.";
+    QUEUE=null;setTimeout(loadQueue,1800);
+  }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
+}
+
 // ========== INIT ==========
 function unlockTabs(){
   const a=document.getElementById("navArticle");
@@ -700,6 +835,8 @@ function unlockTabs(){
   a.style.opacity="1";a.style.pointerEvents="auto";a.textContent="✏️ Článek";
   p.style.opacity="1";p.style.pointerEvents="auto";p.textContent="🚀 Publikuj";
   s.style.opacity="1";s.style.pointerEvents="auto";s.textContent="📊 Statistiky";
+  const q=document.getElementById("navQueue");
+  if(q){q.style.opacity="1";q.style.pointerEvents="auto";q.textContent="🗓️ Fronta";}
 }
 loadSettings();
 if(GH.token){
