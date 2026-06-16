@@ -365,6 +365,27 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <div id="queueList"></div>
 
   <button class="btn btn-primary" id="btnSaveQueue" onclick="saveQueue()" style="margin-top:14px;display:none">💾 Uložit frontu na web</button>
+
+  <!-- EDITOR PUBLIKOVANÉHO ČLÁNKU -->
+  <div id="editPanel" class="card" style="display:none;margin-top:18px">
+    <h2 style="margin-top:0">✏️ Upravit článek <span id="edWho" style="font:400 13px var(--sans);color:var(--ink-dim)"></span></h2>
+    <p style="font:400 12px var(--sans);color:var(--ink-dim);margin:0 0 10px">Změň text nebo přidej obrázek. Co nevyplníš, zůstane beze změny.</p>
+    <label>Titulek</label><input id="edTitle">
+    <label>Hook (úvodní věta)</label><input id="edHook">
+    <label>Teaser (popis na kartě)</label><textarea id="edTeaser" rows="2"></textarea>
+    <label>Tělo článku (odstavce odděl prázdným řádkem)</label><textarea id="edBody" rows="10"></textarea>
+    <label>Zajímavost (box)</label><textarea id="edFact" rows="2"></textarea>
+    <label>Obrázek — cesta</label><input id="edImage" placeholder="img/nazev.jpg">
+    <div class="img-drop" id="edImgDrop" onclick="document.getElementById('edImgFile').click()" style="margin-top:8px">
+      📷 Nahrát / změnit obrázek
+      <input type="file" id="edImgFile" accept="image/*" style="display:none" onchange="handleEditImage(this)">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="saveEdit()" style="flex:1">💾 Uložit změny</button>
+      <button class="btn btn-secondary" onclick="cancelEdit()">Zrušit</button>
+    </div>
+    <div id="editStatus"></div>
+  </div>
 </div>
 
 </div> <!-- /mainApp -->
@@ -798,6 +819,7 @@ function renderQueue(){
       </div>
       <span style="font:600 12px var(--sans);color:${col};white-space:nowrap">${lbl}</span>
       <input type="date" class="qdate" value="${czToISO(o.published)}" style="width:auto">
+      <button class="btn btn-secondary" style="padding:6px 10px;margin:0" onclick="editArticle(${idx})" title="Upravit">✏️</button>
     </div>`;}).join("");
 }
 
@@ -837,6 +859,99 @@ async function saveQueue(){
     el.className="status show ok";el.textContent="✅ Fronta uložena! Web se aktualizuje za ~1 min.";
     QUEUE=null;setTimeout(loadQueue,1800);
   }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
+}
+
+// ========== EDITACE PUBLIKOVANÉHO ČLÁNKU ==========
+let EDIT_IDX=null, editImageData=null, editImageName="";
+function escJS(v){return String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r?\n/g,"\\n");}
+function unescJS(s){return String(s).replace(/\\n/g,"\n").replace(/\\"/g,'"').replace(/\\\\/g,"\\");}
+function pField(obj,name){const m=obj.match(new RegExp(name+':"((?:[^"\\\\]|\\\\.)*)"'));return m?unescJS(m[1]):"";}
+function setField(obj,name,val){
+  const re=new RegExp("("+name+':")(?:[^"\\\\]|\\\\.)*(")');
+  if(re.test(obj))return obj.replace(re,(m,p1,p2)=>p1+escJS(val)+p2);
+  return obj.replace(/(\bid:"[^"]*",?)/,m=>m+"\n    "+name+':"'+escJS(val)+'",');
+}
+function getBody(obj){
+  const i=obj.indexOf("body:");if(i<0)return[];
+  const lb=obj.indexOf("[",i);if(lb<0)return[];
+  let d=0,instr=false,esc=false,q="",cur="",items=[];
+  for(let j=lb;j<obj.length;j++){const c=obj[j];
+    if(instr){if(esc){cur+=c;esc=false;}else if(c==="\\"){esc=true;cur+=c;}else if(c===q){instr=false;items.push(cur);}else cur+=c;continue;}
+    if(c==='"'||c==="'"){instr=true;q=c;cur="";continue;}
+    if(c==="[")d++;else if(c==="]"){d--;if(d===0)break;}
+  }
+  return items.map(unescJS);
+}
+function setBody(obj,paras){
+  const i=obj.indexOf("body:");if(i<0)return obj;
+  const lb=obj.indexOf("[",i);if(lb<0)return obj;
+  let d=0,instr=false,esc=false,q="",j=lb;
+  for(;j<obj.length;j++){const c=obj[j];
+    if(instr){if(esc)esc=false;else if(c==="\\")esc=true;else if(c===q)instr=false;continue;}
+    if(c==='"'||c==="'"){instr=true;q=c;continue;}
+    if(c==="[")d++;else if(c==="]"){d--;if(d===0){j++;break;}}
+  }
+  const newArr="body:["+paras.map(p=>"\n      \""+escJS(p)+"\"").join(",")+"\n    ]";
+  return obj.slice(0,i)+newArr+obj.slice(j);
+}
+function editArticle(idx){
+  if(!QUEUE)return;
+  EDIT_IDX=idx; editImageData=null; editImageName="";
+  const o=QUEUE.objs[idx]; const t=QUEUE.content.slice(o.absStart,o.absEnd);
+  document.getElementById("edWho").textContent="("+(o.id||o.kind||"")+")";
+  document.getElementById("edTitle").value=pField(t,"title");
+  document.getElementById("edHook").value=pField(t,"hook");
+  document.getElementById("edTeaser").value=pField(t,"teaser");
+  document.getElementById("edBody").value=getBody(t).join("\n\n");
+  document.getElementById("edFact").value=pField(t,"fact");
+  document.getElementById("edImage").value=pField(t,"image");
+  document.getElementById("edImgDrop").innerHTML='📷 Nahrát / změnit obrázek<input type="file" id="edImgFile" accept="image/*" style="display:none" onchange="handleEditImage(this)">';
+  const st=document.getElementById("editStatus");st.className="status";st.textContent="";
+  document.getElementById("editPanel").style.display="block";
+  document.getElementById("editPanel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function handleEditImage(input){
+  const f=input.files[0];if(!f)return; editImageName=f.name;
+  const r=new FileReader();
+  r.onload=e=>{editImageData=e.target.result.split(",")[1];
+    document.getElementById("edImgDrop").innerHTML=`<img src="${e.target.result}">`;
+    if(!document.getElementById("edImage").value){
+      const o=QUEUE.objs[EDIT_IDX]; document.getElementById("edImage").value="img/"+((o&&o.id)||("clanek-"+EDIT_IDX))+".jpg";}
+  };
+  r.readAsDataURL(f);
+}
+function cancelEdit(){document.getElementById("editPanel").style.display="none";EDIT_IDX=null;editImageData=null;}
+async function saveEdit(){
+  if(EDIT_IDX==null||!QUEUE)return;
+  const st=document.getElementById("editStatus");
+  const o=QUEUE.objs[EDIT_IDX];
+  let imgPath=document.getElementById("edImage").value.trim();
+  if(imgPath&&!imgPath.startsWith("img/"))imgPath="img/"+imgPath;
+  try{
+    st.className="status show info";st.textContent="⏳ Ukládám...";
+    if(editImageData){
+      if(!imgPath)imgPath="img/"+((o.id||("clanek-"+EDIT_IDX)))+".jpg";
+      st.textContent="📷 Nahrávám obrázek...";
+      await ghUploadBinary(imgPath,editImageData,"Obrázek k článku "+(o.id||""));
+    }
+    let t=QUEUE.content.slice(o.absStart,o.absEnd);
+    const orig=t;
+    t=setField(t,"title",document.getElementById("edTitle").value);
+    t=setField(t,"hook",document.getElementById("edHook").value);
+    t=setField(t,"teaser",document.getElementById("edTeaser").value);
+    t=setField(t,"fact",document.getElementById("edFact").value);
+    if(imgPath)t=setField(t,"image",imgPath);
+    const paras=document.getElementById("edBody").value.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+    if(paras.length)t=setBody(t,paras);
+    st.textContent="📄 Ukládám na web...";
+    const fresh=await ghGetFile("index.html");
+    let content=decodeURIComponent(escape(atob(fresh.content.replace(/\n/g,""))));
+    if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
+    content=content.replace(orig,t);
+    await ghPutFile("index.html",content,fresh.sha,"Úprava článku "+(o.id||"")+" (admin)");
+    st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje za ~1 min.";
+    QUEUE=null;setTimeout(()=>{cancelEdit();loadQueue();},1600);
+  }catch(e){st.className="status show err";st.textContent="❌ "+(e.message||"Chyba");}
 }
 
 // ========== INIT ==========
