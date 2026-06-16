@@ -791,12 +791,12 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.c
 /* ---- ANALYTICS TRACKING ---- */
 const _t0=Date.now();
 function track(type,extra){try{fetch(TRACK_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(Object.assign({type:type,page:location.pathname},extra||{}))});}catch(e){}}
-track("pageview");
 window.addEventListener("beforeunload",function(){track("time",{duration:Math.round((Date.now()-_t0)/1000)});});
 
 /* ---- waitlist (Google Sheets přes Apps Script) ---- */
 const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbxA9GKuiTeKhcvLcJwEHfxiTdtSqjqHzYSXJ5bdOcIyLsNzwJMUA9pleh8SvBOA7taX/exec";
 const TRACK_URL=WAITLIST_ENDPOINT;
+track("pageview");
 const form=document.getElementById("waitlist"),msg=document.getElementById("formMsg");
 form.addEventListener("submit",async e=>{
   e.preventDefault();const email=document.getElementById("email").value.trim();
