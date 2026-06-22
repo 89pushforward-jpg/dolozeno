@@ -1,4 +1,3 @@
-.github/workflows/generate-clanky.yml
 name: Generovat stránky článků
 
 on:
