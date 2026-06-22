@@ -1,0 +1,33 @@
+.github/workflows/generate-clanky.yml
+name: Generovat stránky článků
+
+on:
+  push:
+    branches: [ main, master ]
+    paths: [ 'index.html' ]   # spustí se jen když nahraješ/změníš index.html
+  workflow_dispatch: {}        # umožní spustit i ručně tlačítkem v kartě Actions
+
+permissions:
+  contents: write              # automat smí zapsat vygenerované soubory zpět do repa
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Vyrobit stránky článků + sitemapu
+        run: node generate-clanky.js
+      - name: Uložit změny zpět do repa
+        run: |
+          git config user.name "dolozeno-bot"
+          git config user.email "actions@github.com"
+          git add clanky sitemap.xml
+          if git diff --staged --quiet; then
+            echo "Žádné změny."
+          else
+            git commit -m "Auto: stránky článků + sitemap [skip ci]"
+            git push
+          fi
