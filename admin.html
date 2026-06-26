@@ -105,9 +105,12 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <h1 style="text-align:center;font:700 24px var(--sans);color:var(--ink);margin-bottom:8px">Přihlášení</h1>
     <p style="text-align:center;font:400 14px var(--sans);color:var(--ink-dim);margin-bottom:32px">Pouze pro oprávněné osoby.</p>
     <label>Jméno</label>
-    <input type="text" id="loginUser" placeholder="Uživatel" autocomplete="username">
+    <input type="text" id="loginUser" placeholder="Uživatel" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
     <label>Heslo</label>
-    <input type="password" id="loginPass" placeholder="Heslo" autocomplete="current-password">
+    <input type="password" id="loginPass" placeholder="Heslo" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+    <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font:400 14px var(--sans);color:var(--ink-dim);cursor:pointer">
+      <input type="checkbox" id="showPass" onclick="document.getElementById('loginPass').type=this.checked?'text':'password'" style="width:auto;margin:0"> 👁 Zobrazit heslo
+    </label>
     <button class="btn btn-primary" onclick="tryLogin()" style="margin-top:20px">Přihlásit se</button>
     <div id="loginErr" class="status" style="margin-top:12px"></div>
   </div>
@@ -401,8 +404,8 @@ async function sha256(text){
 }
 
 async function tryLogin(){
-  const u=document.getElementById("loginUser").value.trim();
-  const p=document.getElementById("loginPass").value;
+  const u=document.getElementById("loginUser").value.trim().toLowerCase();
+  const p=document.getElementById("loginPass").value.trim();
   const hash=await sha256(u+":"+p);
   if(hash===AUTH_HASH){
     sessionStorage.setItem("dolozeno_auth","1");
