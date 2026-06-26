@@ -814,15 +814,18 @@ function renderQueue(){
     .sort((a,b)=>((czToDate(b.o.published)||0)-(czToDate(a.o.published)||0)));
   box.innerHTML=rows.map(({o,idx})=>{
     const [lbl,col]=qBadge(o.published);
-    return `<div class="qrow" data-idx="${idx}" style="display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)">
+    const hidden=isHiddenDate(o.published);
+    return `<div class="qrow" data-idx="${idx}" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)${hidden?";opacity:.6":""}">
       <input type="checkbox" class="qcheck" style="width:auto;margin:0">
-      <div style="flex:1;min-width:0">
+      <div style="flex:1;min-width:120px">
         <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(o.title||"(bez názvu)").replace(/</g,"&lt;")}</div>
-        <div style="font:400 11px var(--sans);color:var(--ink-dim)">${o.kind||"?"}${o.id?" · "+o.id:""}</div>
+        <div style="font:400 11px var(--sans);color:var(--ink-dim)">${o.kind||"?"}${o.id?" · "+o.id:""}${hidden?" · 🙈 skrytý":""}</div>
       </div>
       <span style="font:600 12px var(--sans);color:${col};white-space:nowrap">${lbl}</span>
       <input type="date" class="qdate" value="${czToISO(o.published)}" style="width:auto">
-      <button class="btn btn-secondary" style="padding:6px 10px;margin:0" onclick="editArticle(${idx})" title="Upravit">✏️</button>
+      <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="toggleHide(${idx})" title="${hidden?"Zobrazit":"Skrýt"}">${hidden?"👁":"🙈"}</button>
+      <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="editArticle(${idx})" title="Upravit">✏️</button>
+      <button class="btn btn-secondary" style="padding:6px 9px;margin:0;color:#ff6b6b;border-color:rgba(255,107,107,.4)" onclick="deleteArticle(${idx})" title="Smazat">🗑️</button>
     </div>`;}).join("");
 }
 
@@ -955,6 +958,83 @@ async function saveEdit(){
     st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje za ~1 min.";
     QUEUE=null;setTimeout(()=>{cancelEdit();loadQueue();},1600);
   }catch(e){st.className="status show err";st.textContent="❌ "+(e.message||"Chyba");}
+}
+
+// ========== SKRÝT / ZOBRAZIT / SMAZAT ČLÁNEK ==========
+const HIDE_DATE="1. 1. 2099";
+function isHiddenDate(p){const m=(p||"").match(/(\d{4})/);return !!m&&+m[1]>=2099;}
+function todayCz(){const t=new Date();return `${t.getDate()}. ${t.getMonth()+1}. ${t.getFullYear()}`;}
+
+async function ghDeleteFile(path, sha, msg){
+  return ghAPI(`/repos/${GH.owner}/${GH.repo}/contents/${path}`,"DELETE",{message:msg,sha});
+}
+
+// Vyndá objekt z pole FEED a uklidí přilehlou čárku (funguje pro první/prostřední/poslední prvek)
+function feedRemoveObject(content, objText){
+  const i=content.indexOf(objText);
+  if(i<0)return null;
+  let from=i, to=i+objText.length;
+  let t=to; while(t<content.length && /\s/.test(content[t])) t++;
+  if(content[t]===","){ to=t+1; }
+  else { let f=from; while(f>0 && /\s/.test(content[f-1])) f--; if(content[f-1]===","){ from=f-1; } }
+  return content.slice(0,from)+content.slice(to);
+}
+
+async function toggleHide(idx){
+  if(!QUEUE)return;
+  const o=QUEUE.objs[idx];
+  const hidden=isHiddenDate(o.published);
+  const newDate=hidden?todayCz():HIDE_DATE;
+  const verb=hidden?"Zobrazit":"Skrýt";
+  if(!confirm(verb+" článek „"+(o.title||o.id||"")+"“?"+(hidden?" Vrátí se na web s dnešním datem.":" Zmizí z webu (zůstane uložený, půjde vrátit).")))return;
+  const el=document.getElementById("queueStatus");
+  el.className="status show info";el.textContent="⏳ "+verb+"…";
+  try{
+    const orig=QUEUE.content.slice(o.absStart,o.absEnd);
+    const fresh=await ghGetFile("index.html");
+    if(!fresh||!fresh.content)throw new Error("Nepřipojeno k GitHubu (záložka Nastavení).");
+    let content=decodeURIComponent(escape(atob(fresh.content.replace(/\n/g,""))));
+    if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
+    let nt = /published:"/.test(orig)
+      ? orig.replace(/(published:")[^"]*(")/,`$1${newDate}$2`)
+      : orig.replace(/(\bid:"[^"]*",?)/,m=>m+` published:"${newDate}",`);
+    content=content.replace(orig,nt);
+    const res=await ghPutFile("index.html",content,fresh.sha,verb+" článku "+(o.id||"")+" (admin)");
+    if(res&&res.message&&!res.content)throw new Error(res.message);
+    el.className="status show ok";el.textContent="✅ "+verb+" hotovo. Web se aktualizuje za ~1 min.";
+    QUEUE=null;setTimeout(loadQueue,1600);
+  }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
+}
+
+async function deleteArticle(idx){
+  if(!QUEUE)return;
+  const o=QUEUE.objs[idx];
+  const dup=QUEUE.objs.filter(x=>x.id&&x.id===o.id).length;
+  let m="SMAZAT článek „"+(o.title||o.id||"")+"“?\n\nTohle je nevratné — článek zmizí z webu i ze sitemap.";
+  if(dup>1)m+="\n\nPozn.: ID „"+o.id+"“ je v seznamu "+dup+"×. Stránka clanky/"+o.id+".html zůstane (patří druhému výskytu).";
+  if(!confirm(m))return;
+  const el=document.getElementById("queueStatus");
+  el.className="status show info";el.textContent="⏳ Mažu…";
+  try{
+    const orig=QUEUE.content.slice(o.absStart,o.absEnd);
+    const fresh=await ghGetFile("index.html");
+    if(!fresh||!fresh.content)throw new Error("Nepřipojeno k GitHubu (záložka Nastavení).");
+    let content=decodeURIComponent(escape(atob(fresh.content.replace(/\n/g,""))));
+    if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
+    const removed=feedRemoveObject(content,orig);
+    if(removed===null)throw new Error("Nepodařilo se najít článek v poli FEED.");
+    const res=await ghPutFile("index.html",removed,fresh.sha,"Smazání článku "+(o.id||"")+" (admin)");
+    if(res&&res.message&&!res.content)throw new Error(res.message);
+    // pojistka: smaž stránku clanky/<id>.html jen když nezůstává jiný článek se stejným ID
+    if(o.id && dup<=1){
+      el.textContent="🧹 Mažu stránku clanky/"+o.id+".html…";
+      try{const cf=await ghGetFile("clanky/"+o.id+".html");
+        if(cf&&cf.sha)await ghDeleteFile("clanky/"+o.id+".html",cf.sha,"Smazání stránky článku "+o.id+" (admin)");
+      }catch(e){}
+    }
+    el.className="status show ok";el.textContent="✅ Smazáno. Sitemap se přegeneruje při pushi (~1 min).";
+    QUEUE=null;setTimeout(loadQueue,1600);
+  }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
 }
 
 // ========== INIT ==========
