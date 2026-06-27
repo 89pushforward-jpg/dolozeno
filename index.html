@@ -136,7 +136,7 @@
   .chip-fp .fp-p{color:var(--pepa);border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.10);border-radius:0 6px 6px 0}
   .filter.active.chip-fp{box-shadow:0 0 0 2px rgba(242,196,15,.5),0 0 14px rgba(242,196,15,.3)}
   .verdikt{margin-top:6px;padding-top:18px;border-top:1px solid var(--line)}
-  .verdikt-cap{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);text-align:center;margin-bottom:14px}
+  .verdikt-cap{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-align:center;margin-bottom:14px}
   .verdikt-head{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
   .v-stamp{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:7px 14px;display:inline-flex;align-items:center;gap:6px}
   .v-stamp.t-overeno{background:var(--ok);color:#063524}
@@ -147,6 +147,7 @@
   .v-verd.potvrzeno{color:var(--ok);border-color:var(--ok)}
   .v-verd.nevime{color:var(--cyan);border-color:var(--cyan)}
   .v-verd.bezdukazu{color:var(--spec);border-color:var(--spec)}
+  .v-verd.vysvetleno{color:var(--ok);border-color:var(--ok)}
   .v-note{text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.55;margin:14px auto 18px;max-width:480px}
   .v-barcap{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-align:center;margin-bottom:8px}
   .v-bar{display:flex;height:32px;border-radius:8px;overflow:hidden}
@@ -295,7 +296,7 @@
   <section class="legend" aria-label="Filtry">
     <div class="frow">
       <span class="frow-lbl">DŮVĚRA</span>
-      <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">OVĚŘENO</button>
+      <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">FAKTA</button>
       <button class="chip chip-svedectvi filter" data-group="tag" data-val="svedectvi" aria-pressed="false">SVĚDECTVÍ</button>
       <button class="chip chip-spekulace filter" data-group="tag" data-val="spekulace" aria-pressed="false">SPEKULACE</button>
     </div>
@@ -516,7 +517,7 @@ const FEED = [
     ],
     fact:"Většina „záhadných“ záběrů má nudný vysvětlení — ptáci, drony, balony, odlesk čočky. Že je něco nuda ale neznamená, že nudný je všechno. Jen je rozumný začít u toho nejjednoduššího.",
     source:"r/UFOs", date:"2026", published:"9. 6. 2026", image:"", imgType:"ilustrace", imgCredit:"",
-    sources:[{name:"r/UFOs", url:"https://www.reddit.com/r/UFOs/", lang:"anglicky"}] ,"verdikt":{"proPct":17,"note":"Záběr byl zpočátku nejasný. Po změření z něj ale vyšel obyčejný pták.","pro":["Video bylo zpočátku opravdu nejasné"],"proti":["Měření ukázalo obyčejného ptáka (racka)","Většina „záhadných“ záběrů má nudné vysvětlení","Rozumné je začít u nejjednoduššího vysvětlení"]}},
+    sources:[{name:"r/UFOs", url:"https://www.reddit.com/r/UFOs/", lang:"anglicky"}] ,"verdikt":{"tier":"vysvetleno","proPct":90,"q":"Je ta záhada vyřešená?","note":"Tady to není záhada — měření ukázalo obyčejného ptáka. Případ uzavřený.","pro":["Měření dráhy a velikosti ukázalo racka","Ptáci, drony a balony jsou nejčastější příčina takových záběrů","Vysvětlení sedí na data, ne jen „mohlo by to být“"],"proti":["U hodně rozmazaných záběrů se měří hůř"]}},
 
   { kind:"zprava", tag:"spekulace", topic:"disclosure",
     hook:"„Tohle je teprve začátek,“ tvrdí muž od slavných UFO videí.",
@@ -672,7 +673,7 @@ const FEED = [
     sources:[
       {name:"war.gov/UFO — oficiální archiv PURSUE", url:"https://www.war.gov/UFO/", lang:"anglicky"},
       {name:"FOX — Third batch of UFO files released by Pentagon", url:"https://www.fox32chicago.com/news/third-batch-ufo-files-released-pentagon", lang:"anglicky"}
-    ] ,"verdikt":{"proPct":17,"note":"Audio je pravé. „Mimozemská základna“ je ale věta vytržená z kontextu.","pro":["Nahrávka je autentický archiv NASA"],"proti":["Jedna věta z dvouhodinového audia se šíří bez kontextu","V kontextu nejde o žádné potvrzení mimozemšťanů","Co bylo řečeno před a po, mění význam úplně"]}},
+    ] ,"verdikt":{"tier":"vysvetleno","proPct":85,"q":"Je ta záhada vyřešená?","note":"Žádná „mimozemská základna“ — je to věta vytržená z dvouhodinového audia. V kontextu je význam jasný.","pro":["Celá nahrávka je k dispozici a kontext se dá dohledat","V souvislosti ta věta nic mimozemského neříká","Jde o klasický misquote, ne o nový objev"],"proti":["Vytržená věta se šíří dál, i když je vyvrácená"]}},
   { kind:"zprava", tag:"overeno", topic:"disclosure", id:"rekonstrukce",
     hook:"Než nasdílíš „nové UFO video“, mrkni, jestli to není obrázek od kreslíře. Část páteční várky totiž je.",
     title:"Pozor na „záběry“: část nových UFO videí jsou kreslené rekonstrukce",
@@ -689,7 +690,7 @@ const FEED = [
     sources:[
       {name:"war.gov/UFO — oficiální archiv PURSUE", url:"https://www.war.gov/UFO/", lang:"anglicky"},
       {name:"LiveNOW from FOX — třetí dávka UFO spisů", url:"https://www.livenowfox.com/news/third-batch-ufo-files-released-pentagon", lang:"anglicky"}
-    ] ,"verdikt":{"proPct":14,"q":"je to reálný záznam UFO?","note":"Dobré vědět předem: některá „videa“ jsou kreslené rekonstrukce podle svědka, ne reálné záběry.","pro":["Rekonstrukce je legitimní způsob, jak ukázat svědectví"],"proti":["Je to kresba podle vzpomínky, ne záznam události","Vizuál působí na mozek jako důkaz, i když jím není","Hezký obrázek není tvrdá data"]}},
+    ] ,"verdikt":{"tier":"vysvetleno","proPct":85,"q":"Je jasné, na co koukáme?","note":"Tady není co řešit — některá „videa“ jsou kreslené rekonstrukce podle svědka, ne reálné záběry.","pro":["Jde prokazatelně o ilustraci, ne o záznam","Rekonstrukce bývá i takto označená","Hezký obrázek prostě není tvrdá data"],"proti":["Vizuál na mozek pořád působí jako důkaz"]}},
   { kind:"franta", tag:"franta", topic:"zahady", id:"franta3",
     hook:"Pepan viděl nové vládní UFO spisy a balí kufr na Mars. Franta otevírá soubory a čte je nahlas.",
     title:"Franta vs. Pepan: „Vláda přiznala mimozemšťany!“ Tak schválně.",
@@ -736,7 +737,7 @@ const FEED = [
       {name:"CIA – Studies in Intelligence (Haines)", url:"https://sgp.fas.org/library/ciaufo.html", lang:"anglicky"},
       {name:"AARO Historical Record Report", url:"https://www.aaro.mil/Portals/136/PDFs/AARO_Historical_Record_Report_Vol_1_2024.pdf", lang:"anglicky"},
       {name:"CBS News – 3. várka PURSUE", url:"https://www.cbsnews.com/news/ufo-files-pentagon-3rd-release-documents-videos/", lang:"anglicky"}
-    ] ,"verdikt":{"proPct":14,"q":"šlo o utajování mimozemšťanů?","note":"Utajování bylo skutečné — jen nešlo o mimozemšťany, ale o tlumení zájmu o ně.","pro":["Tajná komise i mediální kampaň reálně existovaly"],"proti":["Komise sama uzavřela, že UFO nejsou mimozemšťani","Cílem bylo utlumit zájem veřejnosti, ne skrýt ufouny","Prostudovala jen hrstku případů během ~12 hodin"]}},
+    ] ,"verdikt":{"tier":"vysvetleno","proPct":85,"q":"Je ta záhada vyřešená?","note":"Utajování bylo reálné, ale je doložené — šlo o tlumení zájmu o UFO, ne o skrývání mimozemšťanů.","pro":["Komise i mediální kampaň jsou historicky doložené","Sama komise uzavřela, že UFO nejsou mimozemšťani","Roli CIA potvrdily odtajněné spisy (1975)"],"proti":["Že šlo „jen“ o tlumení zájmu, část lidí nepřesvědčí"]}},
 
 
   { kind:"zprava", tag:"spekulace", topic:"zahady", id:"wow-signal",
@@ -796,7 +797,7 @@ const FEED = [
     {name:"U.S. Navy — U-2s, UFOs, and Operation Blue Book", url:"https://www.history.navy.mil/browse-by-topic/disasters-and-phenomena/u2s-ufos-and-operation-blue-book.html", lang:"anglicky"},
     {name:"Britannica — Project Blue Book", url:"https://www.britannica.com/topic/Project-Blue-Book", lang:"anglicky"},
     {name:"History.com — How the CIA Tried to Quell UFO Panic During the Cold War", url:"https://www.history.com/articles/ufo-sightings-cia-robertson-condon", lang:"anglicky"}
-  ] ,"verdikt":{"proPct":13,"q":"tajila vláda mimozemšťany?","note":"Vláda pravdu opravdu tajila — jen skrývala špionážní letadla U-2, ne mimozemšťany.","pro":["Hlášení „ohnivých objektů“ reálně chodila"],"proti":["Šlo prokazatelně o letadla U-2, ne o ufouny","Stříbrná křídla ve výšce zářila ve slunci jako oheň","CIA to potvrdila ve své vlastní historii"]}},
+  ] ,"verdikt":{"tier":"vysvetleno","proPct":88,"q":"Je ta záhada vyřešená?","note":"Záhada je vyřešená — „ohnivé objekty“ byla špionážní letadla U-2, potvrdila to sama CIA.","pro":["CIA původ hlášení potvrdila ve své historii","Stříbrná křídla U-2 ve výšce zářila ve slunci","Sedí to časově i geograficky s lety U-2"],"proti":["Ne každé tehdejší hlášení šlo takto přiřadit"]}},
 { kind:"franta", tag:"franta", topic:"disclosure", id:"franta4",
     hook:"Pepan slaví: vláda dala UFO spisy vědcům z Harvardu. Franta zjišťuje, že ti vědci ty spisy vidět nesmí.",
     title:"Franta vs. Pepan: vědci od UFO, co k UFO spisům nesmí",
@@ -891,7 +892,7 @@ FEED.forEach((it,i)=>{ const m=IMAGES[i]; if(!m||it.image)return;
 });
 
 const TAGCOL = { overeno:"#3ecf8e", svedectvi:"#ff9d4d", spekulace:"#ff6b6b", franta:"#f2c40f" };
-const LABELS = { overeno:"OVĚŘENO", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
+const LABELS = { overeno:"FAKTA", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
 
 function coverSVG(tag,i){
   const c=TAGCOL[tag], stamp = (tag==="franta") ? "SATIRA" : "SPIS";
@@ -1003,17 +1004,21 @@ function openArticle(i){
     var v=it.verdikt; if(!v) return "";
     var pro=Math.max(0,Math.min(100, v.proPct!=null?v.proPct:50)); var proti=100-pro;
     var tier=v.tier||(pro>=70?"potvrzeno":(pro<=30?"bezdukazu":"nevime"));
-    var vlabel=tier==="potvrzeno"?"POTVRZENO":(tier==="bezdukazu"?"BEZ DŮKAZU":"NEVÍME");
-    var stampTxt=(typeof LABELS!=="undefined"&&LABELS[it.tag])?LABELS[it.tag]:"OVĚŘENO";
+    var isV=tier==="vysvetleno";
+    var vlabel=tier==="potvrzeno"?"POTVRZENO":isV?"VYSVĚTLENO":(tier==="bezdukazu"?"BEZ DŮKAZU":"NEVÍME");
+    var barCap=isV?(v.q||"Je ta záhada vyřešená?"):("Váha důkazů — "+(v.q||"je za tím něco mimozemského?"));
+    var segL=isV?(proti+" % otevřené"):(proti+" % proti");
+    var segR=isV?(pro+" % vysvětleno"):(pro+" % pro");
+    var headProti=isV?"ZBÝVÁ OTEVŘENÉ":"PROTI";
+    var headPro=isV?"VYSVĚTLENÍ":"PRO";
     var L=function(a){return (a||[]).map(function(t){return "<li>"+t+"</li>";}).join("");};
-    return '<div class="verdikt"><div class="verdikt-cap">Shrnutí redakce</div>'
-      +'<div class="verdikt-head"><span class="v-stamp t-'+it.tag+'"><span aria-hidden="true">✓</span> '+stampTxt+'</span>'
-      +'<span class="v-arrow">→</span><span class="v-verd '+tier+'">VERDIKT: '+vlabel+'</span></div>'
+    return '<div class="verdikt"><div class="verdikt-cap">Verdikt redakce</div>'
+      +'<div class="verdikt-head"><span class="v-verd '+tier+'">'+vlabel+'</span></div>'
       +(v.note?'<div class="v-note">'+v.note+'</div>':'')
-      +'<div class="v-barcap">Váha důkazů — '+(v.q||'je za tím něco mimozemského?')+'</div>'
-      +'<div class="v-bar"><div class="seg seg-proti" style="width:'+proti+'%">'+proti+' % proti</div><div class="seg seg-pro" style="width:'+pro+'%">'+pro+' % pro</div></div>'
-      +'<div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">✗</span> PROTI</h6><ul>'+L(v.proti)+'</ul></div>'
-      +'<div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> PRO</h6><ul>'+L(v.pro)+'</ul></div></div></div>';
+      +'<div class="v-barcap">'+barCap+'</div>'
+      +'<div class="v-bar"><div class="seg seg-proti" style="width:'+proti+'%">'+segL+'</div><div class="seg seg-pro" style="width:'+pro+'%">'+segR+'</div></div>'
+      +'<div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">'+(isV?'○':'✗')+'</span> '+headProti+'</h6><ul>'+L(v.proti)+'</ul></div>'
+      +'<div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> '+headPro+'</h6><ul>'+L(v.pro)+'</ul></div></div></div>';
   })();
   document.getElementById("d-glosa").innerHTML = (function(){
     if(it.kind==="franta") return "";

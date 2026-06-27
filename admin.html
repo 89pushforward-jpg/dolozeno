@@ -180,7 +180,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div style="flex:1">
         <label>Štítek</label>
         <select id="artTag">
-          <option value="overeno">✅ Ověřeno</option>
+          <option value="overeno">✅ Fakta (ověřená)</option>
           <option value="svedectvi">🟠 Svědectví</option>
           <option value="spekulace">🔴 Spekulace</option>
           <option value="franta">🟡 Franta</option>
@@ -213,15 +213,20 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <textarea id="artFact" rows="2" placeholder="Jeden zajímavý fakt k tématu"></textarea>
 
     <label style="margin-top:12px;border-top:1px solid #2a2f3a;padding-top:14px;display:block">⚖️ Verdikt redakce (nepovinné — necháš prázdné = bez verdiktu)</label>
-    <label>% důkazů PRO (0–100)</label>
+    <label>Typ verdiktu</label>
+    <select id="artVTier">
+      <option value="auto">Automaticky podle % (Potvrzeno / Nevíme / Bez důkazu)</option>
+      <option value="vysvetleno">✅ VYSVĚTLENO — případ je prokazatelně vyřešený (zelený)</option>
+    </select>
+    <label>% PRO  (u VYSVĚTLENO = jak moc je to vysvětlené, např. 90)</label>
     <input id="artVProPct" type="number" min="0" max="100" placeholder="např. 30  ·  ≥70 = Potvrzeno, 30–70 = Nevíme, ≤30 = Bez důkazu">
     <label>Otázka do lišty (nepovinné)</label>
-    <input id="artVQ" placeholder="např. je to známka mimozemského života?  (prázdné = „je za tím něco mimozemského?“)">
+    <input id="artVQ" placeholder="např. je to známka mimozemského života?  ·  u VYSVĚTLENO: Je ta záhada vyřešená?">
     <label>Shrnutí redakce (1 věta)</label>
     <textarea id="artVNote" rows="2" placeholder="Fakta sedí. Mimozemšťan z toho ale neplyne."></textarea>
-    <label>Body PRO (každý na nový řádek)</label>
+    <label>Body PRO  (u VYSVĚTLENO = co to vysvětluje · každý na nový řádek)</label>
     <textarea id="artVPro" rows="3" placeholder="40 % případů úřad zatím neumí vysvětlit"></textarea>
-    <label>Body PROTI (každý na nový řádek)</label>
+    <label>Body PROTI  (u VYSVĚTLENO = co zbývá otevřené · každý na nový řádek)</label>
     <textarea id="artVProti" rows="4" placeholder="„Nevysvětlené“ ≠ „mimozemské“"></textarea>
 
     <label id="lblGlosa">Frantova glosa</label>
@@ -646,6 +651,8 @@ ${bodyStr}
     const ve=x=>x.split('"').join(BS+'"');
     const va=a=>"["+a.map(x=>`"${ve(x)}"`).join(",")+"]";
     let vp=["proPct:"+(vProPct===""?50:(parseInt(vProPct,10)||0))];
+    const vTier=document.getElementById("artVTier").value;
+    if(vTier==="vysvetleno")vp.push('tier:"vysvetleno"');
     if(vQ)vp.push('q:"'+ve(vQ)+'"');
     if(vNote)vp.push('note:"'+ve(vNote)+'"');
     vp.push("pro:"+va(vPro));
