@@ -180,8 +180,8 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
       <div style="flex:1">
         <label>Štítek</label>
         <select id="artTag">
-          <option value="ověřeno">✅ Ověřeno</option>
-          <option value="svědectví">🟠 Svědectví</option>
+          <option value="overeno">✅ Ověřeno</option>
+          <option value="svedectvi">🟠 Svědectví</option>
           <option value="spekulace">🔴 Spekulace</option>
           <option value="franta">🟡 Franta</option>
         </select>
@@ -211,6 +211,18 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 
     <label>Zajímavost (box)</label>
     <textarea id="artFact" rows="2" placeholder="Jeden zajímavý fakt k tématu"></textarea>
+
+    <label style="margin-top:12px;border-top:1px solid #2a2f3a;padding-top:14px;display:block">⚖️ Verdikt redakce (nepovinné — necháš prázdné = bez verdiktu)</label>
+    <label>% důkazů PRO (0–100)</label>
+    <input id="artVProPct" type="number" min="0" max="100" placeholder="např. 30  ·  ≥70 = Potvrzeno, 30–70 = Nevíme, ≤30 = Bez důkazu">
+    <label>Otázka do lišty (nepovinné)</label>
+    <input id="artVQ" placeholder="např. je to známka mimozemského života?  (prázdné = „je za tím něco mimozemského?“)">
+    <label>Shrnutí redakce (1 věta)</label>
+    <textarea id="artVNote" rows="2" placeholder="Fakta sedí. Mimozemšťan z toho ale neplyne."></textarea>
+    <label>Body PRO (každý na nový řádek)</label>
+    <textarea id="artVPro" rows="3" placeholder="40 % případů úřad zatím neumí vysvětlit"></textarea>
+    <label>Body PROTI (každý na nový řádek)</label>
+    <textarea id="artVProti" rows="4" placeholder="„Nevysvětlené“ ≠ „mimozemské“"></textarea>
 
     <label id="lblGlosa">Frantova glosa</label>
     <textarea id="artGlosa" rows="2" placeholder="Frantův komentář k článku (2–4 věty)"></textarea>
@@ -547,7 +559,7 @@ function addSource(name="",url="",lang="anglicky"){
 // ========== FRANTA TOGGLE ==========
 function toggleFranta(){
   const isFranta=document.getElementById("artKind").value==="franta";
-  document.getElementById("artTag").value=isFranta?"franta":"ověřeno";
+  document.getElementById("artTag").value=isFranta?"franta":"overeno";
   document.getElementById("lblGlosa").style.display=isFranta?"none":"block";
   document.getElementById("artGlosa").style.display=isFranta?"none":"block";
 }
@@ -623,6 +635,24 @@ ${bodyStr}
     code+=`\n    frantaGlosa:"${glosa.replace(/"/g,'\\"')}",`;
   }
 
+  // Verdikt (nepovinné)
+  const vProPct=document.getElementById("artVProPct").value.trim();
+  const vNote=document.getElementById("artVNote").value.trim();
+  const vQ=document.getElementById("artVQ").value.trim();
+  const NL=String.fromCharCode(10), BS=String.fromCharCode(92);
+  const vPro=document.getElementById("artVPro").value.split(NL).map(x=>x.trim()).filter(Boolean);
+  const vProti=document.getElementById("artVProti").value.split(NL).map(x=>x.trim()).filter(Boolean);
+  if(kind!=="franta" && (vProPct!=="" || vPro.length || vProti.length)){
+    const ve=x=>x.split('"').join(BS+'"');
+    const va=a=>"["+a.map(x=>`"${ve(x)}"`).join(",")+"]";
+    let vp=["proPct:"+(vProPct===""?50:(parseInt(vProPct,10)||0))];
+    if(vQ)vp.push('q:"'+ve(vQ)+'"');
+    if(vNote)vp.push('note:"'+ve(vNote)+'"');
+    vp.push("pro:"+va(vPro));
+    vp.push("proti:"+va(vProti));
+    code+=`
+    verdikt:{ ${vp.join(", ")} },`;
+  }
   code+=`\n    sources:[${srcStr}] }`;
 
   articleCode=code;
