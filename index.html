@@ -66,7 +66,7 @@
   header{padding:40px 22px 32px;margin-top:8px;border-radius:0 0 16px 16px;background:linear-gradient(to bottom,rgba(10,12,16,0.05) 0%,rgba(10,12,16,0.08) 55%,rgba(10,12,16,0.8) 80%,rgba(10,12,16,0.95) 100%),url('img/hero-bg.jpg') center 30%/cover no-repeat;border-bottom:1px solid var(--line)}
   .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
   .brand{font-family:var(--mono);font-weight:700;font-size:clamp(48px,13vw,81px);letter-spacing:.04em;line-height:.95;color:var(--signal);text-shadow:4px 4px 12px rgba(0,0,0,.7),0 0 40px rgba(0,0,0,.4)}
-  .tag-line{margin-top:14px;color:var(--ink-dim);font-size:15px;max-width:48ch}
+  .tag-line{margin-top:14px;color:var(--ink);font-size:15px;max-width:48ch}
 
   .hero{padding:24px 0 28px;border-bottom:1px solid var(--line)}
   .franta-bar{display:flex;align-items:center;justify-content:flex-end;gap:14px;padding:18px 0 14px;position:relative}
@@ -136,7 +136,8 @@
   .chip-fp .fp-p{color:var(--pepa);border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.10);border-radius:0 6px 6px 0}
   .filter.active.chip-fp{box-shadow:0 0 0 2px rgba(242,196,15,.5),0 0 14px rgba(242,196,15,.3)}
   .verdikt{margin-top:6px;padding-top:18px;border-top:1px solid var(--line)}
-  .verdikt-cap{font-family:var(--mono);font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-align:center;margin-bottom:14px}
+  .v-question{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;line-height:1.45;margin:0 auto 16px;max-width:520px}
+  .verdikt-cap{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:14px}
   .verdikt-head{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
   .v-stamp{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:7px 14px;display:inline-flex;align-items:center;gap:6px}
   .v-stamp.t-overeno{background:var(--ok);color:#063524}
@@ -149,7 +150,7 @@
   .v-verd.bezdukazu{color:var(--spec);border-color:var(--spec)}
   .v-verd.vysvetleno{color:var(--ok);border-color:var(--ok)}
   .v-note{text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.55;margin:14px auto 18px;max-width:480px}
-  .v-barcap{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);text-align:center;margin-bottom:8px}
+  .v-barcap{font-family:var(--sans);font-size:14px;color:var(--ink-dim);text-align:center;margin-bottom:8px}
   .v-bar{display:flex;height:32px;border-radius:8px;overflow:hidden}
   .v-bar .seg{box-sizing:border-box;font-family:var(--mono);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center}
   .v-bar .seg-proti{background:var(--spec);color:#3a0d12;border-right:2px solid var(--bg-card)}
@@ -296,7 +297,7 @@
   <section class="legend" aria-label="Filtry">
     <div class="frow">
       <span class="frow-lbl">DŮVĚRA</span>
-      <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">FAKTA</button>
+      <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">ZPRÁVA</button>
       <button class="chip chip-svedectvi filter" data-group="tag" data-val="svedectvi" aria-pressed="false">SVĚDECTVÍ</button>
       <button class="chip chip-spekulace filter" data-group="tag" data-val="spekulace" aria-pressed="false">SPEKULACE</button>
     </div>
@@ -892,7 +893,7 @@ FEED.forEach((it,i)=>{ const m=IMAGES[i]; if(!m||it.image)return;
 });
 
 const TAGCOL = { overeno:"#3ecf8e", svedectvi:"#ff9d4d", spekulace:"#ff6b6b", franta:"#f2c40f" };
-const LABELS = { overeno:"FAKTA", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
+const LABELS = { overeno:"ZPRÁVA", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
 
 function coverSVG(tag,i){
   const c=TAGCOL[tag], stamp = (tag==="franta") ? "SATIRA" : "SPIS";
@@ -1006,16 +1007,18 @@ function openArticle(i){
     var tier=v.tier||(pro>=70?"potvrzeno":(pro<=30?"bezdukazu":"nevime"));
     var isV=tier==="vysvetleno";
     var vlabel=tier==="potvrzeno"?"POTVRZENO":isV?"VYSVĚTLENO":(tier==="bezdukazu"?"BEZ DŮKAZU":"NEVÍME");
-    var barCap=isV?(v.q||"Je ta záhada vyřešená?"):("Váha důkazů — "+(v.q||"je za tím něco mimozemského?"));
+    var topQ=isV?(v.q||"Je ta záhada vyřešená?"):(v.q||"je za tím něco mimozemského?");
+    var barLabel=isV?"Míra vysvětlení":"Váha důkazů";
     var segL=isV?(proti+" % otevřené"):(proti+" % proti");
     var segR=isV?(pro+" % vysvětleno"):(pro+" % pro");
     var headProti=isV?"ZBÝVÁ OTEVŘENÉ":"PROTI";
     var headPro=isV?"VYSVĚTLENÍ":"PRO";
     var L=function(a){return (a||[]).map(function(t){return "<li>"+t+"</li>";}).join("");};
-    return '<div class="verdikt"><div class="verdikt-cap">Verdikt redakce</div>'
+    return '<div class="verdikt"><div class="v-question">'+topQ+'</div>'
+      +'<div class="verdikt-cap">Verdikt redakce</div>'
       +'<div class="verdikt-head"><span class="v-verd '+tier+'">'+vlabel+'</span></div>'
       +(v.note?'<div class="v-note">'+v.note+'</div>':'')
-      +'<div class="v-barcap">'+barCap+'</div>'
+      +'<div class="v-barcap">'+barLabel+'</div>'
       +'<div class="v-bar"><div class="seg seg-proti" style="width:'+proti+'%">'+segL+'</div><div class="seg seg-pro" style="width:'+pro+'%">'+segR+'</div></div>'
       +'<div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">'+(isV?'○':'✗')+'</span> '+headProti+'</h6><ul>'+L(v.proti)+'</ul></div>'
       +'<div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> '+headPro+'</h6><ul>'+L(v.pro)+'</ul></div></div></div>';
