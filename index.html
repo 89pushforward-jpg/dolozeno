@@ -894,6 +894,7 @@ FEED.forEach((it,i)=>{ const m=IMAGES[i]; if(!m||it.image)return;
 
 const TAGCOL = { overeno:"#3ecf8e", svedectvi:"#ff9d4d", spekulace:"#ff6b6b", franta:"#f2c40f" };
 const LABELS = { overeno:"ZPRÁVA", svedectvi:"SVĚDECTVÍ", spekulace:"SPEKULACE", franta:"FRANTA" };
+function tagChip(tag,id){var idp=id?' id="'+id+'"':'';return tag==="franta"?'<span'+idp+' class="chip-fp"><span class="fp-f">Franta</span><span class="fp-p">Pepan</span></span>':'<span'+idp+' class="chip chip-'+tag+'">'+(LABELS[tag]||tag)+'</span>';}
 
 function coverSVG(tag,i){
   const c=TAGCOL[tag], stamp = (tag==="franta") ? "SATIRA" : "SPIS";
@@ -927,7 +928,7 @@ function cardHTML(item,i){return `
     <div class="cover">${coverHTML(item,i)}</div>
     <div class="card-body">
       <div class="hook"><b>REDAKCE:</b> ${item.hook}</div>
-      <span class="chip chip-${item.tag}">${LABELS[item.tag]}</span>
+      ${tagChip(item.tag)}
       <h4>${item.title}</h4>
       <p class="teaser">${item.teaser}</p>
       <div class="card-meta"><span>Zdroj: ${item.source} · ${item.date}${item.published?" · Zveřejněno: "+item.published:""}</span><span class="more">číst celé →</span></div>
@@ -996,7 +997,7 @@ function openArticle(i){
     ? "Ilustrace vygenerovaná umělou inteligencí (AI)"
     : (it.image ? `Foto: ${it.imgCredit||"zdroj"}${it.imgSource?` · <a href="${it.imgSource}" target="_blank" rel="noopener noreferrer">zdroj ↗</a>`:""}` : "Ilustrace");
   document.getElementById("d-hook").innerHTML=`<b>REDAKCE:</b> ${it.hook}`;
-  document.getElementById("d-chip").outerHTML=`<span id="d-chip" class="chip chip-${it.tag}">${LABELS[it.tag]}</span>`;
+  document.getElementById("d-chip").outerHTML=tagChip(it.tag,"d-chip");
   document.getElementById("d-title").textContent=it.title;
   document.getElementById("d-video").innerHTML=it.video?`<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${it.video}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:"";
   document.getElementById("d-fact").innerHTML=it.fact?`<div class="fact ${it.factLabel==="FIKCE"?"fikce":""}"><b>${it.factLabel||"Zajímavost"}</b>${it.fact}</div>`:"";
