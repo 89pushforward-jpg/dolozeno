@@ -201,6 +201,13 @@
   .glosa-ava img{width:100%;height:100%;object-fit:cover}
   .glosa-text b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--franta);margin-bottom:6px}
   .glosa-text p{font-size:14.5px;color:var(--ink-dim);font-style:italic;margin:0}
+  .glosa.glosa-p{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.07)}
+  .glosa.glosa-p .glosa-ava{border-color:#ff6b6b}
+  .glosa.glosa-p .glosa-text b{color:#ff6b6b}
+  .ij{display:block;margin:20px 0;padding:8px 0 8px 16px;border-left:3px solid;font-style:italic;font-size:15.5px;line-height:1.55}
+  .ij b{font-style:normal;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:4px;opacity:.85}
+  .ij.f{color:#f2c40f;border-color:#f2c40f}
+  .ij.p{color:#ff6b6b;border-color:#ff6b6b}
 
   footer{padding:34px 0 60px;margin-top:30px;border-top:1px solid var(--line);color:var(--ink-faint);font-size:12px;line-height:1.7}
   footer .mono{font-family:var(--mono);letter-spacing:.04em} footer strong{color:var(--ink-dim)}
@@ -785,54 +792,13 @@ const FEED = [
     ] }
 ,
 
-  {
- kind:"zprava", tag:"spekulace", topic:"zahady", id:"k2-18b",
- hook:"Teleskop našel na cizí planetě plyn, který na Zemi dělají jen živé mikroby. Konečně důkaz života ve vesmíru?",
- title:"K2-18b — planeta, kde „našli život“?",
- teaser:"Na exoplanetě 124 světelných let daleko objevil teleskop plyn, který na Zemi vyrábějí jen mořské mikroby. Znělo to jako největší objev v dějinách. Pak se ukázalo, že to nemusí být ani život, ani jistota.",
- body:[
-      "K2-18b je exoplaneta (planeta obíhající cizí hvězdu) v souhvězdí Lva, 124 světelných let od nás. Vesmírný dalekohled James Webb (JWST) v její atmosféře v letech 2023 a 2025 našel plyn DMS (dimethylsulfid). A právě ten rozjel poprask.",
-      "Proč? DMS na Zemi vyrábějí prakticky jen mořské mikroby (drobné živé organismy v oceánu). Když ho najdeš v atmosféře cizí planety, napadne tě jediné — někde tam dole něco žije. Tým z Cambridge to označil za zatím nejsilnější náznak života mimo Zemi. Navíc K2-18b patří mezi tzv. hycejské světy (planeta s vodním oceánem pod hustou vodíkovou atmosférou), takže oceán plný mikrobů by dokonce dával smysl.",
-      "Jenže pak přišly další rozbory. Nezávislé týmy stejná data přepočítaly a silný signál DMS nepotvrdily; jistá byla jen voda a metan. A hlavně — modely ukázaly, že DMS umí vzniknout i bez života, čistou chemii ve vodíkové atmosféře (když sluneční světlo rozkládá jiné látky). Plyn, co měl být podpisem mikrobů, tak nemusí mít se životem nic společného.",
-      "A ještě dál: v roce 2026 tým prohledal soustavu K2-18 rádiovými teleskopy (VLA v USA a MeerKAT v Jižní Africe) celých 33 dní a hledal technosignaturu (stopu po technologii — třeba vysílání). Nenašel nic.",
-      "Férově druhá strana: neznamená to, že tam život NENÍ. Webb potvrdil, že planeta je bohatá na vodu a má složitou atmosféru, a vědci ji dál berou jako jedno z nejnadějnějších míst k pátrání. Platí ale pravidlo: mimořádné tvrzení potřebuje mimořádně pevný důkaz — a ten zatím chybí.",
-      "Kde to tedy stojí? Buď v tamním oceánu něco žije, nebo ten plyn vyrobila neživá chemie, nebo ho tam ve skutečnosti tolik není. Ani jedno zatím nikdo nedokázal. K2-18b je dráždivě blízko k odpovědi „je tam život“ — ale pořád jen blízko."
-    ],
- fact:"Novináři často píšou objevy ostřeji než vědci. Studie řekne „možný náznak, sporné“, a titulek z toho udělá „našli mimozemský život“. Mezi tím je obrovský rozdíl — a u K2-18b se to stalo skoro pokaždé.",
- source:"JWST / NASA", date:"2023–2026", published:"26. 6. 2026",
- image:"img/k2-18b.jpg", imgType:"ai", imgCredit:"Ilustrace (AI)",
- sources:[{name:"Astronomy.com (no signs of technology on K2-18 b)", url:"https://www.astronomy.com/science/no-signs-of-technology-on-exoplanet-k2-18-b/", lang:"anglicky"},{name:"Astronomy.com (NASA study revisits K2-18 b)", url:"https://www.astronomy.com/science/new-study-revisits-signs-of-life-on-k2-18-b/", lang:"anglicky"},{name:"Wikipedia (K2-18b)", url:"https://en.wikipedia.org/wiki/K2-18b", lang:"anglicky"}]
-},
+  {"kind":"zprava","tag":"spekulace","topic":"zahady","id":"k2-18b","hook":"Teleskop našel na cizí planetě plyn, který na Zemi dělají jen živé mikroby. Konečně důkaz života ve vesmíru?","title":"K2-18b — planeta, kde „našli život“?","teaser":"Na exoplanetě 124 světelných let daleko objevil teleskop plyn, který na Zemi vyrábějí jen mořské mikroby. Znělo to jako největší objev v dějinách. Pak se ukázalo, že to nemusí být ani život, ani jistota.","body":["K2-18b je exoplaneta (planeta obíhající cizí hvězdu) v souhvězdí Lva, 124 světelných let od nás. Vesmírný dalekohled James Webb (JWST) v její atmosféře v letech 2023 a 2025 našel plyn DMS (dimethylsulfid). A právě ten rozjel poprask.","Proč? DMS na Zemi vyrábějí prakticky jen mořské mikroby (drobné živé organismy v oceánu). Když ho najdeš v atmosféře cizí planety, napadne tě jediné — někde tam dole něco žije. Tým z Cambridge to označil za zatím nejsilnější náznak života mimo Zemi. Navíc K2-18b patří mezi tzv. hycejské světy (planeta s vodním oceánem pod hustou vodíkovou atmosférou), takže oceán plný mikrobů by dokonce dával smysl.","Jenže pak přišly další rozbory. Nezávislé týmy stejná data přepočítaly a silný signál DMS nepotvrdily; jistá byla jen voda a metan. A hlavně — modely ukázaly, že DMS umí vzniknout i bez života, čistou chemii ve vodíkové atmosféře (když sluneční světlo rozkládá jiné látky). Plyn, co měl být podpisem mikrobů, tak nemusí mít se životem nic společného.","A ještě dál: v roce 2026 tým prohledal soustavu K2-18 rádiovými teleskopy (VLA v USA a MeerKAT v Jižní Africe) celých 33 dní a hledal technosignaturu (stopu po technologii — třeba vysílání). Nenašel nic.","Férově druhá strana: neznamená to, že tam život NENÍ. Webb potvrdil, že planeta je bohatá na vodu a má složitou atmosféru, a vědci ji dál berou jako jedno z nejnadějnějších míst k pátrání. Platí ale pravidlo: mimořádné tvrzení potřebuje mimořádně pevný důkaz — a ten zatím chybí.","Kde to tedy stojí? Buď v tamním oceánu něco žije, nebo ten plyn vyrobila neživá chemie, nebo ho tam ve skutečnosti tolik není. Ani jedno zatím nikdo nedokázal. K2-18b je dráždivě blízko k odpovědi „je tam život“ — ale pořád jen blízko."],"fact":"Novináři často píšou objevy ostřeji než vědci. Studie řekne „možný náznak, sporné“, a titulek z toho udělá „našli mimozemský život“. Mezi tím je obrovský rozdíl — a u K2-18b se to stalo skoro pokaždé.","source":"JWST / NASA","date":"2023–2026","published":"26. 6. 2026","image":"img/k2-18b.jpg","imgType":"ai","imgCredit":"Ilustrace (AI)","sources":[{"name":"Astronomy.com (no signs of technology on K2-18 b)","url":"https://www.astronomy.com/science/no-signs-of-technology-on-exoplanet-k2-18-b/","lang":"anglicky"},{"name":"Astronomy.com (NASA study revisits K2-18 b)","url":"https://www.astronomy.com/science/new-study-revisits-signs-of-life-on-k2-18-b/","lang":"anglicky"},{"name":"Wikipedia (K2-18b)","url":"https://en.wikipedia.org/wiki/K2-18b","lang":"anglicky"}],"glosy":[{"spk":"p","label":"Pepan jásá","text":"Plyn od mimozemských mikrobů na cizí planetě a ty pořád ‚možná'! Já to věděl — život je tam!"},{"spk":"f","label":"Franta ho mírní","text":"Zadrž. Ten plyn umí udělat i neživá chemie a signál se nepotvrdil. ALE upřímně — todle je z nejzajímavějšího, co máme. Za mě klidně život na 60 %. Jen to ještě neumím dokázat, a bez důkazu to neprohlásím."}]},
+
+
+  {"kind":"zprava","tag":"overeno","topic":"disclosure","id":"aaro-40","hook":"Šéf vládního úřadu na UFO přiznal: 40 % případů nedokážou vysvětlit. Znamená to mimozemšťany?","title":"Šéf AARO: 40 % případů UAP nemá vysvětlení","teaser":"Ve třetí vlně odtajněných spisů je zpráva ředitele Pentagonského úřadu pro záhadné jevy. Píše o „mateřské kouli“ i o tom, že čtyři z deseti případů zůstávají bez vysvětlení. Pozor ale na to, co tím myslí.","body":["12. června 2026 vyšla už třetí vlna odtajněných UFO spisů (program PURSUE, kterým vláda USA postupně zveřejňuje záznamy o záhadných jevech). Bylo v ní 53 dokumentů, 10 fotek, 6 videí a 3 zvukové nahrávky od CIA, FBI, NASA a Pentagonu.","Součástí je zpráva ředitele úřadu AARO (úřad Pentagonu, který má záhadné jevy na nebi vyšetřovat — zkratka z anglického All-domain Anomaly Resolution Office) Jona Kosloského z 5. června. Stojí v ní, že zhruba 40 % hlášených případů UAP (neidentifikované jevy, z anglického Unidentified Anomalous Phenomena) nemá rozumné vysvětlení a zůstává nevyřešených. Zpráva zmiňuje i případ „mateřské koule“ — oranžové koule, ze které prý vylétaly menší červené.","Háček: „nevysvětlené“ ale neznamená „mimozemské“. Znamená to, že úřad zatím nemá dost dat, aby případ uzavřel — chybí kvalitní záběr, měření, úhel. Stejný úřad navrch opakovaně říká, že do dneška nenašel žádný důkaz mimozemského života ani techniky.","Férově druhá strana: není to ale jen mávnutí rukou. Vláda kvůli tomu zřídila novou vědeckou radu (vede ji harvardský astrofyzik Avi Loeb), která má neškrábnutá data rozebrat. Loeb to označil za „detektivku, která se dá vyřešit lepšími daty“. Bere se to tedy vážně — jen ne jako potvrzení mimozemšťanů.","40 % nevysvětlených případů je velké a zajímavé číslo. Ale je to spíš mapa toho, kde nám chybí data, než seznam mimozemských návštěv. Sledujeme dál."],"fact":"„Nevysvětlené“ je past na oči. V hláškách to zní jako „záhada potvrzena“, ve skutečnosti to znamená „zatím nevíme, případ otevřený“. Bez lepších dat se z otazníku ufoun neudělá.","source":"war.gov / CBS","date":"12. 6. 2026","published":"27. 6. 2026","image":"img/aaro-40.jpg","imgType":"ai","imgCredit":"Ilustrace (AI)","sources":[{"name":"CBS News (Pentagon 3rd UFO release)","url":"https://www.cbsnews.com/news/ufo-files-pentagon-3rd-release-documents-videos/","lang":"anglicky"},{"name":"Wikipedia (United States UFO files)","url":"https://en.wikipedia.org/wiki/United_States_UFO_files","lang":"anglicky"},{"name":"Newsweek (Trump UFO adviser, detective story)","url":"https://www.newsweek.com/trump-ufo-adviser-files-are-detective-story-loeb-12114391","lang":"anglicky"}],"glosy":[{"spk":"f","label":"Franta dodává","text":"Většinou za tím bude balon nebo odraz čidla. Jenže 40 % je dost a tam, kde dojdou rozumná vysvětlení, začínám poslouchat. Chci důkaz, ne víru — ale doufám, že přijde."},{"spk":"p","label":"Pepan se rozčiluje","text":"‚Doufám, že přijde'?! Vždyť ho máš před nosem! Čtyřicet procent, Franto! Co ti ještě musí ukázat?!"}]},
 
 
   
-
-
-  {
- kind:"zprava", tag:"overeno", topic:"disclosure", id:"aaro-40",
- hook:"Šéf vládního úřadu na UFO přiznal: 40 % případů nedokážou vysvětlit. Znamená to mimozemšťany?",
- title:"Šéf AARO: 40 % případů UAP nemá vysvětlení",
- teaser:"Ve třetí vlně odtajněných spisů je zpráva ředitele Pentagonského úřadu pro záhadné jevy. Píše o „mateřské kouli“ i o tom, že čtyři z deseti případů zůstávají bez vysvětlení. Pozor ale na to, co tím myslí.",
- body:["12. června 2026 vyšla už třetí vlna odtajněných UFO spisů (program PURSUE, kterým vláda USA postupně zveřejňuje záznamy o záhadných jevech). Bylo v ní 53 dokumentů, 10 fotek, 6 videí a 3 zvukové nahrávky od CIA, FBI, NASA a Pentagonu.","Součástí je zpráva ředitele úřadu AARO (úřad Pentagonu, který má záhadné jevy na nebi vyšetřovat — zkratka z anglického All-domain Anomaly Resolution Office) Jona Kosloského z 5. června. Stojí v ní, že zhruba 40 % hlášených případů UAP (neidentifikované jevy, z anglického Unidentified Anomalous Phenomena) nemá rozumné vysvětlení a zůstává nevyřešených. Zpráva zmiňuje i případ „mateřské koule“ — oranžové koule, ze které prý vylétaly menší červené.","Háček: „nevysvětlené“ ale neznamená „mimozemské“. Znamená to, že úřad zatím nemá dost dat, aby případ uzavřel — chybí kvalitní záběr, měření, úhel. Stejný úřad navrch opakovaně říká, že do dneška nenašel žádný důkaz mimozemského života ani techniky.","Férově druhá strana: není to ale jen mávnutí rukou. Vláda kvůli tomu zřídila novou vědeckou radu (vede ji harvardský astrofyzik Avi Loeb), která má neškrábnutá data rozebrat. Loeb to označil za „detektivku, která se dá vyřešit lepšími daty“. Bere se to tedy vážně — jen ne jako potvrzení mimozemšťanů.","40 % nevysvětlených případů je velké a zajímavé číslo. Ale je to spíš mapa toho, kde nám chybí data, než seznam mimozemských návštěv. Sledujeme dál."],
- fact:"„Nevysvětlené“ je past na oči. V hláškách to zní jako „záhada potvrzena“, ve skutečnosti to znamená „zatím nevíme, případ otevřený“. Bez lepších dat se z otazníku ufoun neudělá.",
- source:"war.gov / CBS", date:"12. 6. 2026", published:"27. 6. 2026",
- image:"img/aaro-40.jpg", imgType:"ai", imgCredit:"Ilustrace (AI)",
- sources:[{name:"CBS News (Pentagon 3rd UFO release)", url:"https://www.cbsnews.com/news/ufo-files-pentagon-3rd-release-documents-videos/", lang:"anglicky"},{name:"Wikipedia (United States UFO files)", url:"https://en.wikipedia.org/wiki/United_States_UFO_files", lang:"anglicky"},{name:"Newsweek (Trump UFO adviser, detective story)", url:"https://www.newsweek.com/trump-ufo-adviser-files-are-detective-story-loeb-12114391", lang:"anglicky"}]
-},
-
-
-  {
- kind:"franta", tag:"franta", topic:"zahady", id:"franta5",
- hook:"Pepan našel ve spisech Zimbabwe a má jasno: 62 dětí nemůže lhát. Franta otevírá, co se stalo na školním dvoře.",
- title:"Franta vs. Pepan: „62 dětí to vidělo!“ Tak schválně",
- teaser:"V nových spisech je i případ ze Zimbabwe. Pepan vytáhl slavný školní dvůr z roku 1994 — desítky dětí, mimozemšťani, telepatie. Franta jde kus po kuse.",
- factLabel:"FIKCE",
- fact:"Pepan je vymyšlená postava — archetyp nadšence. Utahujeme si z uvažování, ne z lidí. Fakta o případu Ariel School v rozhovoru sedí.",
- body:["<span class='spk f'>Franta:</span> Tak Pepane, proč balíš batoh a kreslíš si na ruku mimozemšťana?","<span class='spk p'>Pepan:</span> Franto, v nových spisech je Zimbabwe! A víš, co se tam stalo v roce 1994? Dvašedesát dětí vidělo přistát talíř a mimozemšťany! Dvašedesát! To si nemůže vymyslet celá škola!","<span class='spk f'>Franta:</span> Hezky popořádku. Případ ze spisů je z letiště v Harare z roku 2008. Ty mluvíš o jiném — o škole Ariel v Ruwě, 16. září 1994. A jo, je slavný. Tak ho pojď otevřít.","<span class='spk p'>Pepan:</span> Šedesát dva svědci! Děti přece nelžou!","<span class='spk f'>Franta:</span> Za prvé — dva dny předtím letěla nad jižní Afrikou jasná ohnivá koule a rozhlas vyzýval lidi, ať volají, co viděli. Spustila se vlna „UFO nálady“. (Později se ukázalo, že ta koule byl shořívající zbytek rakety Zenit-2.) Děti šly na dvůr už nažhavené tím, že „něco lítá“.","<span class='spk p'>Pepan:</span> Dobře, ale viděly mimozemšťany s velkýma očima a dostaly telepatickou zprávu o ekologii!","<span class='spk f'>Franta:</span> A teď to nejzajímavější. Tu telepatii a ekologické poselství přidal až psychiatr John Mack — přijel za dětmi až o dva měsíce později, sám byl velký nadšenec do únosů mimozemšťany a podle kritiků dětem ten směr „napovídal“. V prvních výslechách od Cynthie Hindové to ještě nebylo.","<span class='spk p'>Pepan:</span> Ale ona ty děti vyslechla hned a popisovaly to stejně!","<span class='spk f'>Franta:</span> Vyslýchala je ale ve skupinkách po čtyřech až šesti, a ostatní poslouchali. Takže si příběhy navzájem „obarvily“ — jeden řekl detail a ostatní ho převzali. A další věc: tvrdilo se, že děti nemohly znát filmy o mimozemšťanech. Jenže Ruwa je kousek od Harare a šlo o děti z bohatých rodin. K obrázkům ufounů se dostaly snadno.","<span class='spk p'>Pepan:</span> ...takže si to celé vymyslely?","<span class='spk f'>Franta:</span> To zas neříkám. A pozor — v roce 2024 jeden z tehdejších žáků v Netflix dokumentu řekl, že si to tenkrát vymyslel, aby nemusel do hodiny. Jeden. Jiní dodnes přísahají, že to byla pravda. Fyzický důkaz žádný není — ani pro, ani proti.","<span class='spk f'>Franta:</span> Shrnutí: pár svědků se nažhavilo ohnivou koulí, ve skupince si příběh srovnali, dospělý jim přidal telepatii a média z toho udělala senzaci. Zůstává záhada, proč si to tolik dětí drží dodnes. Ale „62 svědků“ samo o sobě důkaz mimozemšťanů není — paměť a sugesce jsou silnější, než si myslíš."],
- source:"Franta", date:"díl 5", published:"28. 6. 2026",
- image:"img/franta5.jpg", imgType:"ai", imgCredit:"Ilustrace (AI)",
- sources:[{name:"Wikipedia (Ariel School UFO incident)", url:"https://en.wikipedia.org/wiki/Ariel_School_UFO_incident", lang:"anglicky"},{name:"IFLScience (Ariel School Phenomenon)", url:"https://www.iflscience.com/the-ariel-school-phenomenon-what-really-happened-when-68-children-witnessed-a-ufo-63873", lang:"anglicky"},{name:"VICE / Netflix Encounters (Believers)", url:"https://www.vice.com/en/article/encounters-netflix-zimbabwe-ufo-sighting/", lang:"anglicky"}]
-},
 ];
 
 /* krátká glosa od Franty pod každou ZPRÁVOU (dle pořadí FEED; index 0 = díl Franty, ten glosu nemá) */
@@ -849,7 +815,7 @@ const GLOSY=[
   "„Brzy přijde další vlna.“ Tohle slýchám pořád. Až fakt přijde, ozvu se. Do tý doby si beru rezervu.",
   "Vědci přiznali, že možná hledali špatně. To je vzácnej druh — chytrej člověk, co řekne „možná jsem se sekl“. Klobouk dolů."
 ];
-FEED.forEach((it,i)=>{ if(GLOSY[i]) it.frantaGlosa=GLOSY[i]; });
+FEED.forEach((it,i)=>{ if(GLOSY[i] && !it.frantaGlosa && !it.glosy) it.frantaGlosa=GLOSY[i]; });
 
 /* obrázky z veřejných zdrojů (NASA = volné dílo) přes oficiální odkaz Wikimedia Commons.
    Pro ostrý provoz je ideální stáhnout a hostovat u sebe; volné dílo atribuci nevyžaduje, my ji uvádíme slušně. */
@@ -983,9 +949,15 @@ function openArticle(i){
   document.getElementById("d-title").textContent=it.title;
   document.getElementById("d-video").innerHTML=it.video?`<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${it.video}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:"";
   document.getElementById("d-fact").innerHTML=it.fact?`<div class="fact ${it.factLabel==="FIKCE"?"fikce":""}"><b>${it.factLabel||"Zajímavost"}</b>${it.fact}</div>`:"";
-  document.getElementById("d-body").innerHTML=it.body.map(p=>`<p>${p}</p>`).join("");
-  document.getElementById("d-glosa").innerHTML = (it.kind!=="franta" && it.frantaGlosa) ?
-    `<div class="glosa"><div class="glosa-ava"><img src="img/franta-avatar.jpg" alt="Franta"></div><div class="glosa-text"><b>Franta dodává</b><p>„${it.frantaGlosa}“</p></div></div>` : "";
+  document.getElementById("d-body").innerHTML=it.body.map(function(p){return p.indexOf("<span class='ij")===0 ? p : "<p>"+p+"</p>";}).join("");
+  document.getElementById("d-glosa").innerHTML = (function(){
+    if(it.kind==="franta") return "";
+    var arr = it.glosy;
+    if(!arr){ arr=[]; if(it.frantaGlosa) arr.push({spk:"f",label:"Franta dodává",text:it.frantaGlosa}); if(it.pepanGlosa) arr.push({spk:"p",label:"Pepan dodává",text:it.pepanGlosa}); }
+    if(!arr.length) return "";
+    return arr.map(function(g){ var isP=g.spk==="p"; var av=isP?"img/pepan-avatar.jpg":"img/franta-avatar.jpg"; var cls=isP?"glosa glosa-p":"glosa"; var nm=isP?"Pepan":"Franta";
+      return '<div class="'+cls+'"><div class="glosa-ava"><img src="'+av+'" alt="'+nm+'"></div><div class="glosa-text"><b>'+(g.label||(nm+" dodává"))+'</b><p>\u201e'+g.text+'\u201c</p></div></div>'; }).join("");
+  })();
   document.getElementById("d-premium").innerHTML = (it.kind!=="franta") ? `
     <div class="premium">
       <span class="premium-lock">Plná verze</span>
