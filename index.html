@@ -1375,7 +1375,16 @@ function cardHTML(item,i){return `
 
 /* ---- detail ---- */
 const overlay=document.getElementById("overlay");
-function openArticle(i){
+/* sdílitelné adresy článků – stejná logika jako generátor clanky/*.html */
+const ARTICLE_SLUGS=(function(){
+  const map={'á':'a','č':'c','ď':'d','é':'e','ě':'e','í':'i','ň':'n','ó':'o','ř':'r','š':'s','ť':'t','ú':'u','ů':'u','ý':'y','ž':'z'};
+  function slug(t){return String(t).toLowerCase().replace(/[áčďéěíňóřšťúůýž]/g,function(c){return map[c]||c;}).replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);}
+  const seen={},out=[];
+  FEED.forEach(function(a){let sl=a.id||slug(a.title); if(seen[sl])sl=sl+'-'+(++seen[sl]); seen[sl]=1; out.push(sl);});
+  return out;
+})();
+function articleUrl(i){return "/clanky/"+ARTICLE_SLUGS[i]+".html";}
+function openArticle(i,push){
   const it=FEED[i];
   track("article",{articleId:it.id||("article-"+i)});
   document.getElementById("d-cover").innerHTML=coverHTML(it,i);
@@ -1432,8 +1441,17 @@ function openArticle(i){
     </div>` : "";
   document.getElementById("d-sources").innerHTML=`<h5>Zdroje</h5>`+it.sources.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.name}<span>${s.lang} ↗</span></a>`).join("");
   overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.classList.add("locked");overlay.scrollTop=0;
+  if(push!==false){try{history.pushState({article:i},"",articleUrl(i));}catch(e){}}
 }
-function closeArticle(){overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("locked");document.getElementById("d-video").innerHTML="";}
+function closeArticle(pop){
+  overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("locked");document.getElementById("d-video").innerHTML="";
+  if(pop!==true && history.state && history.state.article!=null){try{history.back();}catch(e){}}
+}
+window.addEventListener("popstate",function(e){
+  const st=e.state;
+  if(st && st.article!=null){openArticle(st.article,false);}
+  else if(overlay.classList.contains("open")){closeArticle(true);}
+});
 function goWaitlist(){closeArticle();const el=document.getElementById("email");el.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>el.focus(),450);}
 feedEl.addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openArticle(+c.dataset.i);});
 document.getElementById("filmBanner").addEventListener("click",()=>{const idx=FEED.findIndex(x=>x.id==="film");openArticle(idx<0?0:idx);});
