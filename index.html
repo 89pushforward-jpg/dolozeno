@@ -62,6 +62,8 @@
   .highlight .ht b{color:var(--signal)}
   .highlight .ht small{display:block;color:var(--ink-dim);font-size:12px;margin-top:2px}
   .highlight .go{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--cyan);white-space:nowrap}
+  .hl-img{width:54px;height:54px;border-radius:8px;object-fit:cover;flex:0 0 auto;border:1px solid var(--line)}
+  .hl-sep{width:1px;align-self:stretch;min-height:44px;background:rgba(245,166,35,.35);flex:0 0 auto}
 
   header{padding:40px 22px 32px;margin-top:8px;border-radius:0 0 16px 16px;background:linear-gradient(to bottom,rgba(10,12,16,0.05) 0%,rgba(10,12,16,0.08) 55%,rgba(10,12,16,0.8) 80%,rgba(10,12,16,0.95) 100%),url('img/hero-bg.jpg') center 30%/cover no-repeat;border-bottom:1px solid var(--line)}
   .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px}
@@ -98,7 +100,7 @@
   .pager button:hover{border-color:var(--cyan);color:var(--ink)}
   .pager button.active{border-color:var(--signal);color:var(--signal);box-shadow:0 0 0 1px var(--signal) inset}
   .pager button:disabled{opacity:.4;cursor:default}
-  .pager .pinfo{flex-basis:100%;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-faint);margin-bottom:2px}
+  .pager .pinfo{flex-basis:100%;text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink);margin-bottom:2px}
   .hero h2{font-size:18px;font-weight:600;margin-bottom:6px}
   .hero p{color:var(--ink-dim);font-size:14px;margin-bottom:16px;max-width:50ch}
   form{display:flex;gap:8px;flex-wrap:wrap}
@@ -167,9 +169,13 @@
   .v-col.col-proti li::before{color:var(--spec)} .v-col.col-pro li::before{color:var(--ok)}
   @media(max-width:560px){.v-cols{grid-template-columns:1fr}}
 
-  .feed-head{padding:26px 0 2px}
-  .feed-head h3{font-family:var(--mono);font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim)}
-  .feed-head span{font-family:var(--mono);font-size:11px;color:var(--ink-faint)}
+  .feed-head{padding:26px 0 2px;text-align:center}
+  .feed-head h3{font-family:var(--mono);font-weight:700;font-size:clamp(30px,8vw,52px);letter-spacing:.02em;line-height:1.02;text-transform:uppercase;color:var(--signal);text-shadow:3px 3px 10px rgba(0,0,0,.6);margin-bottom:8px}
+  .feed-head span{font-family:var(--mono);font-size:11px;color:var(--ink)}
+  .months{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;padding:12px 0 2px}
+  .mfilter{font-family:var(--mono);font-size:12px;padding:7px 12px;border-radius:9px;border:1px solid var(--line);background:var(--bg-card);color:var(--ink-dim);cursor:pointer;transition:border-color .15s,color .15s}
+  .mfilter:hover{border-color:var(--cyan);color:var(--ink)}
+  .mfilter.active{border-color:var(--signal);color:var(--signal);box-shadow:0 0 0 1px var(--signal) inset}
 
   .card{border:1px solid var(--line);background:var(--bg-card);border-radius:16px;margin:16px 0;
     overflow:hidden;cursor:pointer;transition:border-color .15s,transform .15s}
@@ -261,7 +267,8 @@
   </div>
 
   <button class="highlight" id="filmBanner">
-    <span class="count" id="filmCount">NOVÉ</span>
+    <img id="bannerImg" class="hl-img" alt="" loading="lazy">
+    <span class="hl-sep" aria-hidden="true"></span>
     <span class="ht"><b>Nejnovější článek</b></span>
     <span class="go">číst →</span>
   </button>
@@ -284,8 +291,8 @@
   </div>
 
   <section class="hero">
-    <h2 style="color:var(--cyan)"><span style="font-variant-emoji:text">✉︎</span> Připravujeme newsletter</h2>
-    <p style="color:var(--cyan)">Chystáme pravidelný přehled toho nejzajímavějšího ze světa UAP a vesmírných záhad — odtajněné spisy, hlubší témata i hlášky Franty a Pepana. Česky a bez bullshitu.<br>Nech nám adresu a všechno ti přijde přímo do e-mailu, jakmile spustíme. Bez spamu, kdykoli se odhlásíš.</p>
+    <h2 style="color:var(--cyan)"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít to nejlepší</h2>
+    <p style="color:var(--cyan)">Chystáme pravidelný přehled ze světa UAP a vesmírných záhad, k tomu hlubší rozbory — všechno přímo do e-mailu. Nech nám adresu. Bez spamu, kdykoli se odhlásíš.</p>
     <div aria-hidden="true" style="color:var(--cyan);font-size:30px;line-height:1;margin:2px 0 8px">↓</div>
     <form id="waitlist" novalidate>
       <input type="email" id="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required>
@@ -320,10 +327,11 @@
   </div>
 
   <div class="feed-head">
-    <h3>Nejnovější</h3>
+    <h3>NOVÉ ČLÁNKY</h3>
     <span>Krátké zprávy — rozklikni pro celý článek · <span id="feed-count"></span></span>
   </div>
 
+  <div id="month-filter" class="months"></div>
   <div id="pager-top" class="pager"></div>
   <div id="feed"></div>
   <div id="pager-bot" class="pager"></div>
@@ -1329,6 +1337,20 @@ function cardHTML(item,i){return `
   const order=FEED.map((it,i)=>i).filter(i=>!dzFuture(FEED[i].published)).reverse();
   const sel={tag:new Set(),topic:new Set()};
   let q="",page=1;
+  /* měsíční filtr (podle data zveřejnění) */
+  const CZM=["","leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"];
+  function ym(p){const m=(p||"").match(/(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/);return m?(m[3]+"-"+String(m[2]).padStart(2,"0")):"";}
+  function mlabel(k){const mm=+k.split("-")[1];return CZM[mm].charAt(0).toUpperCase()+CZM[mm].slice(1);}
+  let activeMonth="";
+  const months=Array.from(new Set(order.map(i=>ym(FEED[i].published)).filter(Boolean))).sort().reverse();
+  const monthBox=document.getElementById("month-filter");
+  function renderMonths(){
+    if(!monthBox)return;
+    let h='<button class="mfilter'+(activeMonth===""?" active":"")+'" data-m="">Vše</button>';
+    months.forEach(function(k){h+='<button class="mfilter'+(activeMonth===k?" active":"")+'" data-m="'+k+'">'+mlabel(k)+'</button>';});
+    monthBox.innerHTML=h;
+  }
+  if(monthBox)monthBox.addEventListener("click",function(e){const b=e.target.closest("button");if(!b)return;activeMonth=b.dataset.m;page=1;render();});
   const fc=document.getElementById("feed-count");
   const qEl=document.getElementById("q");
   const pTop=document.getElementById("pager-top");
@@ -1341,7 +1363,8 @@ function cardHTML(item,i){return `
       const okTag=sel.tag.size===0||sel.tag.has(it.tag);
       const okTopic=sel.topic.size===0||sel.topic.has(it.topic);
       const okQ=!nq||hay(it).indexOf(nq)>=0;
-      return okTag&&okTopic&&okQ;
+      const okMonth=!activeMonth||ym(it.published)===activeMonth;
+      return okTag&&okTopic&&okQ&&okMonth;
     });
   }
   function pagerHTML(pages){
@@ -1361,7 +1384,8 @@ function cardHTML(item,i){return `
       : '<p style="color:var(--ink-faint);font-family:var(--mono);font-size:13px;padding:24px 0;text-align:center">Nic nenalezeno. Zkus jiné slovo nebo zruš filtry.</p>';
     const pg=pagerHTML(pages); pTop.innerHTML=pg; pBot.innerHTML=pg;
     const total=order.length;
-    fc.textContent=(q||sel.tag.size||sel.topic.size)?(list.length+" z "+total):(total+" článků");
+    fc.textContent=(q||sel.tag.size||sel.topic.size||activeMonth)?(list.length+" z "+total):(total+" článků");
+    renderMonths();
   }
   function go(p){page=p;render();if(headEl)headEl.scrollIntoView({behavior:"smooth",block:"start"});}
   [pTop,pBot].forEach(el=>el.addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;go(+b.dataset.p);}));
@@ -1430,8 +1454,8 @@ function openArticle(i,push){
   document.getElementById("d-premium").innerHTML = `
     <div style="border-top:1px solid var(--line);margin-top:40px"></div>
     <div class="premium" style="border-color:rgba(54,214,231,.4);margin-top:26px">
-      <div style="color:var(--cyan);font-weight:800;font-size:18px;margin-bottom:8px"><span style="font-variant-emoji:text">✉︎</span> Připravujeme newsletter</div>
-      <p style="color:var(--cyan);font-size:14.5px;line-height:1.55;margin:0 0 14px">Chystáme pravidelný přehled toho nejzajímavějšího ze světa UAP a vesmírných záhad — odtajněné spisy, hlubší témata i hlášky Franty a Pepana. Česky a bez bullshitu.<br>Nech nám adresu a všechno ti přijde přímo do e-mailu, jakmile spustíme. Bez spamu, kdykoli se odhlásíš.</p>
+      <div style="color:var(--cyan);font-weight:800;font-size:18px;margin-bottom:8px"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít to nejlepší</div>
+      <p style="color:var(--cyan);font-size:14.5px;line-height:1.55;margin:0 0 14px">Chystáme pravidelný přehled ze světa UAP a vesmírných záhad, k tomu hlubší rozbory — všechno přímo do e-mailu. Nech nám adresu. Bez spamu, kdykoli se odhlásíš.</p>
       <button class="buybtn" style="background:var(--cyan)" onclick="goWaitlist()">Chci být u toho →</button>
     </div>`;
   document.getElementById("d-sources").innerHTML=`<h5>Zdroje</h5>`+it.sources.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.name}<span>${s.lang} ↗</span></a>`).join("");
@@ -1453,20 +1477,20 @@ document.getElementById("closeBtn").addEventListener("click",closeArticle);
 overlay.addEventListener("click",e=>{if(e.target===overlay)closeArticle();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeArticle();});
 
-/* ---- banner: nejnovější publikovaný článek (klik = sjede na jeho kartu) ---- */
+/* ---- banner: nejnovější publikovaný článek (klik = sjede na seznam článků) ---- */
 (function(){
   const idx=FEED.map((it,i)=>i).filter(i=>!dzFuture(FEED[i].published)).reverse()[0];
   if(idx==null)return;
   const it=FEED[idx];
   const ht=document.querySelector("#filmBanner .ht");
   const sr=document.getElementById("status-right");
-  const txt=(it.teaser||it.hook||"").replace(/<[^>]*>/g,"").trim();
-  const small=txt.length>95?txt.slice(0,94).trim()+"…":txt;
-  if(ht)ht.innerHTML="<b>"+it.title+"</b>"+(small?"<small>"+small+"</small>":"");
+  const img=document.getElementById("bannerImg");
+  if(img){img.src=it.image||"img/og-default.jpg";img.onerror=function(){this.onerror=null;this.src="img/og-default.jpg";};}
+  if(ht)ht.innerHTML="<b>"+it.title+"</b>";
   if(sr)sr.textContent=it.published||"nový článek";
   document.getElementById("filmBanner").addEventListener("click",function(){
-    const card=feedEl.querySelector('[data-i="'+idx+'"]');
-    (card||feedEl).scrollIntoView({behavior:"smooth",block:"start"});
+    const t=document.querySelector(".search-wrap")||feedEl;
+    t.scrollIntoView({behavior:"smooth",block:"start"});
   });
 })();
 
