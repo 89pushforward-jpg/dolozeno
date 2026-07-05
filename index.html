@@ -261,9 +261,8 @@
   </div>
 
   <button class="highlight" id="filmBanner">
-    <span class="count" id="filmCount">4</span>
-    <span class="ht"><b>Disclosure Day</b> — nový sci-fi film Stevena Spielberga
-      <small>12. 6. v kinech · proč to souvisí s odtajňováním spisů?</small></span>
+    <span class="count" id="filmCount">NOVÉ</span>
+    <span class="ht"><b>Nejnovější článek</b></span>
     <span class="go">číst →</span>
   </button>
 
@@ -293,7 +292,7 @@
       <button type="submit" class="cta" style="background:var(--cyan)">Chci být u toho</button>
     </form>
     <div class="form-msg" id="formMsg"></div>
-    <p class="form-note">Odesláním souhlasíš se zpracováním e-mailu za účelem oznámení o spuštění (GDPR). E-mail nikomu nepředáváme a kdykoli se můžeš odhlásit.</p>
+    <p class="form-note">Odesláním souhlasíš se zpracováním e-mailu za účelem zasílání newsletteru (GDPR). E-mail nikomu nepředáváme a kdykoli se můžeš odhlásit.</p>
   </section>
 
   <section class="legend" aria-label="Filtry">
@@ -1455,18 +1454,25 @@ window.addEventListener("popstate",function(e){
 });
 function goWaitlist(){closeArticle();const el=document.getElementById("email");el.scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>el.focus(),450);}
 feedEl.addEventListener("click",e=>{const c=e.target.closest(".card");if(c)openArticle(+c.dataset.i);});
-document.getElementById("filmBanner").addEventListener("click",()=>{const idx=FEED.findIndex(x=>x.id==="film");openArticle(idx<0?0:idx);});
 document.getElementById("closeBtn").addEventListener("click",closeArticle);
 overlay.addEventListener("click",e=>{if(e.target===overlay)closeArticle();});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.contains("open"))closeArticle();});
 
-/* ---- countdown ---- */
+/* ---- banner: nejnovější publikovaný článek (klik = sjede na jeho kartu) ---- */
 (function(){
-  const film=new Date("2026-06-12T00:00:00");const days=Math.ceil((film-new Date())/86400000);
-  const sr=document.getElementById("status-right"),fc=document.getElementById("filmCount");
-  if(days>0){sr.innerHTML=`Disclosure Day za <span class="live">${days} dní</span>`;fc.textContent=days;}
-  else if(days===0){sr.innerHTML=`Disclosure Day <span class="live">dnes v kinech</span>`;fc.textContent="0";}
-  else{sr.innerHTML=`Disclosure Day <span class="live">už v kinech</span>`;fc.textContent="★";}
+  const idx=FEED.map((it,i)=>i).filter(i=>!dzFuture(FEED[i].published)).reverse()[0];
+  if(idx==null)return;
+  const it=FEED[idx];
+  const ht=document.querySelector("#filmBanner .ht");
+  const sr=document.getElementById("status-right");
+  const txt=(it.teaser||it.hook||"").replace(/<[^>]*>/g,"").trim();
+  const small=txt.length>95?txt.slice(0,94).trim()+"…":txt;
+  if(ht)ht.innerHTML="<b>"+it.title+"</b>"+(small?"<small>"+small+"</small>":"");
+  if(sr)sr.textContent=it.published||"nový článek";
+  document.getElementById("filmBanner").addEventListener("click",function(){
+    const card=feedEl.querySelector('[data-i="'+idx+'"]');
+    (card||feedEl).scrollIntoView({behavior:"smooth",block:"start"});
+  });
 })();
 
 /* ---- ANALYTICS TRACKING ---- */
