@@ -1427,18 +1427,13 @@ function openArticle(i,push){
     return arr.map(function(g){ var isP=g.spk==="p"; var av=isP?"img/pepan-avatar.jpg":"img/franta-avatar.jpg"; var cls=isP?"glosa glosa-p":"glosa"; var nm=isP?"Pepan":"Franta";
       return '<div class="'+cls+'"><div class="glosa-ava"><img src="'+av+'" alt="'+nm+'"></div><div class="glosa-text"><b>'+(g.label||(nm+" dodává"))+'</b><p>\u201e'+g.text+'\u201c</p></div></div>'; }).join("");
   })();
-  document.getElementById("d-premium").innerHTML = (it.kind!=="franta") ? `
-    <div class="premium">
-      <span class="premium-lock">Plná verze</span>
-      <button class="buybtn" onclick="var i=this.parentNode.querySelector('.premium-info');i.hidden=!i.hidden;">Kup plnou verzi článku →</button>
-      <div class="premium-info" hidden>
-        <h5>Co je v plné verzi</h5>
-        <p>Hlubší rozbor problematiky, vědecký pohled, argumenty pro i proti, možné závěry a shrnutí — vše s doloženými zdroji.</p>
-        <p class="price">Součást předplatného · 49 Kč / měsíc</p>
-        <p class="soon">Plnou verzi teprve připravujeme. Přihlas se do čekačky a dáme ti vědět, jakmile spustíme.</p>
-        <button class="wlbtn" onclick="goWaitlist()">Přihlásit do čekačky →</button>
-      </div>
-    </div>` : "";
+  document.getElementById("d-premium").innerHTML = `
+    <div style="border-top:1px solid var(--line);margin-top:40px"></div>
+    <div class="premium" style="border-color:rgba(54,214,231,.4);margin-top:26px">
+      <div style="color:var(--cyan);font-weight:800;font-size:18px;margin-bottom:8px"><span style="font-variant-emoji:text">✉︎</span> Připravujeme newsletter</div>
+      <p style="color:var(--cyan);font-size:14.5px;line-height:1.55;margin:0 0 14px">Chystáme pravidelný přehled toho nejzajímavějšího ze světa UAP a vesmírných záhad — odtajněné spisy, hlubší témata i hlášky Franty a Pepana. Česky a bez bullshitu.<br>Nech nám adresu a všechno ti přijde přímo do e-mailu, jakmile spustíme. Bez spamu, kdykoli se odhlásíš.</p>
+      <button class="buybtn" style="background:var(--cyan)" onclick="goWaitlist()">Chci být u toho →</button>
+    </div>`;
   document.getElementById("d-sources").innerHTML=`<h5>Zdroje</h5>`+it.sources.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.name}<span>${s.lang} ↗</span></a>`).join("");
   overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.classList.add("locked");overlay.scrollTop=0;
   if(push!==false){try{history.pushState({article:i},"",articleUrl(i));}catch(e){}}
