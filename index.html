@@ -1244,6 +1244,48 @@ const FEED = [
     {name:"EarthSky — Rare meteorite hints at giant early planet (NWA 12774)", url:"https://earthsky.org/space/rare-meteorite-giant-early-planet-nwa-12774/", lang:"anglicky"}
   ]
 },
+
+
+  { kind:"zprava", tag:"spekulace", topic:"zahady", id:"webb-99-zivot",
+  hook:"Internetem lítá obrázek: „Webb našel planetu s 99,7% šancí na život.“ To číslo ale znamená něco úplně jiného.",
+  title:"Ne, Webb nenašel planetu s 99,7% šancí na život",
+  teaser:"Virální hláška bere skutečný, ale slabý signál a přebalí ho na senzaci. „99,7 %“ není šance na život — a i ten signál mezitím nová měření srazila.",
+  body:[
+    "Sociálními sítěmi teď koluje efektní obrázek a videa s titulkem, že Vesmírný dalekohled Jamese Webba (JWST — nejsilnější kosmický dalekohled) našel planetu s „99,7% šancí na život“. Zní to jako senzace století. Jenže to číslo znamená něco úplně jiného, než si většina lidí přečte.",
+    "Za tím vším je reálná planeta: K2-18b, 124 světelných let daleko, zhruba 2,5× větší než Země. Webb v roce 2025 v její atmosféře zachytil možnou stopu plynu dimethylsulfid (DMS — na Zemi ho vyrábějí hlavně mořské řasy). Bere se jako takzvaná biosignatura (chemická stopa, kterou by po sobě mohl zanechat život).",
+    "A teď ten háček. „99,7 %“ je takzvaná 3-sigma — statistická míra, jak moc si vědci věří, že naměřený signál není jen náhodný šum. 3-sigma tedy znamená 99,7% jistotu, že tam ten signál JE — ne že tam je život. Pro potvrzený objev věda navíc chce 5-sigma, tedy 99,99999 %. Sám vedoucí týmu to označil za nejsilnější náznak zatím, ale výslovně dodal, že to není důkaz.",
+    "A tady je to, co clickbait zamlčuje: od toho oznámení vyšlo několik nezávislých přezkoumání dat a signál pořádně zředila. Studie vedená NASA průkazný dimethylsulfid nenašla. Další týmy ukázaly, že data sedí i na „rovnou čáru“ (tedy žádný zvláštní signál), že DMS není jednoznačně nejlepší vysvětlení a že při společné analýze všech měření nevychází vůbec. Spolehlivě se potvrdil jen metan.",
+    "I kdyby tam DMS nakonec byl, sám o sobě není důkaz života — objevil se i na kometách a v mezihvězdném prostoru, kde žádný život není. A sporný je i onen „vodní oceán“ pod atmosférou: stejně dobře to může být roztavená hornina nebo plynný mini-Neptun bez pevného povrchu, na kterém by se vůbec dalo stát.",
+    "Takže ten hezký obrázek bujné planety s městy, lesy a vodopády? Čirá fantazie ilustrátora. K2-18b je zahalený sub-Neptun, nejspíš bez povrchu, kam by šlo šlápnout. Je to zajímavý cíl a sledujeme ho dál — ale „nevíme ≠ mimozemšťani“, a „99,7 %“ tady rozhodně neznamená to, co si z obrázku odnese většina lidí."
+  ],
+  fact:"3-sigma (99,7 %) zní skoro jistě, ale ve fyzice je to teprve „stojí za další měření“. Pro skutečný objev se čeká na 5-sigma — tedy 99,99999 %.",
+  source:"CBS News / Astronomy.com / A&A", date:"2025–2026", published:"6. 7. 2026",
+  image:"img/webb-99-zivot.jpg", imgType:"ai", imgCredit:"Ilustrace (AI)",
+  glosy:[
+    {spk:"p", label:"Pepan už balí kufry", text:"Devadesát devět celých sedm procenta! To je přece skoro jistota! Tam dole plavou mimozemský velryby, cítím to!"},
+    {spk:"f", label:"Franta čte, co tam fakt stojí", text:"Kámo, to procento říká jen, že signál není šum — ne že tam někdo bydlí. A pak ho tři nezávislý party přeměřily a nenašly nic. Zajímavej tip, zázrak zatím ne."}
+  ],
+  verdikt:{
+    proPct:20,
+    q:"Našel Webb planetu s 99,7% šancí na život?",
+    note:"Reálný, ale slabý signál přebalený na senzaci. „99,7 %“ je statistická jistota, ne šance na život — a i ten signál pozdější měření srazila.",
+    pro:[
+      "Webb opravdu zachytil možnou stopu dimethylsulfidu (plyn spojovaný se životem) na úrovni 3-sigma; ohlásil ji seriózní cambridgeský tým.",
+      "K2-18b má potvrzenou atmosféru s vodou a leží v obyvatelné zóně (kde by mohla být tekutá voda)."
+    ],
+    proti:[
+      "„99,7 %“ je statistická jistota, že signál není šum (3-sigma) — ne pravděpodobnost života. Pro objev věda chce 5-sigma (99,99999 %).",
+      "Nezávislá přezkoumání (desítky metod, stovky analýz) průkazný dimethylsulfid nenašla — potvrdil se jen metan.",
+      "Další studie: data sedí i na „rovnou čáru“ bez signálu a DMS není jednoznačně nejlepší vysvětlení.",
+      "I kdyby tam DMS byl, není sám o sobě důkaz života — najde se i na kometách a v mezihvězdném prostoru."
+    ]
+  },
+  sources:[
+    {name:"CBS News Boston — Avi Loeb k 99,7 % (3-sigma)", url:"https://www.cbsnews.com/boston/news/evidence-life-distant-planet-k218b/", lang:"anglicky"},
+    {name:"Astronomy.com — NASA studie: žádný průkazný DMS", url:"https://www.astronomy.com/science/new-study-revisits-signs-of-life-on-k2-18-b/", lang:"anglicky"},
+    {name:"Astronomy & Astrophysics — nedostatečný důkaz DMS/DMDS", url:"https://www.aanda.org/articles/aa/full_html/2025/08/aa55580-25/aa55580-25.html", lang:"anglicky"}
+  ]
+},
 ];
 
 /* krátká glosa od Franty pod každou ZPRÁVOU (dle pořadí FEED; index 0 = díl Franty, ten glosu nemá) */
