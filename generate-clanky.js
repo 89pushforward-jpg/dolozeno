@@ -19,7 +19,7 @@ const TAG={overeno:'OVĚŘENO',spekulace:'SPEKULACE',svedectvi:'SVĚDECTVÍ',dis
 function badge(a){if(a.kind==='franta')return 'FRANTA';return TAG[a.tag]||TAG[a.topic]||'ZPRÁVA';}
 function desc(a){let d=a.teaser||a.hook||(a.body&&a.body[0])||a.title;d=String(d).replace(/\s+/g,' ').trim();return d.length>155?d.slice(0,152)+'…':d;}
 
-function page(a,sl){
+function page(a,sl,i){
   const url=`${BASE}/clanky/${sl}.html`;
   const img=a.image?`${BASE}/${a.image}`:`${BASE}/img/og-default.jpg`;
   const d=desc(a);
@@ -29,6 +29,10 @@ function page(a,sl){
     a.sources.map(z=>`      <a href="${esc(z.url)}" target="_blank" rel="noopener nofollow">${esc(z.name)}${z.lang?` <span>(${esc(z.lang)})</span>`:''}</a>`).join('\n')+
     `\n    </div>`:'';
   const factHtml=a.fact?`\n    <div class="fact"><span>DOLOŽENO:</span> ${esc(a.fact)}</div>`:'';
+  const rel=(typeof i==='number' && typeof relatedFor==='function')?relatedFor(i):[];
+  const relHtml=rel.length?`\n    <div class="rel"><div class="rel-h">Související články</div>\n`+
+    rel.map(j=>`      <a href="${BASE}/clanky/${SLUGS[j]}.html">${esc(FEED[j].title)}</a>`).join('\n')+
+    `\n    </div>`:'';
   const ld={"@context":"https://schema.org","@type":"NewsArticle",headline:a.title,description:d,image:[img],
     datePublished:isoDate(a.published),dateModified:isoDate(a.published),
     author:{"@type":"Organization",name:"DOLOŽENO",url:BASE},
@@ -76,6 +80,9 @@ function page(a,sl){
   .src-h{font-size:13px;letter-spacing:1px;color:var(--mut);font-weight:700;margin-bottom:10px}
   .src a{display:block;color:var(--cy);text-decoration:none;font-size:14px;padding:4px 0}
   .src a span{color:var(--mut)}
+  .rel{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+  .rel-h{font-size:13px;letter-spacing:1px;color:var(--mut);font-weight:700;margin-bottom:10px}
+  .rel a{display:block;color:var(--cy);text-decoration:none;font-size:14px;padding:5px 0}
   .cta{display:block;text-align:center;margin:38px 0 0;background:var(--amb);color:#0a0c10;font-weight:800;text-decoration:none;padding:15px;border-radius:10px;font-size:16px}
   footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
   footer a{color:var(--mut)}
@@ -94,7 +101,7 @@ function page(a,sl){
       <div class="meta">${esc(a.published||a.date||'')}${a.source?` · zdroj: ${esc(a.source)}`:''}</div>
       <img class="hero" src="/${esc(a.image||'img/og-default.jpg')}" alt="${esc(a.title)}" onerror="this.onerror=null;this.src='/img/og-default.jpg'">
       ${a.teaser?`<p class="lead">${esc(a.teaser)}</p>`:''}
-${bodyHtml}${factHtml}${srcHtml}
+${bodyHtml}${factHtml}${srcHtml}${relHtml}
       <a class="cta" href="${BASE}/">Číst víc na DOLOŽENO →</a>
     </article>
     <footer>© 2026 · <a href="${BASE}/">dolozeno.cz</a> · UFO, vládní spisy a vesmírné záhady česky</footer>
@@ -104,11 +111,19 @@ ${bodyHtml}${factHtml}${srcHtml}
 }
 
 const sitemap=[{loc:`${BASE}/`,lastmod:new Date().toISOString().slice(0,10),pri:'1.0',freq:'daily'}];
-const seen={};
+// předpočítej slugy všech článků (kvůli interním odkazům "Související články")
+const SLUGS=[]; { const s2={}; FEED.forEach(a=>{ let sl=a.id||slug(a.title); if(s2[sl])sl=sl+'-'+(++s2[sl]); s2[sl]=1; SLUGS.push(sl); }); }
+function relatedFor(i){
+  const a=FEED[i];
+  const others=FEED.map((x,j)=>j).filter(j=>j!==i);
+  const score=j=>(a.topic&&FEED[j].topic===a.topic?2:0)+(a.tag&&FEED[j].tag===a.tag?1:0);
+  others.sort((x,y)=>score(y)-score(x)||y-x); // nejdřív nejrelevantnější, pak nejnovější
+  return others.slice(0,4);
+}
 const keep=new Set();
-FEED.forEach(a=>{
-  let sl=a.id||slug(a.title); if(seen[sl])sl=sl+'-'+(++seen[sl]); seen[sl]=1;
-  fs.writeFileSync(`${OUT}/${sl}.html`,page(a,sl),'utf8');
+FEED.forEach((a,i)=>{
+  const sl=SLUGS[i];
+  fs.writeFileSync(`${OUT}/${sl}.html`,page(a,sl,i),'utf8');
   keep.add(sl+'.html');
   sitemap.push({loc:`${BASE}/clanky/${sl}.html`,lastmod:isoDate(a.published),pri:'0.8',freq:'monthly'});
 });
