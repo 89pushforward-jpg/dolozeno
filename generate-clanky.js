@@ -23,7 +23,7 @@ function page(a,sl,i){
   const url=`${BASE}/clanky/${sl}.html`;
   const img=a.image?`${BASE}/${a.image}`:`${BASE}/img/og-default.jpg`;
   const d=desc(a);
-  const bodyHtml=(a.body||[]).map(p=>`      <p>${esc(p)}</p>`).join('\n');
+  const bodyHtml=(a.body||[]).map(p=>{const t=String(p);return (t.indexOf("<img")===0||t.indexOf("<figure")===0)?`      ${p}`:`      <p>${esc(p)}</p>`;}).join('\n');
   const srcHtml=(a.sources&&a.sources.length)?
     `\n    <div class="src"><div class="src-h">Zdroje</div>\n`+
     a.sources.map(z=>`      <a href="${esc(z.url)}" target="_blank" rel="noopener nofollow">${esc(z.name)}${z.lang?` <span>(${esc(z.lang)})</span>`:''}</a>`).join('\n')+

@@ -35,6 +35,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .btn-primary{background:var(--amber);color:var(--bg)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed}
 .btn-secondary{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.edmode-btn.active{border-color:var(--amber);color:var(--amber)}
 .btn-danger{background:var(--red);color:#fff}
 .btn-small{padding:8px 16px;font-size:12px;width:auto;margin-top:0}
 
@@ -389,6 +390,11 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <!-- EDITOR PUBLIKOVANÉHO ČLÁNKU -->
   <div id="editPanel" class="card" style="display:none;margin-top:18px">
     <h2 style="margin-top:0">✏️ Upravit článek <span id="edWho" style="font:400 13px var(--sans);color:var(--ink-dim)"></span></h2>
+    <div style="display:flex;gap:6px;margin:0 0 14px">
+      <button type="button" id="edTabForm" class="btn btn-secondary edmode-btn active" onclick="setEdMode('form')" style="margin-top:0;flex:1;padding:9px">📝 Formulář</button>
+      <button type="button" id="edTabCode" class="btn btn-secondary edmode-btn" onclick="setEdMode('code')" style="margin-top:0;flex:1;padding:9px">{ } Kód</button>
+    </div>
+    <div id="edFormWrap">
     <p style="font:400 12px var(--sans);color:var(--ink-dim);margin:0 0 10px">Změň text nebo přidej obrázek. Co nevyplníš, zůstane beze změny.</p>
     <label>Titulek</label><input id="edTitle">
     <label>Hook (úvodní věta)</label><input id="edHook">
@@ -399,6 +405,11 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <div class="img-drop" id="edImgDrop" onclick="document.getElementById('edImgFile').click()" style="margin-top:8px">
       📷 Nahrát / změnit obrázek
       <input type="file" id="edImgFile" accept="image/*" style="display:none" onchange="handleEditImage(this)">
+    </div>
+    </div>
+    <div id="edCodeWrap" style="display:none">
+      <p style="font:400 12px var(--sans);color:var(--ink-dim);margin:0 0 8px">Celý objekt článku (JS) přesně jako ve FEEDu — uprav cokoli (i verdikt/glosy) a ulož. Přepíše článek se stejným id. Musí to být platný JS objekt <code>{ … }</code> (pozor na uvozovky a čárky).</p>
+      <textarea id="edCode" rows="22" spellcheck="false" style="font-family:var(--mono);font-size:12.5px;line-height:1.55;white-space:pre;overflow-wrap:normal"></textarea>
     </div>
     <div style="display:flex;gap:8px;margin-top:14px">
       <button class="btn btn-primary" onclick="saveEdit()" style="flex:1">💾 Uložit změny</button>
@@ -905,7 +916,7 @@ async function saveQueue(){
 }
 
 // ========== EDITACE PUBLIKOVANÉHO ČLÁNKU ==========
-let EDIT_IDX=null, editImageData=null, editImageName="";
+let EDIT_IDX=null, editImageData=null, editImageName="", EDIT_MODE="form";
 function escJS(v){return String(v).replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r?\n/g,"\\n");}
 function unescJS(s){return String(s).replace(/\\n/g,"\n").replace(/\\"/g,'"').replace(/\\\\/g,"\\");}
 function pField(obj,name){const m=obj.match(new RegExp(name+':"((?:[^"\\\\]|\\\\.)*)"'));return m?unescJS(m[1]):"";}
@@ -948,6 +959,12 @@ function editArticle(idx){
   document.getElementById("edBody").value=getBody(t).join("\n\n");
   document.getElementById("edFact").value=pField(t,"fact");
   document.getElementById("edImage").value=pField(t,"image");
+  document.getElementById("edCode").value=t; // celý objekt článku pro režim Kód
+  EDIT_MODE="form";
+  document.getElementById("edFormWrap").style.display="block";
+  document.getElementById("edCodeWrap").style.display="none";
+  document.getElementById("edTabForm").classList.add("active");
+  document.getElementById("edTabCode").classList.remove("active");
   document.getElementById("edImgDrop").innerHTML='📷 Nahrát / změnit obrázek<input type="file" id="edImgFile" accept="image/*" style="display:none" onchange="handleEditImage(this)">';
   const st=document.getElementById("editStatus");st.className="status";st.textContent="";
   document.getElementById("editPanel").style.display="block";
@@ -963,7 +980,56 @@ function handleEditImage(input){
   };
   r.readAsDataURL(f);
 }
-function cancelEdit(){document.getElementById("editPanel").style.display="none";EDIT_IDX=null;editImageData=null;}
+function cancelEdit(){document.getElementById("editPanel").style.display="none";EDIT_IDX=null;editImageData=null;EDIT_MODE="form";}
+// ---- režim KÓD: validace, plnění, přepínání ----
+function parseArticleCode(text){
+  const s=String(text).trim();
+  if(!s||s[0]!=="{"||s[s.length-1]!=="}")return{ok:false,error:"musí začínat { a končit }"};
+  try{
+    const obj=Function('"use strict";return ('+s+');')();
+    if(!obj||typeof obj!=="object"||Array.isArray(obj))return{ok:false,error:"není to objekt { … }"};
+    return{ok:true,obj};
+  }catch(e){return{ok:false,error:e.message||"neplatný JS"};}
+}
+function fillFormFromObj(obj){
+  document.getElementById("edTitle").value=obj.title||"";
+  document.getElementById("edHook").value=obj.hook||"";
+  document.getElementById("edTeaser").value=obj.teaser||"";
+  document.getElementById("edBody").value=Array.isArray(obj.body)?obj.body.join("\n\n"):"";
+  document.getElementById("edFact").value=obj.fact||"";
+  document.getElementById("edImage").value=obj.image||"";
+}
+function buildCodeFromForm(){
+  const o=QUEUE.objs[EDIT_IDX];
+  let t=document.getElementById("edCode").value;
+  if(!parseArticleCode(t).ok)t=QUEUE.content.slice(o.absStart,o.absEnd); // fallback na původní objekt
+  t=setField(t,"title",document.getElementById("edTitle").value);
+  t=setField(t,"hook",document.getElementById("edHook").value);
+  t=setField(t,"teaser",document.getElementById("edTeaser").value);
+  t=setField(t,"fact",document.getElementById("edFact").value);
+  let img=document.getElementById("edImage").value.trim();
+  if(img){if(!img.startsWith("img/"))img="img/"+img;t=setField(t,"image",img);}
+  const paras=document.getElementById("edBody").value.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean);
+  if(paras.length)t=setBody(t,paras);
+  return t;
+}
+function setEdMode(mode){
+  if(EDIT_IDX==null||mode===EDIT_MODE)return;
+  const st=document.getElementById("editStatus");
+  if(mode==="code"){
+    document.getElementById("edCode").value=buildCodeFromForm();
+  }else{
+    const chk=parseArticleCode(document.getElementById("edCode").value);
+    if(!chk.ok){st.className="status show err";st.textContent="❌ Kód není platný objekt ("+chk.error+"). Oprav ho, než přepneš na formulář.";return;}
+    fillFormFromObj(chk.obj);
+    st.className="status";st.textContent="";
+  }
+  EDIT_MODE=mode;
+  document.getElementById("edFormWrap").style.display=mode==="form"?"block":"none";
+  document.getElementById("edCodeWrap").style.display=mode==="code"?"block":"none";
+  document.getElementById("edTabForm").classList.toggle("active",mode==="form");
+  document.getElementById("edTabCode").classList.toggle("active",mode==="code");
+}
 async function saveEdit(){
   if(EDIT_IDX==null||!QUEUE)return;
   const st=document.getElementById("editStatus");
@@ -972,6 +1038,21 @@ async function saveEdit(){
   if(imgPath&&!imgPath.startsWith("img/"))imgPath="img/"+imgPath;
   try{
     st.className="status show info";st.textContent="⏳ Ukládám...";
+    if(EDIT_MODE==="code"){
+      const codeText=document.getElementById("edCode").value.trim();
+      const chk=parseArticleCode(codeText);
+      if(!chk.ok){st.className="status show err";st.textContent="❌ Kód není platný objekt: "+chk.error+" — oprav a ulož znovu.";return;}
+      const orig=QUEUE.content.slice(o.absStart,o.absEnd);
+      st.textContent="📄 Ukládám na web...";
+      const fresh=await ghGetFile("index.html");
+      let content=decodeURIComponent(escape(atob(fresh.content.replace(/\n/g,""))));
+      if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
+      content=content.replace(orig,()=>codeText);
+      await ghPutFile("index.html",content,fresh.sha,"Úprava článku "+(o.id||"")+" (kód, admin)");
+      st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje za ~1 min.";
+      QUEUE=null;setTimeout(()=>{cancelEdit();loadQueue();},1600);
+      return;
+    }
     if(editImageData){
       if(!imgPath)imgPath="img/"+((o.id||("clanek-"+EDIT_IDX)))+".jpg";
       st.textContent="📷 Nahrávám obrázek...";
