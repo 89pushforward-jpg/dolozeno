@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530}
+  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',sans-serif;--ink:#e8ecf3;--ink-dim:#9aa2b2;--ok:#3ecf8e;--spec:#ff6b6b;--cyan:#36d6e7;--franta:#f2c40f;--pepa:#ff6b6b;--bg-card:#13171f}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.65}
   .wrap{max-width:720px;margin:0 auto;padding:24px 20px 60px}
@@ -48,6 +48,41 @@
   .rel{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
   .rel-h{font-size:13px;letter-spacing:1px;color:var(--mut);font-weight:700;margin-bottom:10px}
   .rel a{display:block;color:var(--cy);text-decoration:none;font-size:14px;padding:5px 0}
+  .verdikt{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+  .v-question{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;line-height:1.45;margin:0 auto 16px;max-width:520px}
+  .verdikt-cap{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:14px}
+  .verdikt-head{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  .v-verd{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1.5px solid;border-radius:8px;padding:7px 13px;background:transparent}
+  .v-verd.potvrzeno{color:var(--ok);border-color:var(--ok)}
+  .v-verd.nevime{color:var(--cyan);border-color:var(--cyan)}
+  .v-verd.bezdukazu{color:var(--spec);border-color:var(--spec)}
+  .v-verd.vysvetleno{color:var(--ok);border-color:var(--ok)}
+  .v-note{text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.55;margin:14px auto 18px;max-width:480px}
+  .v-barcap{font-family:var(--sans);font-size:14px;color:var(--ink-dim);text-align:center;margin-bottom:8px}
+  .v-bar{display:flex;height:32px;border-radius:8px;overflow:hidden}
+  .v-bar .seg{box-sizing:border-box;font-family:var(--mono);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .v-bar .seg-proti{background:var(--spec);color:#3a0d12;border-right:2px solid var(--bg-card)}
+  .v-bar .seg-pro{background:var(--ok);color:#063524}
+  .v-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .v-col{border:1px solid;border-radius:10px;padding:12px 14px}
+  .v-col.col-proti{border-color:rgba(255,107,107,.25);background:rgba(255,107,107,.05)}
+  .v-col.col-pro{border-color:rgba(62,207,142,.22);background:rgba(62,207,142,.05)}
+  .v-col h6{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;margin:0 0 8px;display:flex;align-items:center;gap:6px}
+  .v-col.col-proti h6{color:var(--spec)} .v-col.col-pro h6{color:var(--ok)}
+  .v-col ul{list-style:none;margin:0;padding:0}
+  .v-col li{font-size:13px;line-height:1.5;color:var(--ink);opacity:.9;margin:7px 0;padding-left:14px;position:relative}
+  .v-col li::before{content:"—";position:absolute;left:0}
+  .v-col.col-proti li::before{color:var(--spec)} .v-col.col-pro li::before{color:var(--ok)}
+  @media(max-width:560px){.v-cols{grid-template-columns:1fr}}
+  .glosa{margin-top:22px;padding:14px 16px;border:2px solid rgba(242,196,15,.4);border-radius:12px;background:rgba(242,196,15,.07);display:flex;gap:14px;align-items:flex-start}
+  .glosa-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--franta);flex-shrink:0}
+  .glosa-ava img{width:100%;height:100%;object-fit:cover}
+  .glosa-text b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--franta);margin-bottom:6px}
+  .glosa-text p{font-size:14.5px;color:var(--franta);font-style:italic;margin:0}
+  .glosa.glosa-p .glosa-text p{color:#ff6b6b}
+  .glosa.glosa-p{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.07)}
+  .glosa.glosa-p .glosa-ava{border-color:#ff6b6b}
+  .glosa.glosa-p .glosa-text b{color:#ff6b6b}
   .cta{display:block;text-align:center;margin:38px 0 0;background:var(--amb);color:#0a0c10;font-weight:800;text-decoration:none;padding:15px;border-radius:10px;font-size:16px}
   footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
   footer a{color:var(--mut)}
@@ -79,6 +114,9 @@
       <p>&lt;span class='ij f'&gt;Franta: Uklidni se, Pepane. To, že něco neumíme hned vysvětlit, není důkaz, že to přiletělo z hvězd. Ale musím ti dát čestně za pravdu v jedné věci — takhle konkrétní popis od dvou lidí najednou plus ověřené video, to už není jen „něco zahlídnul strejda z hospody“. To si zaslouží pořádnou pozornost.&lt;/span&gt;</p>
       <p>Kde to tedy stojí? Máme **věcně poctivou záhadu**. Máme dva nezávislé svědky, kteří viděli přesně to samé. Máme video, které FBI potvrdila jako pravé. Máme podobný případ v téže oblasti o rok dřív. A přesto **žádné z pozorovaných rysů samo o sobě nevyžaduje mimozemský původ**. Vypadá to jako záhada, které chybí ještě jeden článek řetězu — přesná měření (spektrální analýza světla té „plazmy“, radar, teplotní senzory). Bez těch stojíme přesně na hraně: nemůžeme to odbýt jako blesk ani jako balón, ale ani přijmout jako důkaz čehokoli nadpozemského. Poctivé „nevíme“.</p>
     <div class="fact"><span>DOLOŽENO:</span> FBI má v úředních záznamech u těchto případů zvláštní kategorii — hodnocení věrohodnosti svědka. U svědka z října 2024 (podobný případ, jiná koule) použila přímo formulaci „vysoce věrohodný“. To není o samotném objektu — to je o tom, že vyšetřovatel po interview neměl důvod pochybovat o tom, co člověk viděl. U té metrové rudé koule z července 2025 se navíc shodovaly popisy dvou lidí, kteří přišli na scénu nezávisle.</div>
+    <div class="verdikt"><div class="v-question">Je to nový typ UAP z jiného světa?</div><div class="verdikt-cap">Verdikt redakce</div><div class="verdikt-head"><span class="v-verd nevime">NEVÍME</span></div><div class="v-note">Reálná záhada, ne fáma. Dva nezávislí svědci a video ověřené FBI dělají z případu něco, co nelze odbýt mávnutím ruky — ale ani přijmout jako důkaz mimozemské technologie. Chybí měření.</div><div class="v-barcap">Váha důkazů</div><div class="v-bar"><div class="seg seg-proti" style="width:60%">60 % proti</div><div class="seg seg-pro" style="width:40%">40 % pro</div></div><div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">✗</span> PROTI</h6><ul><li>Žádný z pozorovaných rysů nevyžaduje mimozemský původ</li><li>Kulový blesk (vzácný, ale zdokumentovaný jev) může mít bílé jádro obklopené barevnou plazmou a být tichý</li><li>Chybí měření: spektrální analýza světla, radarová data, teplotní senzory</li><li>Vládní hodnocení: „nezdá se, že by šlo o techniku cizí velmoci“ — ale ani se to nezařadilo do kategorie neznámé technologie</li><li>PURSUE dosud u žádného zveřejněného případu nedošlo k závěru „mimozemský původ“</li></ul></div><div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> PRO</h6><ul><li>Dva nezávislí svědci (přišli ven zvlášť) popsali totéž — silná indicie</li><li>iPhone video, které FBI autentifikovala jako pravé (neupravené)</li><li>Návaznost: podobný případ v téže oblasti v říjnu 2024, svědek FBI oficiálně označen za „vysoce věrohodného“</li><li>Objekt tichý, blízko (~27 m), v nízké výšce — nejde o vzdálený bod na obloze</li></ul></div></div></div>
+    <div class="glosa glosa-p"><div class="glosa-ava"><img src="/img/pepan-avatar.jpg" alt="Pepan"></div><div class="glosa-text"><b>Pepan jásá</b><p>„Konečně! Metrová rudá koule s bílým plazmovým sluncem uvnitř, dva svědci, ověřené video, ještě podobná koule ve stejné oblasti loni. Franto, kolik ti mimozemšťani musejí ještě naparkovat na zahradu, abys uznal, že tady něco lítá?!“</p></div></div>
+    <div class="glosa"><div class="glosa-ava"><img src="/img/franta-avatar.jpg" alt="Franta"></div><div class="glosa-text"><b>Franta ho krotí</b><p>„Klídek. Ověřené video znamená, že ho někdo neupravil, ne že tam byli mimozemšťani. Ale nebudu ti kecat — kulový blesk se nezdvojí a neodletí v páru. Balón nemá „bílé slunce“ uvnitř. Chce to lepší data — teploměr, spektrum světla, radar. Do té doby: fakt netuším. A to říkám nerad.“</p></div></div>
     <div class="src"><div class="src-h">Zdroje</div>
       <a href="https://abc7ny.com/post/new-batch-ufo-files-released-pentagon-donald-trump-administration-describe-spinning-discs-more/19288671/" target="_blank" rel="noopener nofollow">AP / ABC7NY — nové UFO spisy popisují rotující disky, zářící koule a objekt tvaru brambory <span>(anglicky)</span></a>
       <a href="https://www.newsweek.com/ufo-files-pentagon-releases-third-batch-records-uap-pete-hegseth-trump-12064856" target="_blank" rel="noopener nofollow">Newsweek — 5 klíčových odhalení ze třetí várky UFO spisů <span>(anglicky)</span></a>

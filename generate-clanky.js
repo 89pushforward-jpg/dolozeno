@@ -33,6 +33,40 @@ function page(a,sl,i){
   const relHtml=rel.length?`\n    <div class="rel"><div class="rel-h">Související články</div>\n`+
     rel.map(j=>`      <a href="${BASE}/clanky/${SLUGS[j]}.html">${esc(FEED[j].title)}</a>`).join('\n')+
     `\n    </div>`:'';
+  // ---- verdikt (stejné jako v overlay na webu) ----
+  const v=a.verdikt;
+  const vL=arr=>(arr||[]).map(t=>`<li>${esc(t)}</li>`).join('');
+  let verdiktHtml='';
+  if(v){
+    const pro=Math.max(0,Math.min(100, v.proPct!=null?v.proPct:50)); const proti=100-pro;
+    const tier=v.tier||(pro>=70?'potvrzeno':(pro<=30?'bezdukazu':'nevime'));
+    const isV=tier==='vysvetleno';
+    const vlabel=tier==='potvrzeno'?'POTVRZENO':isV?'VYSVĚTLENO':(tier==='bezdukazu'?'BEZ DŮKAZU':'NEVÍME');
+    const topQ=esc(isV?(v.q||'Je ta záhada vyřešená?'):(v.q||'je za tím něco mimozemského?'));
+    const barLabel=isV?'Míra vysvětlení':'Váha důkazů';
+    const segL=isV?(proti+' % otevřené'):(proti+' % proti');
+    const segR=isV?(pro+' % vysvětleno'):(pro+' % pro');
+    const headProti=isV?'ZBÝVÁ OTEVŘENÉ':'PROTI';
+    const headPro=isV?'VYSVĚTLENÍ':'PRO';
+    verdiktHtml='\n    <div class="verdikt"><div class="v-question">'+topQ+'</div>'
+      +'<div class="verdikt-cap">Verdikt redakce</div>'
+      +'<div class="verdikt-head"><span class="v-verd '+tier+'">'+vlabel+'</span></div>'
+      +(v.note?'<div class="v-note">'+esc(v.note)+'</div>':'')
+      +'<div class="v-barcap">'+barLabel+'</div>'
+      +'<div class="v-bar"><div class="seg seg-proti" style="width:'+proti+'%">'+segL+'</div><div class="seg seg-pro" style="width:'+pro+'%">'+segR+'</div></div>'
+      +'<div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">'+(isV?'○':'✗')+'</span> '+headProti+'</h6><ul>'+vL(v.proti)+'</ul></div>'
+      +'<div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> '+headPro+'</h6><ul>'+vL(v.pro)+'</ul></div></div></div>';
+  }
+  // ---- glosy Franta / Pepan ----
+  let glosaHtml='';
+  if(a.kind!=='franta'){
+    let ga=a.glosy;
+    if(!ga){ga=[];if(a.frantaGlosa)ga.push({spk:'f',label:'Franta dodává',text:a.frantaGlosa});if(a.pepanGlosa)ga.push({spk:'p',label:'Pepan dodává',text:a.pepanGlosa});}
+    if(ga.length){
+      glosaHtml='\n'+ga.map(g=>{const isP=g.spk==='p';const av=isP?'/img/pepan-avatar.jpg':'/img/franta-avatar.jpg';const cls=isP?'glosa glosa-p':'glosa';const nm=isP?'Pepan':'Franta';
+        return '    <div class="'+cls+'"><div class="glosa-ava"><img src="'+av+'" alt="'+nm+'"></div><div class="glosa-text"><b>'+esc(g.label||(nm+' dodává'))+'</b><p>„'+esc(g.text)+'“</p></div></div>';}).join('\n');
+    }
+  }
   const ld={"@context":"https://schema.org","@type":"NewsArticle",headline:a.title,description:d,image:[img],
     datePublished:isoDate(a.published),dateModified:isoDate(a.published),
     author:{"@type":"Organization",name:"DOLOŽENO",url:BASE},
@@ -64,7 +98,7 @@ function page(a,sl,i){
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530}
+  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',sans-serif;--ink:#e8ecf3;--ink-dim:#9aa2b2;--ok:#3ecf8e;--spec:#ff6b6b;--cyan:#36d6e7;--franta:#f2c40f;--pepa:#ff6b6b;--bg-card:#13171f}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.65}
   .wrap{max-width:720px;margin:0 auto;padding:24px 20px 60px}
@@ -88,6 +122,41 @@ function page(a,sl,i){
   .rel{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
   .rel-h{font-size:13px;letter-spacing:1px;color:var(--mut);font-weight:700;margin-bottom:10px}
   .rel a{display:block;color:var(--cy);text-decoration:none;font-size:14px;padding:5px 0}
+  .verdikt{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+  .v-question{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;line-height:1.45;margin:0 auto 16px;max-width:520px}
+  .verdikt-cap{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:14px}
+  .verdikt-head{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  .v-verd{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1.5px solid;border-radius:8px;padding:7px 13px;background:transparent}
+  .v-verd.potvrzeno{color:var(--ok);border-color:var(--ok)}
+  .v-verd.nevime{color:var(--cyan);border-color:var(--cyan)}
+  .v-verd.bezdukazu{color:var(--spec);border-color:var(--spec)}
+  .v-verd.vysvetleno{color:var(--ok);border-color:var(--ok)}
+  .v-note{text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.55;margin:14px auto 18px;max-width:480px}
+  .v-barcap{font-family:var(--sans);font-size:14px;color:var(--ink-dim);text-align:center;margin-bottom:8px}
+  .v-bar{display:flex;height:32px;border-radius:8px;overflow:hidden}
+  .v-bar .seg{box-sizing:border-box;font-family:var(--mono);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .v-bar .seg-proti{background:var(--spec);color:#3a0d12;border-right:2px solid var(--bg-card)}
+  .v-bar .seg-pro{background:var(--ok);color:#063524}
+  .v-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .v-col{border:1px solid;border-radius:10px;padding:12px 14px}
+  .v-col.col-proti{border-color:rgba(255,107,107,.25);background:rgba(255,107,107,.05)}
+  .v-col.col-pro{border-color:rgba(62,207,142,.22);background:rgba(62,207,142,.05)}
+  .v-col h6{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;margin:0 0 8px;display:flex;align-items:center;gap:6px}
+  .v-col.col-proti h6{color:var(--spec)} .v-col.col-pro h6{color:var(--ok)}
+  .v-col ul{list-style:none;margin:0;padding:0}
+  .v-col li{font-size:13px;line-height:1.5;color:var(--ink);opacity:.9;margin:7px 0;padding-left:14px;position:relative}
+  .v-col li::before{content:"—";position:absolute;left:0}
+  .v-col.col-proti li::before{color:var(--spec)} .v-col.col-pro li::before{color:var(--ok)}
+  @media(max-width:560px){.v-cols{grid-template-columns:1fr}}
+  .glosa{margin-top:22px;padding:14px 16px;border:2px solid rgba(242,196,15,.4);border-radius:12px;background:rgba(242,196,15,.07);display:flex;gap:14px;align-items:flex-start}
+  .glosa-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--franta);flex-shrink:0}
+  .glosa-ava img{width:100%;height:100%;object-fit:cover}
+  .glosa-text b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--franta);margin-bottom:6px}
+  .glosa-text p{font-size:14.5px;color:var(--franta);font-style:italic;margin:0}
+  .glosa.glosa-p .glosa-text p{color:#ff6b6b}
+  .glosa.glosa-p{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.07)}
+  .glosa.glosa-p .glosa-ava{border-color:#ff6b6b}
+  .glosa.glosa-p .glosa-text b{color:#ff6b6b}
   .cta{display:block;text-align:center;margin:38px 0 0;background:var(--amb);color:#0a0c10;font-weight:800;text-decoration:none;padding:15px;border-radius:10px;font-size:16px}
   footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
   footer a{color:var(--mut)}
@@ -107,7 +176,7 @@ function page(a,sl,i){
       <div class="meta">${esc(a.published||a.date||'')}${a.source?` · zdroj: ${esc(a.source)}`:''}</div>
       <img class="hero" src="/${esc(a.image||'img/og-default.jpg')}" alt="${esc(a.title)}" onerror="this.onerror=null;this.src='/img/og-default.jpg'">
       ${a.teaser?`<p class="lead">${esc(a.teaser)}</p>`:''}
-${bodyHtml}${factHtml}${srcHtml}${relHtml}
+${bodyHtml}${factHtml}${verdiktHtml}${glosaHtml}${srcHtml}${relHtml}
       <a class="cta" href="${BASE}/">Číst víc na DOLOŽENO →</a>
     </article>
     <footer>© 2026 · <a href="${BASE}/">dolozeno.cz</a> · UFO, vládní spisy a vesmírné záhady česky</footer>

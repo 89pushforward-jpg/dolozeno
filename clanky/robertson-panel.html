@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530}
+  :root{--bg:#0a0c10;--card:#11151c;--tx:#e8ecf3;--mut:#9aa6b5;--amb:#f5a623;--cy:#36d6e7;--line:#1e2530;--mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'IBM Plex Sans',sans-serif;--ink:#e8ecf3;--ink-dim:#9aa2b2;--ok:#3ecf8e;--spec:#ff6b6b;--cyan:#36d6e7;--franta:#f2c40f;--pepa:#ff6b6b;--bg-card:#13171f}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--tx);font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.65}
   .wrap{max-width:720px;margin:0 auto;padding:24px 20px 60px}
@@ -48,6 +48,41 @@
   .rel{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
   .rel-h{font-size:13px;letter-spacing:1px;color:var(--mut);font-weight:700;margin-bottom:10px}
   .rel a{display:block;color:var(--cy);text-decoration:none;font-size:14px;padding:5px 0}
+  .verdikt{margin:30px 0 0;padding-top:18px;border-top:1px solid var(--line)}
+  .v-question{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;line-height:1.45;margin:0 auto 16px;max-width:520px}
+  .verdikt-cap{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-align:center;margin-bottom:14px}
+  .verdikt-head{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+  .v-verd{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;border:1.5px solid;border-radius:8px;padding:7px 13px;background:transparent}
+  .v-verd.potvrzeno{color:var(--ok);border-color:var(--ok)}
+  .v-verd.nevime{color:var(--cyan);border-color:var(--cyan)}
+  .v-verd.bezdukazu{color:var(--spec);border-color:var(--spec)}
+  .v-verd.vysvetleno{color:var(--ok);border-color:var(--ok)}
+  .v-note{text-align:center;color:var(--ink-dim);font-size:14px;line-height:1.55;margin:14px auto 18px;max-width:480px}
+  .v-barcap{font-family:var(--sans);font-size:14px;color:var(--ink-dim);text-align:center;margin-bottom:8px}
+  .v-bar{display:flex;height:32px;border-radius:8px;overflow:hidden}
+  .v-bar .seg{box-sizing:border-box;font-family:var(--mono);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .v-bar .seg-proti{background:var(--spec);color:#3a0d12;border-right:2px solid var(--bg-card)}
+  .v-bar .seg-pro{background:var(--ok);color:#063524}
+  .v-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .v-col{border:1px solid;border-radius:10px;padding:12px 14px}
+  .v-col.col-proti{border-color:rgba(255,107,107,.25);background:rgba(255,107,107,.05)}
+  .v-col.col-pro{border-color:rgba(62,207,142,.22);background:rgba(62,207,142,.05)}
+  .v-col h6{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.06em;margin:0 0 8px;display:flex;align-items:center;gap:6px}
+  .v-col.col-proti h6{color:var(--spec)} .v-col.col-pro h6{color:var(--ok)}
+  .v-col ul{list-style:none;margin:0;padding:0}
+  .v-col li{font-size:13px;line-height:1.5;color:var(--ink);opacity:.9;margin:7px 0;padding-left:14px;position:relative}
+  .v-col li::before{content:"—";position:absolute;left:0}
+  .v-col.col-proti li::before{color:var(--spec)} .v-col.col-pro li::before{color:var(--ok)}
+  @media(max-width:560px){.v-cols{grid-template-columns:1fr}}
+  .glosa{margin-top:22px;padding:14px 16px;border:2px solid rgba(242,196,15,.4);border-radius:12px;background:rgba(242,196,15,.07);display:flex;gap:14px;align-items:flex-start}
+  .glosa-ava{width:48px;height:48px;border-radius:50%;overflow:hidden;border:2px solid var(--franta);flex-shrink:0}
+  .glosa-ava img{width:100%;height:100%;object-fit:cover}
+  .glosa-text b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--franta);margin-bottom:6px}
+  .glosa-text p{font-size:14.5px;color:var(--franta);font-style:italic;margin:0}
+  .glosa.glosa-p .glosa-text p{color:#ff6b6b}
+  .glosa.glosa-p{border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.07)}
+  .glosa.glosa-p .glosa-ava{border-color:#ff6b6b}
+  .glosa.glosa-p .glosa-text b{color:#ff6b6b}
   .cta{display:block;text-align:center;margin:38px 0 0;background:var(--amb);color:#0a0c10;font-weight:800;text-decoration:none;padding:15px;border-radius:10px;font-size:16px}
   footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--mut);font-size:13px;text-align:center}
   footer a{color:var(--mut)}
@@ -73,6 +108,7 @@
       <p>Takže pocit, že se něco „tutlá“, byl vlastně oprávněný — jen se to netýkalo schovaných mimozemšťanů, ale psychologie a PR. A je tu paradox: že CIA přiznala financování komise až v roce 1975, nakoplo konspirace víc než cokoli v samotných spisech. Kritiku schytala i metoda — sám astronom J. Allen Hynek, dlouholetá tvář Blue Booku, později přiznal, že se s „debunkingem“ házely do koše i případy, které si zasloužily seriózní zkoumání.</p>
       <p>Robertsonova komise je tak učebnicový důkaz, že vláda UFO brala vážně — ale jako problém vnímání, ne jako talíře v hangáru. „Nevíme“ pořád neznamená „mimozemšťani“. A „utajování“ zase neznamená „schovaní ufouni“. Skutečná záhada je v tom, co se těmi rychlými „běžnými vysvětleními“ možná zametlo pod koberec.</p>
     <div class="fact"><span>DOLOŽENO:</span> Komise prostudovala jen hrstku vybraných případů během zhruba 12 hodin — a přesto na šestnáct let (1953–1969) určila, jak se o UFO mluví. A že za ní stála CIA, se veřejnost dozvěděla až v roce 1975.</div>
+    <div class="verdikt"><div class="v-question">Je ta záhada vyřešená?</div><div class="verdikt-cap">Verdikt redakce</div><div class="verdikt-head"><span class="v-verd vysvetleno">VYSVĚTLENO</span></div><div class="v-note">Utajování bylo reálné, ale je doložené — šlo o tlumení zájmu o UFO, ne o skrývání mimozemšťanů.</div><div class="v-barcap">Míra vysvětlení</div><div class="v-bar"><div class="seg seg-proti" style="width:15%">15 % otevřené</div><div class="seg seg-pro" style="width:85%">85 % vysvětleno</div></div><div class="v-cols"><div class="v-col col-proti"><h6><span aria-hidden="true">○</span> ZBÝVÁ OTEVŘENÉ</h6><ul><li>Že šlo „jen“ o tlumení zájmu, část lidí nepřesvědčí</li></ul></div><div class="v-col col-pro"><h6><span aria-hidden="true">✓</span> VYSVĚTLENÍ</h6><ul><li>Komise i mediální kampaň jsou historicky doložené</li><li>Sama komise uzavřela, že UFO nejsou mimozemšťani</li><li>Roli CIA potvrdily odtajněné spisy (1975)</li></ul></div></div></div>
     <div class="src"><div class="src-h">Zdroje</div>
       <a href="https://sgp.fas.org/library/ciaufo.html" target="_blank" rel="noopener nofollow">CIA – Studies in Intelligence (Haines) <span>(anglicky)</span></a>
       <a href="https://www.aaro.mil/Portals/136/PDFs/AARO_Historical_Record_Report_Vol_1_2024.pdf" target="_blank" rel="noopener nofollow">AARO Historical Record Report <span>(anglicky)</span></a>
