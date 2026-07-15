@@ -38,7 +38,8 @@ function page(a,sl,i){
   const url=`${BASE}/clanky/${sl}.html`;
   const img=a.image?`${BASE}/${a.image}`:`${BASE}/img/og-default.jpg`;
   const d=desc(a);
-  const bodyHtml=(a.body||[]).map(p=>{const t=String(p);return (t.indexOf("<span class='ij")===0||t.indexOf("<img")===0||t.indexOf("<figure")===0)?`      ${p}`:`      <p>${p}</p>`;}).join('\n');
+  // relativní cesty k obrázkům (img/...) přepíšeme na absolutní (/img/...), jinak se na /clanky/ stránkách nenačtou
+  const bodyHtml=(a.body||[]).map(p=>{const t=String(p).replace(/src=(['"])img\//g,'src=$1/img/');return (t.indexOf("<span class='ij")===0||t.indexOf("<img")===0||t.indexOf("<figure")===0)?`      ${t}`:`      <p>${t}</p>`;}).join('\n');
   const srcHtml=(a.sources&&a.sources.length)?
     `\n      <div class="sources"><h5>Zdroje</h5>`+
     a.sources.map(z=>`<a href="${esc(z.url)}" target="_blank" rel="noopener nofollow">${esc(z.name)}<span>${esc(z.lang||'')} ↗</span></a>`).join('')+

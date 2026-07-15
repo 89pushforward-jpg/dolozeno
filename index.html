@@ -1708,7 +1708,7 @@ function openArticle(i,push){
   document.getElementById("d-title").textContent=it.title;
   document.getElementById("d-video").innerHTML=it.video?`<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${it.video}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:"";
   document.getElementById("d-fact").innerHTML=it.fact?`<div class="fact ${it.factLabel==="FIKCE"?"fikce":""}"><b>${it.factLabel||"Zajímavost"}</b>${it.fact}</div>`:"";
-  document.getElementById("d-body").innerHTML=it.body.map(function(p){return (p.indexOf("<span class='ij")===0||p.indexOf("<img")===0||p.indexOf("<figure")===0) ? p : "<p>"+p+"</p>";}).join("");
+  document.getElementById("d-body").innerHTML=it.body.map(function(p){var t=String(p).replace(/src=(['"])img\//g,'src=$1/img/');return (t.indexOf("<span class='ij")===0||t.indexOf("<img")===0||t.indexOf("<figure")===0) ? t : "<p>"+t+"</p>";}).join("");
   document.getElementById("d-verdikt").innerHTML = (function(){
     var v=it.verdikt; if(!v) return "";
     var pro=Math.max(0,Math.min(100, v.proPct!=null?v.proPct:50)); var proti=100-pro;
