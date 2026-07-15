@@ -363,6 +363,16 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   <!-- ARTICLE OPENS -->
   <h2>Otevření článků</h2>
   <div id="articleBars" style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px"></div>
+
+  <!-- HLOUBKA ČTENÍ -->
+  <h2>Hloubka čtení</h2>
+  <p class="subtitle" style="margin-top:-10px">Kolik % článku lidé v průměru přečtou a kde ho zavírají.</p>
+  <div id="readDepthBars" style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px"></div>
+
+  <!-- POSLEDNÍ NÁVŠTĚVY -->
+  <h2>Poslední návštěvy</h2>
+  <p class="subtitle" style="margin-top:-10px">Co jeden návštěvník prošel a jak dlouho u toho byl.</p>
+  <div id="sessionsList"></div>
 </div>
 
 <!-- ===== FRONTA / PLÁNOVÁNÍ ===== -->
@@ -1209,6 +1219,10 @@ async function loadStats(){
     // Article opens bars
     drawArticleBars(d.articleOpens||{});
 
+    // Hloubka čtení + poslední návštěvy
+    drawReadDepth(d.readDepth||{});
+    drawSessions(d.sessions||[]);
+
     el.className="status show ok";el.textContent="✓ Data načtena";
     setTimeout(()=>{el.style.display="none"},2000);
   }catch(e){
@@ -1217,8 +1231,53 @@ async function loadStats(){
 }
 
 function fmtTime(s){
+  s=Math.max(0,Math.round(s||0));
   if(s<60)return s+"s";
   return Math.floor(s/60)+"m "+s%60+"s";
+}
+
+// ---- Hloubka čtení článků ----
+function drawReadDepth(data){
+  const el=document.getElementById("readDepthBars");
+  if(!el)return;
+  const rows=Object.entries(data||{}).sort((a,b)=>(b[1].avgMax||0)-(a[1].avgMax||0));
+  if(!rows.length){el.innerHTML='<p style="color:var(--ink-dim);font:400 13px var(--sans);margin:0">Zatím žádná data — sbírá se od nasazení měření.</p>';return;}
+  el.innerHTML=rows.map(([id,s])=>{
+    const name=(id||"").replace(/-/g," ");
+    const max=Math.round(s.avgMax||0);
+    const col=max>=70?"var(--green)":(max>=40?"var(--amber)":"var(--red)");
+    return `<div style="margin:12px 0">
+      <div style="display:flex;justify-content:space-between;gap:10px;font:500 13px var(--sans);margin-bottom:5px">
+        <span style="color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+        <span style="color:var(--ink-dim);font:400 12px var(--mono);white-space:nowrap">${max}% · ${s.count||0}× · Ø ${fmtTime(s.avgSeconds)}</span>
+      </div>
+      <div style="height:9px;background:var(--surface2);border-radius:5px;overflow:hidden">
+        <div style="height:100%;width:${max}%;background:${col}"></div>
+      </div>
+      <div style="font:400 11px var(--sans);color:var(--ink-dim);margin-top:4px">zavírají průměrně na ${Math.round(s.avgClose||0)} %</div>
+    </div>`;
+  }).join("");
+}
+
+// ---- Poslední návštěvy (cesta jednoho návštěvníka) ----
+function drawSessions(list){
+  const el=document.getElementById("sessionsList");
+  if(!el)return;
+  if(!list||!list.length){el.innerHTML='<p style="color:var(--ink-dim);font:400 13px var(--sans)">Zatím žádná data — sbírá se od nasazení měření.</p>';return;}
+  el.innerHTML=list.map(s=>{
+    let when="";
+    try{when=new Date(s.start).toLocaleString("cs-CZ");}catch(e){when="";}
+    const steps=(s.events||[]).map(ev=>{
+      if(ev.type==="pageview")return `<div style="font:400 13px var(--sans);color:var(--ink-dim);padding:3px 0">🏠 Přišel na web <span style="color:var(--ink-faint);font:400 11px var(--mono)">${ev.page||""}</span></div>`;
+      if(ev.type==="read")return `<div style="font:400 13px var(--sans);color:var(--ink);padding:3px 0">📄 ${(ev.aid||"").replace(/-/g," ")} — <span style="color:var(--cyan)">přečetl ${Math.round(ev.max||0)} %</span>, ${fmtTime(ev.sec)}</div>`;
+      if(ev.type==="time")return `<div style="font:400 12px var(--mono);color:var(--ink-faint);padding:3px 0">⏱ na webu celkem ${fmtTime(ev.sec)}</div>`;
+      return "";
+    }).join("");
+    return `<div class="card" style="margin-bottom:10px;padding:12px 14px">
+      <div style="font:600 11px var(--mono);color:var(--amber);letter-spacing:.06em;margin-bottom:6px">${when} · ${fmtTime(s.seconds)}</div>
+      ${steps||'<div style="color:var(--ink-dim);font:400 12px var(--sans)">—</div>'}
+    </div>`;
+  }).join("");
 }
 
 function drawBarChart(canvasId,data,opts){

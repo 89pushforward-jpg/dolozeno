@@ -1698,6 +1698,7 @@ function articleUrl(i){return "/clanky/"+ARTICLE_SLUGS[i]+".html";}
 function openArticle(i,push){
   const it=FEED[i];
   track("article",{articleId:it.id||("article-"+i)});
+  readStart(it.id||("article-"+i));
   document.getElementById("d-cover").innerHTML=coverHTML(it,i);
   document.getElementById("d-caption").innerHTML = it.imgType==="ai"
     ? "Ilustrace vygenerovaná umělou inteligencí (AI)"
@@ -1750,6 +1751,7 @@ function openArticle(i,push){
   if(push!==false){try{history.pushState({article:i},"",articleUrl(i));}catch(e){}}
 }
 function closeArticle(pop){
+  readEnd();
   overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.classList.remove("locked");document.getElementById("d-video").innerHTML="";
   if(pop!==true && history.state && history.state.article!=null){try{history.back();}catch(e){}}
 }
@@ -1783,8 +1785,27 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&overlay.classList.c
 
 /* ---- ANALYTICS TRACKING ---- */
 const _t0=Date.now();
-function track(type,extra){try{fetch(TRACK_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(Object.assign({type:type,page:location.pathname},extra||{}))});}catch(e){}}
-window.addEventListener("beforeunload",function(){track("time",{duration:Math.round((Date.now()-_t0)/1000)});});
+/* anonymní ID návštěvy (jen sessionStorage, žádné osobní údaje) */
+const SID=(function(){try{var s=sessionStorage.getItem("dz_sid");if(!s){s=Date.now().toString(36)+Math.random().toString(36).slice(2,8);sessionStorage.setItem("dz_sid",s);}return s;}catch(e){return "nosid";}})();
+function track(type,extra){
+  try{
+    const body=JSON.stringify(Object.assign({type:type,page:location.pathname,sessionId:SID},extra||{}));
+    if(navigator.sendBeacon){navigator.sendBeacon(TRACK_URL,new Blob([body],{type:"text/plain;charset=UTF-8"}));}
+    else{fetch(TRACK_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:body,keepalive:true});}
+  }catch(e){}
+}
+/* ---- hloubka čtení článku ---- */
+let RD=null;
+function readDepthNow(){const el=document.getElementById("overlay");if(!el)return 0;const h=el.scrollHeight-el.clientHeight;if(h<=0)return 100;return Math.max(0,Math.min(100,Math.round(el.scrollTop/h*100)));}
+function readStart(id){readEnd();RD={id:id,t0:Date.now(),max:0,last:0};setTimeout(function(){if(RD){const p=readDepthNow();if(p>RD.max)RD.max=p;RD.last=p;}},80);}
+function readEnd(){if(!RD)return;const r=RD;RD=null;track("read",{articleId:r.id,maxDepth:r.max,closedAt:r.last,seconds:Math.round((Date.now()-r.t0)/1000)});}
+(function(){const el=document.getElementById("overlay");if(!el)return;
+  el.addEventListener("scroll",function(){if(!RD)return;const p=readDepthNow();RD.last=p;if(p>RD.max)RD.max=p;},{passive:true});})();
+/* ---- odchod ze stránky (sendBeacon je spolehlivější než beforeunload) ---- */
+let _flushed=false;
+function flushTracking(){if(_flushed)return;_flushed=true;readEnd();track("time",{duration:Math.round((Date.now()-_t0)/1000)});}
+window.addEventListener("pagehide",flushTracking);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden")flushTracking();});
 
 /* ---- waitlist (Google Sheets přes Apps Script) ---- */
 const WAITLIST_ENDPOINT="https://script.google.com/macros/s/AKfycbxA9GKuiTeKhcvLcJwEHfxiTdtSqjqHzYSXJ5bdOcIyLsNzwJMUA9pleh8SvBOA7taX/exec";
