@@ -161,7 +161,7 @@
   </svg>
   <div id="sizeCtl">
     <span class="prevLabel">VELIKOST SLUNCE</span>
-    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="2">
+    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="1.5">
   </div>
 </div>
 
@@ -199,7 +199,7 @@
   <label><input type="checkbox" id="rot" checked> autorotace</label>
   <span class="sep"></span>
   <span class="lbl">OBJEKT</span>
-  <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="4"> <span id="periVal">4.0 rs</span></label>
+  <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="5"> <span id="periVal">5.0 rs</span></label>
   <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="38"></label>
 </div>
 
@@ -431,9 +431,11 @@ void main(){
                   c.y / (uTanHalfFov * c.z));
   gl_Position = vec4(ndc * c.z, 0.0, c.z);
 
-  float px = uRes.y * aSizeGlow.x * (0.85 + 0.35 * aHeat) * mag
+  // rozžhavená hmota v disku je výrazně větší než studené těleso při náletu —
+  // jinak jsou z ní při kroužení kolem díry jen drobné tečky
+  float px = uRes.y * aSizeGlow.x * (0.8 + 1.0 * aHeat) * mag
              / (uTanHalfFov * c.z);
-  gl_PointSize = clamp(px, 2.0, 48.0);
+  gl_PointSize = clamp(px, 2.0, 64.0);
 }`;
 
 const FS_PTS = `#version 300 es
@@ -541,7 +543,7 @@ const K_DAMP   = 0.4;
 // Jinak trosky ztratí moment hybnosti dřív, než se dráhy stihnou zakulatit,
 // výstřednost roste místo aby klesala a hmota spadne rovnou dovnitř —
 // žádný disk nevznikne.
-let K_VISC    = 0.001;   // tečné tření: ubírá moment hybnosti (spirála dovnitř)
+let K_VISC    = 0.0005;  // tečné tření: ubírá moment hybnosti (spirála dovnitř)
 let RAD_POMER = 30;      // radiální tlumení: srovnává elipsy na kruhy (disk)
 const K_KICK  = 0.05;    // rozptyl rychlostí uvolněný při roztržení
 const K_TURB  = 0.02;    // slabá turbulence, dokud se disk usazuje
@@ -634,7 +636,7 @@ function makeBallPayload(Rp){
   const pts = [];
   // méně částic než u fotek (kvůli plynulosti), zato větší —
   // pokrytá plocha, a tím i dojem objemu, zůstává stejná
-  const M = 4000;
+  const M = 6000;
   for(let i = 0; i < M; i++){
     let x, y, z, d2;
     do {
@@ -646,7 +648,7 @@ function makeBallPayload(Rp){
     pts.push({ a: x * Rp, b: y * Rp, c: z * Rp,
                r: 1.0, g: 0.38 + 0.44 * t, b2: 0.06 + 0.39 * t, h0: h0 });
   }
-  return { pts, scale: 0.185, glow: 1 };  // hvězda: měkká záře
+  return { pts, scale: 0.32, glow: 1 };   // hvězda: měkká záře
 }
 
 // z obrázku: každý pixel = jedna barevná částice.
@@ -709,7 +711,7 @@ function imageToPayload(img, Rp, odstranitPozadi){
   }
   if(pts.length < 50) throw new Error('v obrázku skoro nic nezbylo');
   // pixely fotky: plné jádro, bez záře — dokud je nerozžhaví díra
-  return { pts, scale: Math.max(pw / cols, ph / rows) * 1.15, glow: 0 };
+  return { pts, scale: Math.max(pw / cols, ph / rows) * 1.9, glow: 0 };
 }
 
 /* ---------- hod tělesa (WYSIWYG z kruhu náhledu, doprava kolem díry) ---------- */
@@ -748,9 +750,12 @@ function throwObject(builder, key, fallbackAcc){
   const dSpawn = Rp * (ch * 0.5) / (tanHF * rpx);
   let S = [camP[0] + dir[0] * dSpawn, camP[1] + dir[1] * dSpawn, camP[2] + dir[2] * dSpawn];
   let R0 = Math.hypot(S[0], S[1], S[2]);
-  const minR = Math.max(10, rperi + 5);
+  // Odkud těleso přiletí, rozhoduje o tom, jak daleko vznikne disk: trosky
+  // si nesou energii nálezové dráhy. Ze vzdáleného startu se usadí až na
+  // ~18 rs, kde je oběh tak pomalý, že hmota stihne díru sotva jednou obkroužit.
+  const minR = Math.max(9, rperi + 5);
   if(R0 < minR){ const s = minR / R0; S = [S[0]*s, S[1]*s, S[2]*s]; R0 = minR; }
-  if(R0 > 34){  const s = 34 / R0;   S = [S[0]*s, S[1]*s, S[2]*s]; R0 = 34; }
+  if(R0 > 14){  const s = 14 / R0;   S = [S[0]*s, S[1]*s, S[2]*s]; R0 = 14; }
   const cx = S[0], cy0 = S[1], cz = S[2];
 
   // hod doprava kolem díry (bez radiální složky -> oblet, ne zásah)
@@ -1114,7 +1119,7 @@ function komentarKDisku(){
 }
 
 /* ---------------- kamera a UI ---------------- */
-const cam = { yaw: 0.6, pitch: 0.10, dist: 34.0, target: [0, 0, 0] };
+const cam = { yaw: 0.6, pitch: 0.10, dist: 24.0, target: [0, 0, 0] };
 
 // posun kamery do strany (pan) — posouvá bod, kolem kterého se otáčí
 function panBy(dx, dy){
