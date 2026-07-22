@@ -455,9 +455,12 @@ void main(){
   float a = mix(aFlat, aGlow, vGlow);
   a *= smoothstep(1.0, 0.8, d);
 
+  // U fotky vytáhnout stíny: na černém pozadí a při sčítacím míchání by
+  // tmavé pixely (vlasy, oblečení) úplně zanikly a zbyla by jen světlá místa.
+  vec3 zaklad = mix(pow(vColor, vec3(0.6)), vColor, vGlow);
   // barva tělesa; teprve blízko díry se hmota rozžhaví doběla
   float glowT = clamp((h - 0.72) * 3.2, 0.0, 1.0);
-  vec3 col = mix(vColor, vec3(1.0, 0.85, 0.55), mix(glowT, clamp((h - 0.55) * 1.8, 0.0, 1.0), vGlow));
+  vec3 col = mix(zaklad, vec3(1.0, 0.85, 0.55), mix(glowT, clamp((h - 0.55) * 1.8, 0.0, 1.0), vGlow));
   col += vec3(1.0, 0.9, 0.7) * max(h - 0.85, 0.0) * 2.0;
   float bright = mix(1.0, 0.35 + 0.75 * h, vGlow) * 0.7;   // -30 % proti přepalu
   fragColor = vec4(col * a * bright, a);
@@ -532,6 +535,10 @@ const K_SPRING = 0.15;
 const K_DAMP   = 0.4;
 // disipace po roztržení (viskozita/srážky proudů):
 const K_CIRC   = 0.12;   // rychlé zakulacení drah hned po roztržení
+// sestupná spirála: tření nabíhá od SPIRALA_OD a kvadraticky sílí
+let SPIRALA_OD    = 110;   // jednotky po roztržení, kdy tření začne působit
+let SPIRALA_SILA  = 0.032; // stálé tření v disku (dál ho řídí poloměr)
+let SPIRALA_KONEC = 950;   // dojezd: dorazit i zbylé kusy na okraji
 const K_DRAG   = 0.014;  // ztráta energie -> spirála (2× rychleji než dřív)
 const K_KICK   = 0.05;
 const K_TURB   = 0.03;
@@ -639,8 +646,11 @@ function makeBallPayload(Rp){
   return { pts, scale: 0.185, glow: 1 };  // hvězda: měkká záře
 }
 
-// z obrázku: každý pixel (mimo pozadí) = jedna barevná částice
-function imageToPayload(img, Rp){
+// z obrázku: každý pixel = jedna barevná částice.
+// odstranitPozadi: u presetů ano (mají jednolité pozadí), u vlastní
+// nahrané fotky NE — tam nevíme, co je pozadí, a brala by se i tmavá
+// místa fotky (vlasy, oblečení, stíny). Nahraná fotka letí celá.
+function imageToPayload(img, Rp, odstranitPozadi){
   const ar = Math.max(0.2, Math.min(5, img.width / Math.max(1, img.height)));
   let rows = Math.max(8, Math.floor(Math.sqrt(SLOT_N / ar)));
   let cols = Math.max(8, Math.floor(rows * ar));
@@ -660,6 +670,7 @@ function imageToPayload(img, Rp){
     const i = y * cols + x;
     if(!jePozadi[i]){ jePozadi[i] = 1; zasobnik.push(i); }
   };
+  if(odstranitPozadi){
   for(let x = 0; x < cols; x++){ zacni(x, 0); zacni(x, rows - 1); }
   for(let y = 0; y < rows; y++){ zacni(0, y); zacni(cols - 1, y); }
   const TOL2 = 34 * 34;                      // práh mezi SOUSEDNÍMI pixely
@@ -676,6 +687,7 @@ function imageToPayload(img, Rp){
       const dr = dat[o] - dat[oo], dg = dat[o+1] - dat[oo+1], db = dat[o+2] - dat[oo+2];
       if(dr*dr + dg*dg + db*db < TOL2){ jePozadi[j] = 1; zasobnik.push(j); }
     }
+  }
   }
 
   const ph = 2 * Rp, pw = ph * ar;
@@ -819,7 +831,7 @@ function launchSun(){
 }
 function launchPreset(p){
   const im = new Image();
-  im.onload = () => throwObject(Rp => imageToPayload(im, Rp), p.id);
+  im.onload = () => throwObject(Rp => imageToPayload(im, Rp, true), p.id);
   im.onerror = () => say('f', 'Obrázek jsem nenašel — nahraj vlastní, nebo otevři apku přes web.');
   im.src = p.src;
 }
@@ -827,7 +839,7 @@ function launchImageFile(file){
   const rd = new FileReader();
   rd.onload = () => {
     const im = new Image();
-    im.onload = () => throwObject(Rp => imageToPayload(im, Rp), 'obrazek');
+    im.onload = () => throwObject(Rp => imageToPayload(im, Rp, false), 'obrazek');
     im.src = rd.result;
   };
   rd.readAsDataURL(file);
@@ -902,13 +914,14 @@ function physStep(dt){
     const usazovani = tD < 0 ? 0
       : Math.min(1, tD / 15) * Math.max(0, 1 - Math.max(0, (tD - 110) / 50));
     const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.12;
+    // Tření nabíhá hned po ustavení prstence a dál je skoro stálé — hlavní
+    // rozdíl dělá poloměr (viz níže): vnitřek disku se ujídá dřív a hmota
+    // klesá po spirále plynule, místo aby ji díra spolkla naráz.
+    const naběh = Math.min(1, Math.max(0, (tD - SPIRALA_OD) / 60));
     const trenNasob = tD < 0 ? 0
       : (finishing ? 16
-        // Během oběhu nesmí působit ani ždibec tření: i pár procent ztráty
-        // oběžné rychlosti stlačí dráhu pod ISCO a prstenec spadne dřív,
-        // než ho stihneš vidět zakroužit.
-        : tD < 700 ? 0
-        : Math.min(20, (tD - 700) / 9));
+        : Math.min(20, SPIRALA_SILA * naběh
+                       + Math.max(0, (tD - SPIRALA_KONEC) / 15)));
     o._ramp = tD < 0 ? 0 : Math.min(1, tD / 15);
     o._usaz = usazovani;
     o._circ = 1 - Math.exp(-K_CIRC * usazovani * dt);
@@ -985,11 +998,16 @@ function physStep(dt){
           // Tření v disku ubírá MOMENT HYBNOSTI, ne rychlost pádu: brzdí se
           // jen oběžná (tečná) složka. Kdyby se brzdila i radiální, hmota by
           // ke díře klesala "jako v sirupu" terminální rychlostí a nedopadla.
+          // Tření sílí směrem dovnitř (viskózní čas roste s poloměrem):
+          // disk se pak ujídá zevnitř a hmota mizí postupně, ne naráz.
+          const q = 6.5 / Math.max(r, 1.5);
+          let brzda = 1 - q * q * q * (1 - dragFac);
+          if(brzda < 0) brzda = 0;
           const rx = x / r, ry = y / r, rz = z / r;
           const vr = vx * rx + vy * ry + vz * rz;
-          vx = (vx - vr * rx) * dragFac + vr * rx;
-          vy = (vy - vr * ry) * dragFac + vr * ry;
-          vz = (vz - vr * rz) * dragFac + vr * rz;
+          vx = (vx - vr * rx) * brzda + vr * rx;
+          vy = (vy - vr * ry) * brzda + vr * ry;
+          vz = (vz - vr * rz) * brzda + vr * rz;
           // usazování dusí i radiální rozkmit — z eliptických drah se tak
           // stane prstenec, který obíhá, místo aby se hmota rozlétla do dálky
           if(usaz > 0){
