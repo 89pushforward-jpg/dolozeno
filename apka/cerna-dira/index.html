@@ -75,7 +75,10 @@
   .chip.f .av{border:2px solid var(--franta)}
   .chip.p .av{border:2px solid var(--pepa)}
 
-  /* náhled velikosti před vhozením (vlevo dole ve scéně) */
+  /* Náhled velikosti (přerušovaný kruh) je SCHOVANÝ — ale musí zůstat
+     v rozvržení: čte se z něj místo a velikost, kde se těleso zhmotní.
+     Proto visibility:hidden, NIKOLI display:none. Návrat = smazat řádek. */
+  #sunPreview{visibility:hidden}
   #sunPreview{position:fixed;left:16px;bottom:170px;z-index:4;display:flex;flex-direction:column;
     align-items:center;gap:7px;font-size:10px;color:#9aa0a8;letter-spacing:1px;
     text-align:center;user-select:none}
