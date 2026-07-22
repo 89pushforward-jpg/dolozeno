@@ -199,8 +199,8 @@
   <label><input type="checkbox" id="rot" checked> autorotace</label>
   <span class="sep"></span>
   <span class="lbl">OBJEKT</span>
-  <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="6"> <span id="periVal">6.0 rs</span></label>
-  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="24"></label>
+  <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="4"> <span id="periVal">4.0 rs</span></label>
+  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="28"></label>
 </div>
 
 <div id="err"></div>
@@ -533,15 +533,14 @@ const R_CAPTURE = 1.25;
 // vnitřní soudržnost tělesa (drží tvar proti slapům, dokud nepovolí):
 const K_SPRING = 0.15;
 const K_DAMP   = 0.4;
-// disipace po roztržení (viskozita/srážky proudů):
-const K_CIRC   = 0.12;   // rychlé zakulacení drah hned po roztržení
-// sestupná spirála: tření nabíhá od SPIRALA_OD a kvadraticky sílí
-let SPIRALA_OD    = 110;   // jednotky po roztržení, kdy tření začne působit
-let SPIRALA_SILA  = 0.032; // stálé tření v disku (dál ho řídí poloměr)
-let SPIRALA_KONEC = 950;   // dojezd: dorazit i zbylé kusy na okraji
-const K_DRAG   = 0.014;  // ztráta energie -> spirála (2× rychleji než dřív)
-const K_KICK   = 0.05;
-const K_TURB   = 0.03;
+// Po roztržení působí kromě gravitace jediná věc: viskózní tření v disku.
+// Ubírá moment hybnosti (z toho vyjde spirála) a tlumí radiální rozkmit
+// (z toho vyjde disk). Sílu řídí poloměr, ne časový scénář — proto nikde
+// nedojde k náhlé změně pohybu.
+let K_VISC    = 0.008;   // základní viskozita disku
+let RAD_POMER = 7;       // radiální tlumení je takhle silnější než tečné
+const K_KICK  = 0.05;    // rozptyl rychlostí uvolněný při roztržení
+const K_TURB  = 0.02;    // slabá turbulence, dokud se disk usazuje
 
 let simT = 0;
 
@@ -898,44 +897,24 @@ function physStep(dt){
     if(radial < -0.02) o.wasInfalling = true;
   }
 
-  // fáze 2: parametry disipace pro každé těleso
+  // fáze 2: viskozita disku — JEDINÁ věc, která po roztržení působí navíc
+  // ke gravitaci. Žádné časové scénáře ani předepsaný směr otáčení:
+  // hmota si nese vlastní moment hybnosti a tření ho jen postupně ubírá.
   for(const o of OBJS){
-    if(!o.active){ o._drag = 1; o._circ = 0; o._turb = 0; o._ramp = 0; continue; }
-    // ČASOVÝ PLÁN PO ROZTRŽENÍ (tD = jednotky od roztržení):
-    //   0– 20  trosky se balisticky rozletí
-    //  20–110  usazení do prstence: srážky proudů zakulatí dráhy,
-    //          vzdálenější kusy jsou staženy blíž (disk je pak kompaktní)
-    // 110–360  VOLNÝ OBĚH — hmota několikrát obletí díru, tření skoro nepůsobí
-    //  360+    tření sílí a prstenec se po spirále sype za horizont
+    if(!o.active){ o._visc = 0; o._rad = 0; o._turb = 0; continue; }
     const tD = (o.disrupted && o.disruptT >= 0) ? (simT - o.disruptT) : -1;
-    // Usazování musí přijít HNED: trosky mají v tu chvíli skoro kruhovou
-    // rychlost a jsou blízko díry. Když se čeká, rozletí se do dálky a pak
-    // už jen padají místo aby obíhaly.
-    const usazovani = tD < 0 ? 0
-      : Math.min(1, tD / 15) * Math.max(0, 1 - Math.max(0, (tD - 110) / 50));
-    const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.12;
-    // Tření nabíhá hned po ustavení prstence a dál je skoro stálé — hlavní
-    // rozdíl dělá poloměr (viz níže): vnitřek disku se ujídá dřív a hmota
-    // klesá po spirále plynule, místo aby ji díra spolkla naráz.
-    const naběh = Math.min(1, Math.max(0, (tD - SPIRALA_OD) / 60));
-    const trenNasob = tD < 0 ? 0
-      : (finishing ? 16
-        : Math.min(20, SPIRALA_SILA * naběh
-                       + Math.max(0, (tD - SPIRALA_KONEC) / 15)));
-    o._ramp = tD < 0 ? 0 : Math.min(1, tD / 15);
-    o._usaz = usazovani;
-    o._circ = 1 - Math.exp(-K_CIRC * usazovani * dt);
-    o._drag = Math.exp(-K_DRAG * trenNasob * dt);
-    // turbulence jen při usazování; během oběhu by rozhoupala dráhy
-    // a půlka prstence by spadla pod ISCO dřív, než ho stihneš vidět
-    o._turb = finishing ? 0 : K_TURB * usazovani;
+    if(tD < 0){ o._visc = 0; o._rad = 0; o._turb = 0; continue; }
+    // plynulý náběh (tření nemůže naskočit skokem) a pak velmi pozvolný růst
+    const nabeh = Math.min(1, tD / 90);
+    o._visc = K_VISC * nabeh * (1 + tD / 700);
+    o._rad  = o._visc * RAD_POMER;    // radiální tlumení zakulacuje dráhy
+    o._turb = K_TURB * nabeh * Math.max(0, 1 - tD / 260);
   }
 
   // fáze 3: pohyb částic
   for(const o of OBJS){
     if(!o.active) continue;
-    const circBlend = o._circ, dragFac = o._drag, turbAmp = o._turb, ramp = o._ramp;
-    const usaz = o._usaz || 0;
+    const visc = o._visc, radT = o._rad, turbAmp = o._turb;
     for(let ii = o.base; ii < o.base + o.count; ii++){
       if(heat[ii] < -0.5) continue;
       const ix = ii*3;
@@ -975,51 +954,32 @@ function physStep(dt){
         continue;
       }
 
-      // po roztržení: balistika -> disipace -> disk -> spirála
-      if(o.disrupted){
+      // PO ROZTRŽENÍ působí kromě gravitace jediná věc: viskózní tření
+      // v disku. Nic nepředepisuje směr otáčení ani rovinu — hmota si nese
+      // vlastní moment hybnosti a tření ho jen ubírá, tím rychleji, čím je
+      // blíž k díře (viskózní čas roste s poloměrem). Z toho samo vyjde
+      // zakulacení drah, rozprostřený disk i plynule se utahující spirála.
+      if(o.disrupted && visc > 0){
         const r = Math.sqrt(x*x + y*y + z*z);
-        if(r > 22){
-          // návrat slapového proudu: daleko se trosky stáčejí do volného pádu
-          const vin = Math.sqrt(2 * G_M / (r - 1.0));
-          const bl = 1 - Math.exp(-0.12 * ramp * dt);
-          vx += (-x / r * vin - vx) * bl;
-          vy += (-y / r * vin - vy) * bl;
-          vz += (-z / r * vin - vz) * bl;
-        } else {
-          // kruhové usazování jen NAD ISCO a v zóně disku
-          if(r > 3.2 && r < 22){
-            const vc = Math.sqrt(G_M * r) / (r - 1.0);
-            const invXZ = 1 / Math.max(Math.hypot(x, z), 1e-6);
-            const txd = -z * invXZ, tzd = x * invXZ;
-            vx += (txd * vc - vx) * circBlend;
-            vy += (0        - vy) * circBlend * 0.10;
-            vz += (tzd * vc - vz) * circBlend;
-          }
-          // Tření v disku ubírá MOMENT HYBNOSTI, ne rychlost pádu: brzdí se
-          // jen oběžná (tečná) složka. Kdyby se brzdila i radiální, hmota by
-          // ke díře klesala "jako v sirupu" terminální rychlostí a nedopadla.
-          // Tření sílí směrem dovnitř (viskózní čas roste s poloměrem):
-          // disk se pak ujídá zevnitř a hmota mizí postupně, ne naráz.
-          const q = 6.5 / Math.max(r, 1.5);
-          let brzda = 1 - q * q * q * (1 - dragFac);
-          if(brzda < 0) brzda = 0;
-          const rx = x / r, ry = y / r, rz = z / r;
-          const vr = vx * rx + vy * ry + vz * rz;
-          vx = (vx - vr * rx) * brzda + vr * rx;
-          vy = (vy - vr * ry) * brzda + vr * ry;
-          vz = (vz - vr * rz) * brzda + vr * rz;
-          // usazování dusí i radiální rozkmit — z eliptických drah se tak
-          // stane prstenec, který obíhá, místo aby se hmota rozlétla do dálky
-          if(usaz > 0){
-            const tlum = 1 - Math.exp(-0.10 * usaz * dt);
-            vx -= vr * rx * tlum; vy -= vr * ry * tlum; vz -= vr * rz * tlum;
-          }
-          if(r < 18){
-            const tb = turbAmp * dt;
-            vx += (Math.random() - 0.5) * tb;
-            vy += (Math.random() - 0.5) * tb * 0.7;
-            vz += (Math.random() - 0.5) * tb;
-          }
+        // Tření je nejsilnější u díry a s poloměrem slábne — ale jen pozvolna:
+        // slapový proud se sráží sám se sebou i daleko, takže i trosky, které
+        // roztržení vymrštilo, postupně ztrácejí energii a vracejí se.
+        const q = 6.5 / Math.max(r, 1.6);
+        const prof = Math.sqrt(q);
+        const rx = x / r, ry = y / r, rz = z / r;
+        const vr = vx * rx + vy * ry + vz * rz;
+        // tečná složka: ubývá moment hybnosti -> dráha se utahuje dovnitř
+        let ft = 1 - visc * prof * dt;  if(ft < 0) ft = 0;
+        // radiální složka: tlumí se rozkmit -> z elipsy se stává kruh
+        let fr = 1 - radT * prof * dt;  if(fr < 0) fr = 0;
+        vx = (vx - vr * rx) * ft + vr * rx * fr;
+        vy = (vy - vr * ry) * ft + vr * ry * fr;
+        vz = (vz - vr * rz) * ft + vr * rz * fr;
+        if(turbAmp > 0){
+          const tb = turbAmp * dt;
+          vx += (Math.random() - 0.5) * tb;
+          vy += (Math.random() - 0.5) * tb * 0.7;
+          vz += (Math.random() - 0.5) * tb;
         }
       }
 
