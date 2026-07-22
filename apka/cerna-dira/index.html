@@ -176,7 +176,10 @@
       <div id="sunArrow" class="sip">▼</div>
       <button id="throwBtn">VHOĎ SLUNCE</button>
     </div>
-    <button id="imgBtn" class="ghost">NAHRAJ OBRÁZEK</button>
+    <div class="sunItem">
+      <div id="imgArrow" class="sip">▼</div>
+      <button id="imgBtn" class="ghost">NAHRAJ OBRÁZEK</button>
+    </div>
     <button id="resetBtn" class="ghost">RESET</button>
   </div>
 </div>
@@ -644,17 +647,40 @@ function imageToPayload(img, Rp){
   const c2 = cv.getContext('2d', { willReadFrequently: true });
   c2.drawImage(img, 0, 0, cols, rows);
   const dat = c2.getImageData(0, 0, cols, rows).data;
-  // barva pozadí = průměr rohů; podobné pixely vynecháme (chroma-key)
-  const corner = (ix, iy) => { const o = (iy * cols + ix) * 4; return [dat[o], dat[o+1], dat[o+2]]; };
-  const cs = [corner(0,0), corner(cols-1,0), corner(0,rows-1), corner(cols-1,rows-1)];
-  const bg = [0,1,2].map(k => (cs[0][k] + cs[1][k] + cs[2][k] + cs[3][k]) / 4);
+
+  // ODSTRANĚNÍ POZADÍ: záplavové vyplnění od okrajů. Pozadí je souvislá
+  // plocha spojená s krajem, takže projde i přechod/vinětace — a přitom
+  // zůstane modré sako nebo kravata uvnitř postavy.
+  const jePozadi = new Uint8Array(cols * rows);
+  const zasobnik = [];
+  const zacni = (x, y) => {
+    const i = y * cols + x;
+    if(!jePozadi[i]){ jePozadi[i] = 1; zasobnik.push(i); }
+  };
+  for(let x = 0; x < cols; x++){ zacni(x, 0); zacni(x, rows - 1); }
+  for(let y = 0; y < rows; y++){ zacni(0, y); zacni(cols - 1, y); }
+  const TOL2 = 34 * 34;                      // práh mezi SOUSEDNÍMI pixely
+  while(zasobnik.length){
+    const i = zasobnik.pop();
+    const x = i % cols, y = (i / cols) | 0, o = i * 4;
+    for(let k = 0; k < 4; k++){
+      const nx = x + (k === 0 ? 1 : k === 1 ? -1 : 0);
+      const ny = y + (k === 2 ? 1 : k === 3 ? -1 : 0);
+      if(nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
+      const j = ny * cols + nx;
+      if(jePozadi[j]) continue;
+      const oo = j * 4;
+      const dr = dat[o] - dat[oo], dg = dat[o+1] - dat[oo+1], db = dat[o+2] - dat[oo+2];
+      if(dr*dr + dg*dg + db*db < TOL2){ jePozadi[j] = 1; zasobnik.push(j); }
+    }
+  }
+
   const ph = 2 * Rp, pw = ph * ar;
   const pts = [];
   for(let iy = 0; iy < rows; iy++) for(let ix = 0; ix < cols; ix++){
     const o = (iy * cols + ix) * 4;
     if(dat[o+3] < 40) continue;
-    const dr = dat[o]-bg[0], dg = dat[o+1]-bg[1], db = dat[o+2]-bg[2];
-    if(Math.sqrt(dr*dr + dg*dg + db*db) < 55) continue;
+    if(jePozadi[iy * cols + ix]) continue;
     pts.push({
       a: ((ix + 0.5) / cols - 0.5) * pw,
       b: (0.5 - (iy + 0.5) / rows) * ph,
@@ -775,6 +801,10 @@ function throwObject(builder, key, fallbackAcc){
   if(slot.politik){
     hozenoPolitiku++;
     if(faze === 1){ faze = 2; }      // šipky nad ikonami už splnily účel
+  }
+  if(key === 'slunce' && faze === 3){
+    faze = 4;                        // pozornost se přesune na vlastní obrázek
+    say('p', 'A teď to nejlepší: dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 12000);
   }
   aktualizujUI();
   return true;
@@ -1029,14 +1059,20 @@ let hozenoPolitiku = 0;
 let posledniHod = 0;
 
 function aktualizujUI(){
-  const p1 = (faze === 1), veda = (faze >= 3);
+  const p1 = (faze === 1), veda = (faze >= 3), poSlunci = (faze >= 4);
   document.querySelectorAll('.presetItem .sip').forEach(s => {
     s.style.visibility = p1 ? 'visible' : 'hidden';
   });
   $('presetCall').style.display = veda ? 'none' : '';
   $('throwBtn').parentNode.style.display = veda ? '' : 'none';   // .sunItem se šipkou
-  $('imgBtn').style.display   = veda ? '' : 'none';
+  $('imgBtn').parentNode.style.display   = veda ? '' : 'none';
   $('resetBtn').style.display = (hozenoPolitiku > 0 || veda) ? '' : 'none';
+
+  // pozornost putuje dál: po hodu Slunce na nahrání vlastního obrázku
+  $('sunArrow').style.visibility = (veda && !poSlunci) ? 'visible' : 'hidden';
+  $('imgArrow').style.visibility = poSlunci ? 'visible' : 'hidden';
+  $('throwBtn').classList.toggle('ghost', poSlunci);
+  $('imgBtn').classList.toggle('ghost', !poSlunci);
   layoutUI();
 }
 
@@ -1044,14 +1080,14 @@ function spustVedu(){
   if(faze >= 3) return;
   faze = 3;
   aktualizujUI();
-  sayNow('f', 'Tak teď sis zablbnul — a hezky zpátky k vědě. Vytvoř si libovolně velké Slunce a hoď ho tam.', 15000);
+  sayNow('f', 'Tak teď sis zablbnul — a hezky zpátky k vědě. Hoď do díry Slunce.', 14000);
 }
 
 // hlášky ve chvíli, kdy se z trosek zformuje akreční disk
 function komentarKDisku(){
   if(hozenoPolitiku === 1){
+    say('p', 'Přidej trochu do polívky — hoď tam dalšího!', 8000);
     say('f', 'Tomuhle prstenci se říká akreční disk. Hmota se roztočí, tře se sama o sebe a než spadne dovnitř, rozžhaví se na miliony stupňů. Mimochodem, tohle je pořád seriózní věda. 🙂', 13000);
-    say('p', 'Přidej trochu do polívky — hoď tam dalšího!', 9000);
   } else if(hozenoPolitiku === 2){
     say('p', 'Hoď tam ještě jednoho! Ať to má grády! 🔥', 9000);
   } else if(hozenoPolitiku >= 3){
