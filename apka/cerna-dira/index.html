@@ -161,7 +161,7 @@
   </svg>
   <div id="sizeCtl">
     <span class="prevLabel">VELIKOST SLUNCE</span>
-    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="2.75">
+    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="2">
   </div>
 </div>
 
@@ -200,7 +200,7 @@
   <span class="sep"></span>
   <span class="lbl">OBJEKT</span>
   <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="4"> <span id="periVal">4.0 rs</span></label>
-  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="28"></label>
+  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="38"></label>
 </div>
 
 <div id="err"></div>
@@ -537,8 +537,12 @@ const K_DAMP   = 0.4;
 // Ubírá moment hybnosti (z toho vyjde spirála) a tlumí radiální rozkmit
 // (z toho vyjde disk). Sílu řídí poloměr, ne časový scénář — proto nikde
 // nedojde k náhlé změně pohybu.
-let K_VISC    = 0.008;   // základní viskozita disku
-let RAD_POMER = 7;       // radiální tlumení je takhle silnější než tečné
+// POZOR na poměr: radiální tlumení musí být o řád silnější než tečné.
+// Jinak trosky ztratí moment hybnosti dřív, než se dráhy stihnou zakulatit,
+// výstřednost roste místo aby klesala a hmota spadne rovnou dovnitř —
+// žádný disk nevznikne.
+let K_VISC    = 0.001;   // tečné tření: ubírá moment hybnosti (spirála dovnitř)
+let RAD_POMER = 30;      // radiální tlumení: srovnává elipsy na kruhy (disk)
 const K_KICK  = 0.05;    // rozptyl rychlostí uvolněný při roztržení
 const K_TURB  = 0.02;    // slabá turbulence, dokud se disk usazuje
 
@@ -970,8 +974,9 @@ function physStep(dt){
         const vr = vx * rx + vy * ry + vz * rz;
         // tečná složka: ubývá moment hybnosti -> dráha se utahuje dovnitř
         let ft = 1 - visc * prof * dt;  if(ft < 0) ft = 0;
-        // radiální složka: tlumí se rozkmit -> z elipsy se stává kruh
-        let fr = 1 - radT * prof * dt;  if(fr < 0) fr = 0;
+        // radiální složka: tlumí se rozkmit -> z elipsy se stává kruh.
+        // Působí stejně silně i daleko, aby se zakulatily i protáhlé dráhy.
+        let fr = 1 - radT * dt;         if(fr < 0) fr = 0;
         vx = (vx - vr * rx) * ft + vr * rx * fr;
         vy = (vy - vr * ry) * ft + vr * ry * fr;
         vz = (vz - vr * rz) * ft + vr * rz * fr;
