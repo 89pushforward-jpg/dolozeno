@@ -55,12 +55,12 @@
   button.ghost{background:transparent;color:#9aa0a8;border:1px solid #2a2f36}
   button:active{transform:translateY(1px)}
 
-  /* komentáře Franty a Pepana — dole nad tlačítky, vždy jen jeden */
-  #chips{position:fixed;left:50%;transform:translateX(-50%);bottom:150px;
-    display:flex;flex-direction:column;align-items:center;pointer-events:none;
-    max-width:min(560px,92vw);z-index:6}
+  /* komentáře Franty a Pepana — vpravo nahoře, vždy jen jeden */
+  #chips{position:fixed;right:16px;top:44px;
+    display:flex;flex-direction:column;align-items:flex-end;pointer-events:none;
+    width:min(330px,64vw);z-index:6}
   .chip{font-size:11.5px;line-height:1.45;padding:8px 11px;border-radius:6px;
-    background:rgba(5,6,8,.88);opacity:0;transform:translateY(10px);
+    background:rgba(5,6,8,.9);opacity:0;transform:translateY(-10px);
     transition:opacity .4s, transform .4s;
     display:flex;align-items:flex-start;gap:9px}
   .chip.show{opacity:1;transform:none}
@@ -76,7 +76,8 @@
     align-items:center;gap:7px;font-size:10px;color:#9aa0a8;letter-spacing:1px;
     text-align:center;user-select:none}
   #sunPreview svg{pointer-events:none;display:block}
-  #sunPreview .prevLabel{color:var(--signal);font-weight:700}
+  #sunPreview .prevLabel{color:var(--signal);font-weight:700;display:block}
+  #sizeCtl{display:flex;flex-direction:column;align-items:center;gap:6px}
   #sunPreview input[type=range]{-webkit-appearance:none;appearance:none;width:140px;height:4px;
     border-radius:2px;background:#2a2f36;outline:none;cursor:pointer}
   #sunPreview input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
@@ -87,8 +88,10 @@
 
   /* akční tlačítka uprostřed nad panelem (výška se dopočítá podle panelu) */
   #actionBtns{position:fixed;bottom:104px;left:50%;transform:translateX(-50%);
-    display:flex;gap:8px;z-index:5;flex-wrap:wrap;justify-content:center;
+    display:flex;flex-direction:column;align-items:center;gap:3px;z-index:5;
     max-width:calc(100vw - 24px)}
+  #actionRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:flex-end}
+  .sunItem{display:flex;flex-direction:column;align-items:center;gap:2px}
 
   /* výzva nad ikonami politiků */
   #presetWrap{position:fixed;top:10px;left:50%;transform:translateX(-50%);
@@ -97,13 +100,16 @@
   #presetCall{font-size:12px;font-weight:700;color:var(--signal);text-align:center;
     letter-spacing:.03em;line-height:1.3;text-shadow:0 2px 6px rgba(0,0,0,.85);
     user-select:none;pointer-events:none}
-  #presetArrow{font-size:14px;color:var(--signal);line-height:1;margin-bottom:1px;
-    user-select:none;pointer-events:none;animation:sipka 1.8s ease-in-out infinite}
-  @keyframes sipka{0%,100%{transform:translateY(0);opacity:.75}50%{transform:translateY(3px);opacity:1}}
-  @media (prefers-reduced-motion: reduce){ #presetArrow{animation:none} }
+  @keyframes sipka{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(4px);opacity:1}}
+  @media (prefers-reduced-motion: reduce){ .sip{animation:none !important} }
 
   /* horní lišta presetů: miniatura + jméno, VŽDY v jedné řadě */
   #presetBar{display:flex;gap:6px;flex-wrap:nowrap;justify-content:center}
+  .presetItem{display:flex;flex-direction:column;align-items:center;gap:1px}
+  /* pulzující šipka nad každým politikem */
+  .sip{font-size:13px;color:var(--signal);line-height:1;user-select:none;
+    pointer-events:none;animation:sipka 1.6s ease-in-out infinite;
+    text-shadow:0 2px 5px rgba(0,0,0,.8)}
   button.preset{display:flex;flex-direction:column;align-items:center;gap:3px;
     background:rgba(5,6,8,.78);border:1px solid #2a2f36;border-radius:8px;
     padding:6px 8px 5px;color:var(--signal)}
@@ -140,20 +146,26 @@
     <circle id="sunCircle" cx="60" cy="60" r="40" fill="none" stroke="#f5a623"
       stroke-width="1.5" stroke-dasharray="6 5" opacity="0.85"/>
   </svg>
-  <span class="prevLabel">VELIKOST OBJEKTU</span>
-  <input type="range" id="psize" min="1.5" max="4" step="0.25" value="3">
+  <div id="sizeCtl">
+    <span class="prevLabel">VELIKOST SLUNCE</span>
+    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="3">
+  </div>
 </div>
 
 <div id="presetWrap">
   <div id="presetCall">Vhoď nejmíň oblíbenýho politika do černý díry a sleduj, co se stane</div>
-  <div id="presetArrow">▼</div>
   <div id="presetBar"></div>
 </div>
 
 <div id="actionBtns">
-  <button id="throwBtn">VHOĎ SLUNCE</button>
-  <button id="imgBtn" class="ghost">NAHRAJ OBRÁZEK</button>
-  <button id="resetBtn" class="ghost">RESET</button>
+  <div id="actionRow">
+    <div class="sunItem">
+      <div id="sunArrow" class="sip">▼</div>
+      <button id="throwBtn">VHOĎ SLUNCE</button>
+    </div>
+    <button id="imgBtn" class="ghost">NAHRAJ OBRÁZEK</button>
+    <button id="resetBtn" class="ghost">RESET</button>
+  </div>
 </div>
 <input type="file" id="imgFile" accept="image/*" style="display:none">
 
@@ -741,8 +753,17 @@ function throwObject(builder, key, fallbackAcc){
   slot.Rp = Rp;
   slot.mp = mp;
   slot.lines = lines;
-  say('p', lines.hod);
+  slot.politik = !!(LINES[key] && key !== 'slunce' && key !== 'obrazek');
+  slot.diskSaid = false;
+  sayNow('p', lines.hod, 8000);
   $('hint').style.opacity = '0';
+
+  posledniHod = performance.now() / 1000;
+  if(slot.politik){
+    hozenoPolitiku++;
+    if(faze === 1){ faze = 2; }      // šipky nad ikonami už splnily účel
+  }
+  aktualizujUI();
   return true;
 }
 
@@ -921,14 +942,29 @@ function physStep(dt){
 /* události -> závěrečné komentáře (Franta, pak Pepan) */
 function checkEvents(){
   for(const o of OBJS){
+    // z trosek se zformoval akreční disk a začal se sypat dovnitř
+    if(o.active && o.disrupted && !o.diskSaid && o.count > 0 &&
+       o.captured > o.count * 0.12){
+      o.diskSaid = true;
+      if(o.politik) komentarKDisku();
+    }
     if(o.active && !o.endSaid && o.count > 0 && o.captured >= o.count){
       o.endSaid = true;
       o.active = false;
-      const l = o.lines;
-      say('f', l.konF);
-      setTimeout(() => say('p', l.konP), 4000);
+      say('f', o.lines.konF);
+      say('p', o.lines.konP);
     }
   }
+}
+
+// odemčení vědecké části: politici snědení a scéna je zase prázdná
+function zkontrolujOdemceni(now){
+  if(faze >= 3 || hozenoPolitiku < 1) return;
+  if(OBJS.some(o => o.active)) return;
+  const zbyva = OBJS.reduce((s, o) => s + Math.max(0, o.count - o.captured), 0);
+  if(zbyva > 0) return;
+  // po třech politicích hned; jinak ať člověk neuvízne — po chvíli taky
+  if(hozenoPolitiku >= 3 || (now - posledniHod) > 30) spustVedu();
 }
 
 /* chip s hláškou — vždy jen JEDEN, s avatarem postavy, drží 12 s */
@@ -936,8 +972,27 @@ const AV_F = (typeof AV_FRANTA !== 'undefined') ? AV_FRANTA : '';
 const AV_P = (typeof AV_PEPAN  !== 'undefined') ? AV_PEPAN  : '';
 const chipsBox = document.getElementById('chips');
 let chipTimer = null;
+// fronta hlášek: vždy jen jedna na obrazovce, další čeká, až ta předchozí doslouží
+const chipQ = [];
+let chipBusy = false;
+
 function say(who, text, holdMs){
-  chipsBox.innerHTML = '';                 // jen jeden koment najednou
+  chipQ.push({ who, text, hold: holdMs || 9000 });
+  while(chipQ.length > 3) chipQ.shift();   // zahltit se nenecháme
+  if(!chipBusy) chipDalsi();
+}
+// reakce na kliknutí nesmí čekat ve frontě — přebije, co zrovna visí
+function sayNow(who, text, holdMs){
+  chipQ.length = 0;
+  if(chipTimer) clearTimeout(chipTimer);
+  chipBusy = false;
+  say(who, text, holdMs);
+}
+function chipDalsi(){
+  if(!chipQ.length){ chipBusy = false; return; }
+  chipBusy = true;
+  const { who, text, hold } = chipQ.shift();
+  chipsBox.innerHTML = '';
   if(chipTimer) clearTimeout(chipTimer);
   const div = document.createElement('div');
   div.className = 'chip ' + who;
@@ -947,12 +1002,53 @@ function say(who, text, holdMs){
   chipsBox.appendChild(div);
   requestAnimationFrame(() => div.classList.add('show'));
   chipTimer = setTimeout(() => {
-    if(div.parentNode){ div.classList.remove('show'); setTimeout(() => div.remove(), 500); }
-  }, holdMs || 12000);
+    if(div.parentNode){ div.classList.remove('show'); setTimeout(() => div.remove(), 450); }
+    setTimeout(chipDalsi, 500);
+  }, hold);
+}
+
+/* ---------------- FÁZE: nejdřív politici, pak věda ----------------
+   1 = jen politici (šipky nad ikonami)
+   2 = po prvním hodu (šipky pryč, komentáře k disku)
+   3 = odemčená věda: Slunce, vlastní obrázek a posuvník velikosti  */
+let faze = 1;
+let hozenoPolitiku = 0;
+let posledniHod = 0;
+
+function aktualizujUI(){
+  const p1 = (faze === 1), veda = (faze >= 3);
+  document.querySelectorAll('.presetItem .sip').forEach(s => {
+    s.style.visibility = p1 ? 'visible' : 'hidden';
+  });
+  $('presetCall').style.display = veda ? 'none' : '';
+  $('throwBtn').parentNode.style.display = veda ? '' : 'none';   // .sunItem se šipkou
+  $('imgBtn').style.display   = veda ? '' : 'none';
+  $('sizeCtl').style.display  = veda ? '' : 'none';
+  $('resetBtn').style.display = (hozenoPolitiku > 0 || veda) ? '' : 'none';
+  layoutUI();
+}
+
+function spustVedu(){
+  if(faze >= 3) return;
+  faze = 3;
+  aktualizujUI();
+  sayNow('f', 'Tak teď sis zablbnul — a hezky zpátky k vědě. Vytvoř si libovolně velké Slunce a hoď ho tam.', 15000);
+}
+
+// hlášky ve chvíli, kdy se z trosek zformuje akreční disk
+function komentarKDisku(){
+  if(hozenoPolitiku === 1){
+    say('f', 'Tomuhle prstenci se říká akreční disk. Hmota se roztočí, tře se sama o sebe a než spadne dovnitř, rozžhaví se na miliony stupňů. Mimochodem, tohle je pořád seriózní věda. 🙂', 13000);
+    say('p', 'Přidej trochu do polívky — hoď tam dalšího!', 9000);
+  } else if(hozenoPolitiku === 2){
+    say('p', 'Hoď tam ještě jednoho! Ať to má grády! 🔥', 9000);
+  } else if(hozenoPolitiku >= 3){
+    say('f', 'Tři tělesa naráz. Gratuluju, právě sis pustil problém tří těles.', 10000);
+  }
 }
 
 /* ---------------- kamera a UI ---------------- */
-const cam = { yaw: 0.6, pitch: 0.10, dist: 15.0, target: [0, 0, 0] };
+const cam = { yaw: 0.6, pitch: 0.10, dist: 26.0, target: [0, 0, 0] };
 
 // posun kamery do strany (pan) — posouvá bod, kolem kterého se otáčí
 function panBy(dx, dy){
@@ -990,7 +1086,13 @@ $('throwBtn').addEventListener('click', launchSun);
 // horní lišta presetů z babis-data.js (miniatura + jméno)
 if(typeof PRESETS !== 'undefined'){
   const bar = $('presetBar');
-  PRESETS.forEach(p => {
+  PRESETS.forEach((p, i) => {
+    const item = document.createElement('div');
+    item.className = 'presetItem';
+    const sip = document.createElement('div');       // pulzující šipka nad ikonou
+    sip.className = 'sip';
+    sip.textContent = '▼';
+    sip.style.animationDelay = (i * 0.12).toFixed(2) + 's';
     const b = document.createElement('button');
     b.className = 'preset';
     const im = document.createElement('img');
@@ -999,7 +1101,8 @@ if(typeof PRESETS !== 'undefined'){
     sp.textContent = p.label;
     b.appendChild(im); b.appendChild(sp);
     b.addEventListener('click', () => launchPreset(p));
-    bar.appendChild(b);
+    item.appendChild(sip); item.appendChild(b);
+    bar.appendChild(item);
   });
 }
 $('imgBtn').addEventListener('click', () => $('imgFile').click());
@@ -1030,11 +1133,14 @@ function layoutUI(){
   const prev = document.getElementById('sunPreview');
   const nad = base + bh + 10;
   prev.style.bottom = nad + 'px';
-  // na úzkém displeji by bublina zakrývala kruh náhledu -> posadit ji nad něj
-  const uzko = window.innerWidth < 760 && prev.style.display !== 'none';
-  const chipsBottom = nad + (uzko ? prev.offsetHeight + 8 : 0);
-  document.getElementById('chips').style.bottom = chipsBottom + 'px';
-  document.getElementById('hint').style.bottom = chipsBottom + 'px';
+  document.getElementById('hint').style.bottom = (nad + prev.offsetHeight + 8) + 'px';
+
+  // bublina je vpravo nahoře; na úzkém displeji ji posadit pod lištu politiků
+  const chips = document.getElementById('chips');
+  const wrap = document.getElementById('presetWrap').getBoundingClientRect();
+  const chipsLeft = window.innerWidth - 16 - chips.offsetWidth;
+  const kolize = wrap.bottom > 44 && wrap.right > chipsLeft;
+  chips.style.top = (kolize ? Math.round(wrap.bottom) + 8 : 44) + 'px';
 }
 window.addEventListener('resize', resize);
 // přepočítat, kdykoli panel nebo tlačítka změní výšku (zalomení, načtení fontu)
@@ -1043,6 +1149,7 @@ if(window.ResizeObserver){
   ro.observe(document.getElementById('panel'));
   ro.observe(document.getElementById('actionBtns'));
   ro.observe(document.getElementById('sunPreview'));
+  ro.observe(document.getElementById('presetWrap'));
 }
 if(document.fonts && document.fonts.ready) document.fonts.ready.then(layoutUI);
 
@@ -1125,6 +1232,8 @@ function frame(){
 
   if($('rot').checked && now - lastInteract > 3) cam.yaw += dtF * 0.045;
 
+  zkontrolujOdemceni(now);
+
   // fyzika všech aktivních těles
   const anyActive = OBJS.some(o => o.active);
   if(anyActive){
@@ -1196,12 +1305,13 @@ function cross3(a, b){ return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[
 function norm3(a){ const l = Math.hypot(a[0], a[1], a[2]); return [a[0]/l, a[1]/l, a[2]/l]; }
 
 resize();
+aktualizujUI();          // start ve fázi 1: jen politici
 requestAnimationFrame(frame);
 setTimeout(() => { document.getElementById('hint').style.opacity = '0'; }, 8000);
 
 // uvítání
 setTimeout(() => {
-  say('f', 'Vítej v simulátoru černé díry. Chceš vědět, co se stane, když tam hodíš nejmíň oblíbenýho politika? Vyzkoušej. Ale jinak tady děláme seriózní vědu 🙂', 16000);
+  say('f', 'Vítej v simulátoru černé díry. Chceš vědět, co se stane, když tam hodíš nejmíň oblíbenýho politika? Vyzkoušej. Ale jinak tady děláme seriózní vědu 🙂', 13000);
 }, 900);
 </script>
 </body>
