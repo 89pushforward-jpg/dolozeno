@@ -200,7 +200,7 @@
   <span class="sep"></span>
   <span class="lbl">OBJEKT</span>
   <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="6"> <span id="periVal">6.0 rs</span></label>
-  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="12"></label>
+  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="16"></label>
 </div>
 
 <div id="err"></div>
@@ -532,7 +532,7 @@ const K_SPRING = 0.15;
 const K_DAMP   = 0.4;
 // disipace po roztržení (viskozita/srážky proudů):
 const K_CIRC   = 0.03;
-const K_DRAG   = 0.007;  // disk žije ~30-40 s
+const K_DRAG   = 0.014;  // ztráta energie -> spirála (2× rychleji než dřív)
 const K_KICK   = 0.05;
 const K_TURB   = 0.03;
 
@@ -622,7 +622,10 @@ const LINES = {
 // každý vrací {pts: [{a,b,c, r,g,b2, h0}], scale}
 function makeBallPayload(Rp){
   const pts = [];
-  for(let i = 0; i < SLOT_N; i++){
+  // méně částic než u fotek (kvůli plynulosti), zato větší —
+  // pokrytá plocha, a tím i dojem objemu, zůstává stejná
+  const M = 4000;
+  for(let i = 0; i < M; i++){
     let x, y, z, d2;
     do {
       x = Math.random() * 2 - 1; y = Math.random() * 2 - 1; z = Math.random() * 2 - 1;
@@ -633,7 +636,7 @@ function makeBallPayload(Rp){
     pts.push({ a: x * Rp, b: y * Rp, c: z * Rp,
                r: 1.0, g: 0.38 + 0.44 * t, b2: 0.06 + 0.39 * t, h0: h0 });
   }
-  return { pts, scale: 0.13, glow: 1 };   // hvězda: měkká záře
+  return { pts, scale: 0.185, glow: 1 };  // hvězda: měkká záře
 }
 
 // z obrázku: každý pixel (mimo pozadí) = jedna barevná částice
@@ -886,13 +889,20 @@ function physStep(dt){
   // fáze 2: parametry disipace pro každé těleso
   for(const o of OBJS){
     if(!o.active){ o._drag = 1; o._circ = 0; o._turb = 0; o._ramp = 0; continue; }
+    // disipace nabíhá se zpožděním, ať se trosky stihnou rozprostřít do disku,
+    // pak se tření stupňuje, aby se scéna vyprázdnila v rozumném čase
     const ramp = (o.disrupted && o.disruptT >= 0)
-      ? Math.min(1, Math.max(0, (simT - o.disruptT - 40) / 80)) : 0;
+      ? Math.min(1, Math.max(0, (simT - o.disruptT - 20) / 40)) : 0;
     const escal = (o.disrupted && o.disruptT >= 0)
-      ? Math.min(8, 1 + Math.max(0, (simT - o.disruptT - 150) / 100)) : 1;
-    const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.08;
+      ? Math.min(16, 1 + Math.max(0, (simT - o.disruptT - 60) / 20)) : 1;
+    const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.15;
+    // Usazování na kruhovou dráhu je jednorázová věc (srážky proudů hned po
+    // roztržení). Musí vyhasnout — jinak by částicím pořád dodávalo energii
+    // zpět a ty by obíhaly donekonečna navzdory tření.
+    const circFade = (o.disrupted && o.disruptT >= 0)
+      ? Math.max(0, 1 - Math.max(0, (simT - o.disruptT - 60) / 60)) : 0;
     o._ramp = ramp;
-    o._circ = 1 - Math.exp(-K_CIRC * ramp * dt);
+    o._circ = 1 - Math.exp(-K_CIRC * ramp * circFade * dt);
     o._drag = Math.exp(-K_DRAG * (finishing ? 12 : ramp * escal) * dt);
     o._turb = finishing ? 0 : K_TURB * ramp;
   }
@@ -960,7 +970,14 @@ function physStep(dt){
             vy += (0        - vy) * circBlend * 0.10;
             vz += (tzd * vc - vz) * circBlend;
           }
-          vx *= dragFac; vy *= dragFac; vz *= dragFac;
+          // Tření v disku ubírá MOMENT HYBNOSTI, ne rychlost pádu: brzdí se
+          // jen oběžná (tečná) složka. Kdyby se brzdila i radiální, hmota by
+          // ke díře klesala "jako v sirupu" terminální rychlostí a nedopadla.
+          const rx = x / r, ry = y / r, rz = z / r;
+          const vr = vx * rx + vy * ry + vz * rz;
+          vx = (vx - vr * rx) * dragFac + vr * rx;
+          vy = (vy - vr * ry) * dragFac + vr * ry;
+          vz = (vz - vr * rz) * dragFac + vr * rz;
           if(r < 18){
             const tb = turbAmp * dt;
             vx += (Math.random() - 0.5) * tb;
