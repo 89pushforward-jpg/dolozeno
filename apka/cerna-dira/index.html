@@ -40,9 +40,13 @@
     border:1px solid rgba(245,166,35,.25);border-radius:4px;
     transition:opacity 1.2s;user-select:none;pointer-events:none;white-space:nowrap}
 
+  /* nastavovací lišta je zatím SCHOVANÁ (odloženo na později) — hodnoty
+     v ní dál platí jako výchozí nastavení simulace, jen se neladí ručně.
+     Až bude potřeba zpět, stačí smazat řádek s display:none níže. */
   #panel{position:fixed;bottom:14px;left:16px;right:16px;display:flex;gap:8px 14px;align-items:center;
     background:rgba(5,6,8,.78);border:1px solid rgba(245,166,35,.3);border-radius:6px;
     padding:9px 12px;font-size:11px;flex-wrap:wrap;max-width:840px}
+  #panel{display:none}          /* <- schováno; smazat pro návrat lišty */
   #panel label{display:flex;gap:5px;align-items:center;cursor:pointer;white-space:nowrap}
   #panel .lbl{color:var(--signal);font-weight:700;letter-spacing:1px}
   #panel .sep{flex-basis:100%;height:0}
@@ -77,7 +81,8 @@
     text-align:center;user-select:none}
   #sunPreview svg{pointer-events:none;display:block}
   #sunPreview .prevLabel{color:var(--signal);font-weight:700;display:block}
-  #sizeCtl{display:flex;flex-direction:column;align-items:center;gap:6px}
+  /* posuvník velikosti je zatím SCHOVANÝ (odloženo) — velikost je napevno */
+  #sizeCtl{display:none;flex-direction:column;align-items:center;gap:6px}
   #sunPreview input[type=range]{-webkit-appearance:none;appearance:none;width:140px;height:4px;
     border-radius:2px;background:#2a2f36;outline:none;cursor:pointer}
   #sunPreview input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
@@ -118,6 +123,11 @@
   button.preset span{font-size:9px;font-weight:700;letter-spacing:1px}
   button.preset:hover{border-color:var(--signal)}
   @media (max-width: 700px){
+    /* nápověda k ovládání se na mobilu láme na víc řádků, ať nevylézá z obrazu */
+    #hint{white-space:normal;max-width:calc(100vw - 32px);text-align:center;line-height:1.6}
+    /* bublina Franty/Pepana je na mobilu vycentrovaná (pořád pod ikonami) */
+    #chips{left:50%;right:auto;transform:translateX(-50%);align-items:center;
+      width:min(340px, calc(100vw - 24px))}
     #presetWrap{top:58px;max-width:calc(100vw - 24px)}
     #presetCall{font-size:11px}
     #presetBar{gap:4px}
@@ -148,7 +158,7 @@
   </svg>
   <div id="sizeCtl">
     <span class="prevLabel">VELIKOST SLUNCE</span>
-    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="3">
+    <input type="range" id="psize" min="1.5" max="4" step="0.25" value="2.75">
   </div>
 </div>
 
@@ -1023,7 +1033,6 @@ function aktualizujUI(){
   $('presetCall').style.display = veda ? 'none' : '';
   $('throwBtn').parentNode.style.display = veda ? '' : 'none';   // .sunItem se šipkou
   $('imgBtn').style.display   = veda ? '' : 'none';
-  $('sizeCtl').style.display  = veda ? '' : 'none';
   $('resetBtn').style.display = (hozenoPolitiku > 0 || veda) ? '' : 'none';
   layoutUI();
 }
@@ -1048,7 +1057,7 @@ function komentarKDisku(){
 }
 
 /* ---------------- kamera a UI ---------------- */
-const cam = { yaw: 0.6, pitch: 0.10, dist: 26.0, target: [0, 0, 0] };
+const cam = { yaw: 0.6, pitch: 0.10, dist: 34.0, target: [0, 0, 0] };
 
 // posun kamery do strany (pan) — posouvá bod, kolem kterého se otáčí
 function panBy(dx, dy){
@@ -1070,8 +1079,7 @@ const QUALITY = {
   med:  { steps: 280, scale: 0.75 },
   high: { steps: 460, scale: 1.0 },
 };
-const isMobile = matchMedia('(pointer: coarse)').matches;
-let qualityKey = isMobile ? 'low' : 'med';
+let qualityKey = 'low';       // výchozí kvalita (lišta je schovaná)
 $('quality').value = qualityKey;
 let quality = QUALITY[qualityKey];
 let lastInteract = -10;
@@ -1135,11 +1143,12 @@ function layoutUI(){
   prev.style.bottom = nad + 'px';
   document.getElementById('hint').style.bottom = (nad + prev.offsetHeight + 8) + 'px';
 
-  // bublina je vpravo nahoře; na úzkém displeji ji posadit pod lištu politiků
+  // bublina je vpravo nahoře (na mobilu vycentrovaná);
+  // když by ji zakryla lišta politiků, posadit ji pod ni
   const chips = document.getElementById('chips');
   const wrap = document.getElementById('presetWrap').getBoundingClientRect();
-  const chipsLeft = window.innerWidth - 16 - chips.offsetWidth;
-  const kolize = wrap.bottom > 44 && wrap.right > chipsLeft;
+  const ch = chips.getBoundingClientRect();
+  const kolize = wrap.bottom > 44 && wrap.right > ch.left && wrap.left < ch.right;
   chips.style.top = (kolize ? Math.round(wrap.bottom) + 8 : 44) + 'px';
 }
 window.addEventListener('resize', resize);
