@@ -23,9 +23,15 @@
   canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
   canvas:active{cursor:grabbing}
 
-  .brand{position:fixed;top:14px;left:16px;pointer-events:none;user-select:none}
-  .brand .logo{color:var(--signal);font-weight:700;font-size:15px;letter-spacing:2px}
-  .brand .sub{color:#8b929c;font-size:11px;margin-top:2px;letter-spacing:1px}
+  /* logo — stejný font i řez jako hlavní web, prokliknutelné na dolozeno.cz */
+  .brand{position:fixed;top:12px;left:16px;user-select:none;z-index:7;
+    text-decoration:none;display:block}
+  .brand .logo{color:var(--signal);font-weight:700;font-size:26px;letter-spacing:.04em;
+    line-height:1;text-shadow:2px 2px 8px rgba(0,0,0,.75),0 0 24px rgba(0,0,0,.5)}
+  .brand .sub{color:#8b929c;font-size:11px;margin-top:3px;letter-spacing:1px}
+  .brand:hover .logo{color:#ffc257}
+  .brand:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:4px}
+  @media (max-width: 700px){ .brand .logo{font-size:19px} }
 
   #fps{position:fixed;top:14px;right:16px;font-size:11px;color:#8b929c;user-select:none;text-align:right}
 
@@ -61,10 +67,12 @@
   .chip.f{border:1px solid var(--franta);color:var(--franta)}
   .chip.p{border:1px solid var(--pepa);color:var(--pepa)}
   .chip b{letter-spacing:1px}
-  .chip svg.av{width:36px;height:36px;flex:0 0 36px;border-radius:50%}
+  .chip .av{width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:block}
+  .chip.f .av{border:2px solid var(--franta)}
+  .chip.p .av{border:2px solid var(--pepa)}
 
   /* náhled velikosti před vhozením (vlevo dole ve scéně) */
-  #sunPreview{position:fixed;left:16px;bottom:170px;display:flex;flex-direction:column;
+  #sunPreview{position:fixed;left:16px;bottom:170px;z-index:4;display:flex;flex-direction:column;
     align-items:center;gap:7px;font-size:10px;color:#9aa0a8;letter-spacing:1px;
     text-align:center;user-select:none}
   #sunPreview svg{pointer-events:none;display:block}
@@ -82,9 +90,20 @@
     display:flex;gap:8px;z-index:5;flex-wrap:wrap;justify-content:center;
     max-width:calc(100vw - 24px)}
 
+  /* výzva nad ikonami politiků */
+  #presetWrap{position:fixed;top:10px;left:50%;transform:translateX(-50%);
+    display:flex;flex-direction:column;align-items:center;gap:2px;z-index:5;
+    max-width:calc(100vw - 230px)}
+  #presetCall{font-size:12px;font-weight:700;color:var(--signal);text-align:center;
+    letter-spacing:.03em;line-height:1.3;text-shadow:0 2px 6px rgba(0,0,0,.85);
+    user-select:none;pointer-events:none}
+  #presetArrow{font-size:14px;color:var(--signal);line-height:1;margin-bottom:1px;
+    user-select:none;pointer-events:none;animation:sipka 1.8s ease-in-out infinite}
+  @keyframes sipka{0%,100%{transform:translateY(0);opacity:.75}50%{transform:translateY(3px);opacity:1}}
+  @media (prefers-reduced-motion: reduce){ #presetArrow{animation:none} }
+
   /* horní lišta presetů: miniatura + jméno, VŽDY v jedné řadě */
-  #presetBar{position:fixed;top:12px;left:50%;transform:translateX(-50%);
-    display:flex;gap:6px;z-index:5;flex-wrap:nowrap;justify-content:center}
+  #presetBar{display:flex;gap:6px;flex-wrap:nowrap;justify-content:center}
   button.preset{display:flex;flex-direction:column;align-items:center;gap:3px;
     background:rgba(5,6,8,.78);border:1px solid #2a2f36;border-radius:8px;
     padding:6px 8px 5px;color:var(--signal)}
@@ -93,7 +112,9 @@
   button.preset span{font-size:9px;font-weight:700;letter-spacing:1px}
   button.preset:hover{border-color:var(--signal)}
   @media (max-width: 700px){
-    #presetBar{top:64px;gap:4px}
+    #presetWrap{top:58px;max-width:calc(100vw - 24px)}
+    #presetCall{font-size:11px}
+    #presetBar{gap:4px}
     button.preset{padding:4px 5px 4px}
     button.preset img{width:34px;height:34px}
     button.preset span{font-size:8px;letter-spacing:0.5px}
@@ -106,10 +127,10 @@
 <body>
 <canvas id="c"></canvas>
 
-<div class="brand">
-  <div class="logo">DOLOŽENO</div>
+<a class="brand" href="https://dolozeno.cz/" title="Zpět na dolozeno.cz">
+  <div class="logo">DOLOŽENO.CZ</div>
   <div class="sub">ČERNÁ DÍRA — prototyp</div>
-</div>
+</a>
 <div id="fps"></div>
 <div id="hint">táhni = otočit &nbsp;·&nbsp; pravé tl. / 2 prsty = posun &nbsp;·&nbsp; kolečko = zoom &nbsp;·&nbsp; dvojklik = střed</div>
 <div id="chips"></div>
@@ -123,7 +144,11 @@
   <input type="range" id="psize" min="1.5" max="4" step="0.25" value="3">
 </div>
 
-<div id="presetBar"></div>
+<div id="presetWrap">
+  <div id="presetCall">Vhoď nejmíň oblíbenýho politika do černý díry a sleduj, co se stane</div>
+  <div id="presetArrow">▼</div>
+  <div id="presetBar"></div>
+</div>
 
 <div id="actionBtns">
   <button id="throwBtn">VHOĎ SLUNCE</button>
@@ -152,7 +177,7 @@
 
 <div id="err"></div>
 
-<script src="babis-data.js"></script>
+<script src="babis-data.js?v=2"></script>
 <script>
 'use strict';
 /* ============================================================
@@ -406,7 +431,7 @@ void main(){
   float glowT = clamp((h - 0.72) * 3.2, 0.0, 1.0);
   vec3 col = mix(vColor, vec3(1.0, 0.85, 0.55), mix(glowT, clamp((h - 0.55) * 1.8, 0.0, 1.0), vGlow));
   col += vec3(1.0, 0.9, 0.7) * max(h - 0.85, 0.0) * 2.0;
-  float bright = mix(1.0, 0.35 + 0.75 * h, vGlow);
+  float bright = mix(1.0, 0.35 + 0.75 * h, vGlow) * 0.7;   // -30 % proti přepalu
   fragColor = vec4(col * a * bright, a);
 }`;
 
@@ -906,37 +931,24 @@ function checkEvents(){
   }
 }
 
-/* chip s hláškou — vždy jen JEDEN, s avatarem, drží 12 s */
-const AV_F = `<svg class="av" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="30" fill="#1a1d22" stroke="#f2c40f" stroke-width="3"/>
-  <ellipse cx="32" cy="34" rx="15" ry="17" fill="#c9976b"/>
-  <path d="M18 39 q14 20 28 0 l-1 11 q-13 11 -26 0 z" fill="#26262a"/>
-  <path d="M15 29 h4 M45 29 h4" stroke="#f2c40f" stroke-width="3" stroke-linecap="round"/>
-  <rect x="19" y="26" width="11" height="7" rx="3" fill="#0c0c0e"/>
-  <rect x="34" y="26" width="11" height="7" rx="3" fill="#0c0c0e"/>
-  <path d="M30 29 h4" stroke="#0c0c0e" stroke-width="2.5"/>
-</svg>`;
-const AV_P = `<svg class="av" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="30" fill="#1a1d22" stroke="#ff6b6b" stroke-width="3"/>
-  <ellipse cx="32" cy="36" rx="14" ry="16" fill="#d8a97e"/>
-  <path d="M18 32 q-3 -16 14 -17 q17 -1 14 17 q-3 -7 -7 -5 q-1 -6 -6 -4 q-3 -5 -8 -1 q-5 -3 -7 10 z" fill="#5b3a21"/>
-  <ellipse cx="32" cy="47" rx="9" ry="5" fill="rgba(0,0,0,0.16)"/>
-  <circle cx="26" cy="34" r="2.2" fill="#141414"/>
-  <circle cx="38" cy="34" r="2.2" fill="#141414"/>
-  <path d="M26 44 q6 5 12 0" stroke="#141414" stroke-width="2" fill="none" stroke-linecap="round"/>
-</svg>`;
+/* chip s hláškou — vždy jen JEDEN, s avatarem postavy, drží 12 s */
+const AV_F = (typeof AV_FRANTA !== 'undefined') ? AV_FRANTA : '';
+const AV_P = (typeof AV_PEPAN  !== 'undefined') ? AV_PEPAN  : '';
 const chipsBox = document.getElementById('chips');
-function say(who, text){
+let chipTimer = null;
+function say(who, text, holdMs){
   chipsBox.innerHTML = '';                 // jen jeden koment najednou
+  if(chipTimer) clearTimeout(chipTimer);
   const div = document.createElement('div');
   div.className = 'chip ' + who;
-  div.innerHTML = (who === 'f' ? AV_F : AV_P) +
+  const src = who === 'f' ? AV_F : AV_P;
+  div.innerHTML = (src ? '<img class="av" src="' + src + '" alt="">' : '') +
     '<div><b>' + (who === 'f' ? 'FRANTA:' : 'PEPAN:') + '</b> ' + text + '</div>';
   chipsBox.appendChild(div);
   requestAnimationFrame(() => div.classList.add('show'));
-  setTimeout(() => {
+  chipTimer = setTimeout(() => {
     if(div.parentNode){ div.classList.remove('show'); setTimeout(() => div.remove(), 500); }
-  }, 12000);
+  }, holdMs || 12000);
 }
 
 /* ---------------- kamera a UI ---------------- */
@@ -1009,16 +1021,30 @@ function resize(){
   layoutUI();
 }
 // tlačítka, náhled, komenty i nápovědu posadit NAD skutečnou výšku panelu
+// (panel se na úzkých displejích zalamuje do více řádků, proto se měří za běhu)
 function layoutUI(){
-  const ph = document.getElementById('panel').offsetHeight;
-  const base = 14 + ph + 12;
-  document.getElementById('actionBtns').style.bottom = base + 'px';
-  document.getElementById('sunPreview').style.bottom = base + 'px';
-  const bh = document.getElementById('actionBtns').offsetHeight || 30;
-  document.getElementById('chips').style.bottom = (base + bh + 10) + 'px';
-  document.getElementById('hint').style.bottom = (base + bh + 10) + 'px';
+  const base = 14 + document.getElementById('panel').offsetHeight + 12;
+  const btns = document.getElementById('actionBtns');
+  btns.style.bottom = base + 'px';
+  const bh = btns.offsetHeight || 30;
+  const prev = document.getElementById('sunPreview');
+  const nad = base + bh + 10;
+  prev.style.bottom = nad + 'px';
+  // na úzkém displeji by bublina zakrývala kruh náhledu -> posadit ji nad něj
+  const uzko = window.innerWidth < 760 && prev.style.display !== 'none';
+  const chipsBottom = nad + (uzko ? prev.offsetHeight + 8 : 0);
+  document.getElementById('chips').style.bottom = chipsBottom + 'px';
+  document.getElementById('hint').style.bottom = chipsBottom + 'px';
 }
 window.addEventListener('resize', resize);
+// přepočítat, kdykoli panel nebo tlačítka změní výšku (zalomení, načtení fontu)
+if(window.ResizeObserver){
+  const ro = new ResizeObserver(() => layoutUI());
+  ro.observe(document.getElementById('panel'));
+  ro.observe(document.getElementById('actionBtns'));
+  ro.observe(document.getElementById('sunPreview'));
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(layoutUI);
 
 /* ovládání */
 const pointers = new Map();
@@ -1172,6 +1198,11 @@ function norm3(a){ const l = Math.hypot(a[0], a[1], a[2]); return [a[0]/l, a[1]/
 resize();
 requestAnimationFrame(frame);
 setTimeout(() => { document.getElementById('hint').style.opacity = '0'; }, 8000);
+
+// uvítání
+setTimeout(() => {
+  say('f', 'Vítej v simulátoru černé díry. Chceš vědět, co se stane, když tam hodíš nejmíň oblíbenýho politika? Vyzkoušej. Ale jinak tady děláme seriózní vědu 🙂', 16000);
+}, 900);
 </script>
 </body>
 </html>
