@@ -200,7 +200,7 @@
   <span class="sep"></span>
   <span class="lbl">OBJEKT</span>
   <label>přiblížení <input type="range" id="peri" min="2" max="8" step="0.5" value="6"> <span id="periVal">6.0 rs</span></label>
-  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="16"></label>
+  <label>čas <input type="range" id="speed" min="2" max="40" step="1" value="24"></label>
 </div>
 
 <div id="err"></div>
@@ -531,7 +531,7 @@ const R_CAPTURE = 1.25;
 const K_SPRING = 0.15;
 const K_DAMP   = 0.4;
 // disipace po roztržení (viskozita/srážky proudů):
-const K_CIRC   = 0.03;
+const K_CIRC   = 0.12;   // rychlé zakulacení drah hned po roztržení
 const K_DRAG   = 0.014;  // ztráta energie -> spirála (2× rychleji než dřív)
 const K_KICK   = 0.05;
 const K_TURB   = 0.03;
@@ -889,28 +889,40 @@ function physStep(dt){
   // fáze 2: parametry disipace pro každé těleso
   for(const o of OBJS){
     if(!o.active){ o._drag = 1; o._circ = 0; o._turb = 0; o._ramp = 0; continue; }
-    // disipace nabíhá se zpožděním, ať se trosky stihnou rozprostřít do disku,
-    // pak se tření stupňuje, aby se scéna vyprázdnila v rozumném čase
-    const ramp = (o.disrupted && o.disruptT >= 0)
-      ? Math.min(1, Math.max(0, (simT - o.disruptT - 20) / 40)) : 0;
-    const escal = (o.disrupted && o.disruptT >= 0)
-      ? Math.min(16, 1 + Math.max(0, (simT - o.disruptT - 60) / 20)) : 1;
-    const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.15;
-    // Usazování na kruhovou dráhu je jednorázová věc (srážky proudů hned po
-    // roztržení). Musí vyhasnout — jinak by částicím pořád dodávalo energii
-    // zpět a ty by obíhaly donekonečna navzdory tření.
-    const circFade = (o.disrupted && o.disruptT >= 0)
-      ? Math.max(0, 1 - Math.max(0, (simT - o.disruptT - 60) / 60)) : 0;
-    o._ramp = ramp;
-    o._circ = 1 - Math.exp(-K_CIRC * ramp * circFade * dt);
-    o._drag = Math.exp(-K_DRAG * (finishing ? 12 : ramp * escal) * dt);
-    o._turb = finishing ? 0 : K_TURB * ramp;
+    // ČASOVÝ PLÁN PO ROZTRŽENÍ (tD = jednotky od roztržení):
+    //   0– 20  trosky se balisticky rozletí
+    //  20–110  usazení do prstence: srážky proudů zakulatí dráhy,
+    //          vzdálenější kusy jsou staženy blíž (disk je pak kompaktní)
+    // 110–360  VOLNÝ OBĚH — hmota několikrát obletí díru, tření skoro nepůsobí
+    //  360+    tření sílí a prstenec se po spirále sype za horizont
+    const tD = (o.disrupted && o.disruptT >= 0) ? (simT - o.disruptT) : -1;
+    // Usazování musí přijít HNED: trosky mají v tu chvíli skoro kruhovou
+    // rychlost a jsou blízko díry. Když se čeká, rozletí se do dálky a pak
+    // už jen padají místo aby obíhaly.
+    const usazovani = tD < 0 ? 0
+      : Math.min(1, tD / 15) * Math.max(0, 1 - Math.max(0, (tD - 110) / 50));
+    const finishing = o.disrupted && (o.count - o.captured) < o.count * 0.12;
+    const trenNasob = tD < 0 ? 0
+      : (finishing ? 16
+        // Během oběhu nesmí působit ani ždibec tření: i pár procent ztráty
+        // oběžné rychlosti stlačí dráhu pod ISCO a prstenec spadne dřív,
+        // než ho stihneš vidět zakroužit.
+        : tD < 700 ? 0
+        : Math.min(20, (tD - 700) / 9));
+    o._ramp = tD < 0 ? 0 : Math.min(1, tD / 15);
+    o._usaz = usazovani;
+    o._circ = 1 - Math.exp(-K_CIRC * usazovani * dt);
+    o._drag = Math.exp(-K_DRAG * trenNasob * dt);
+    // turbulence jen při usazování; během oběhu by rozhoupala dráhy
+    // a půlka prstence by spadla pod ISCO dřív, než ho stihneš vidět
+    o._turb = finishing ? 0 : K_TURB * usazovani;
   }
 
   // fáze 3: pohyb částic
   for(const o of OBJS){
     if(!o.active) continue;
     const circBlend = o._circ, dragFac = o._drag, turbAmp = o._turb, ramp = o._ramp;
+    const usaz = o._usaz || 0;
     for(let ii = o.base; ii < o.base + o.count; ii++){
       if(heat[ii] < -0.5) continue;
       const ix = ii*3;
@@ -953,16 +965,16 @@ function physStep(dt){
       // po roztržení: balistika -> disipace -> disk -> spirála
       if(o.disrupted){
         const r = Math.sqrt(x*x + y*y + z*z);
-        if(r > 24){
+        if(r > 22){
           // návrat slapového proudu: daleko se trosky stáčejí do volného pádu
           const vin = Math.sqrt(2 * G_M / (r - 1.0));
-          const bl = 1 - Math.exp(-0.05 * ramp * dt);
+          const bl = 1 - Math.exp(-0.12 * ramp * dt);
           vx += (-x / r * vin - vx) * bl;
           vy += (-y / r * vin - vy) * bl;
           vz += (-z / r * vin - vz) * bl;
         } else {
           // kruhové usazování jen NAD ISCO a v zóně disku
-          if(r > 3.2 && r < 18){
+          if(r > 3.2 && r < 22){
             const vc = Math.sqrt(G_M * r) / (r - 1.0);
             const invXZ = 1 / Math.max(Math.hypot(x, z), 1e-6);
             const txd = -z * invXZ, tzd = x * invXZ;
@@ -978,6 +990,12 @@ function physStep(dt){
           vx = (vx - vr * rx) * dragFac + vr * rx;
           vy = (vy - vr * ry) * dragFac + vr * ry;
           vz = (vz - vr * rz) * dragFac + vr * rz;
+          // usazování dusí i radiální rozkmit — z eliptických drah se tak
+          // stane prstenec, který obíhá, místo aby se hmota rozlétla do dálky
+          if(usaz > 0){
+            const tlum = 1 - Math.exp(-0.10 * usaz * dt);
+            vx -= vr * rx * tlum; vy -= vr * ry * tlum; vz -= vr * rz * tlum;
+          }
           if(r < 18){
             const tb = turbAmp * dt;
             vx += (Math.random() - 0.5) * tb;
