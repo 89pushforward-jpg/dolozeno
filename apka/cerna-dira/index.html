@@ -909,6 +909,7 @@ function resetSun(){
   heat.fill(-1);
   gl.bindBuffer(gl.ARRAY_BUFFER, bufHeat);
   gl.bufferSubData(gl.ARRAY_BUFFER, 0, heat);
+  dluhSim = 0;   // ať nový hod nezačne doháněním starého času
 }
 
 /* fyzika částic — jeden krok dt (adaptivní dělení u horizontu) */
@@ -1330,6 +1331,19 @@ const sunCircle = $('sunCircle');
 let frames = 0, fpsTime = 0, lastT = performance.now() / 1000;
 const t0 = lastT;
 
+/* ---------- rozpočet fyziky ----------
+   Fyzikální krok má VŽDY stejnou délku (DT_SUB), takže dráhy vyjdou
+   identicky bez ohledu na výkon — řídí se jen to, kolik kroků se za snímek
+   udělá. Bez stropu si delší snímek vyžádá víc kroků (95 při 10 fps proti
+   32 při 30 fps), čímž je ještě delší: jakmile to jednou spadne, samo se to
+   nahoru nevrátí. Nedopočítaný herní čas se proto zahazuje — děj se při
+   slabém výkonu přehraje pomaleji, ale plynule. */
+const DT_SUB = 0.04;
+const MAX_SUB = 40;        // tvrdý strop (odpovídá ~30 fps při rychlosti 38)
+const ROZPOCET_MS = 12;    // kolik smí fyzika ukrojit ze snímku (cíl 30 fps = 33 ms)
+let dluhSim = 0;           // herní čas čekající na odsimulování
+let kroku = MAX_SUB;       // aktuální rozpočet, doladí se podle výkonu
+
 function frame(){
   const now = performance.now() / 1000;
   const dtF = Math.min(now - lastT, 0.1);
@@ -1357,10 +1371,20 @@ function frame(){
   const anyActive = OBJS.some(o => o.active);
   if(anyActive){
     const speed = parseFloat($('speed').value);
-    const adv = speed * dtF;
-    const nSub = Math.max(1, Math.min(120, Math.round(adv / 0.04)));
-    const dtSub = adv / nSub;
-    for(let s = 0; s < nSub; s++) physStep(dtSub);
+    dluhSim += speed * dtF;
+    const strop = DT_SUB * kroku;
+    if(dluhSim > strop) dluhSim = strop;   // zameškaný čas se nedohání
+    const tFyz = performance.now();
+    let n = 0;
+    while(dluhSim >= DT_SUB){ physStep(DT_SUB); dluhSim -= DT_SUB; n++; }
+    // rozpočet se doladí podle toho, jak drahý krok právě je: po roztržení
+    // stojí dvojnásobek než při náletu, protože trosky létají těsně kolem
+    // horizontu a krok se tam musí krájet na jemnější kousky
+    if(n > 0){
+      const msKrok = (performance.now() - tFyz) / n;
+      const cil = ROZPOCET_MS / Math.max(msKrok, 0.005);
+      kroku = Math.max(6, Math.min(MAX_SUB, kroku * 0.85 + cil * 0.15));
+    }
     checkEvents();
     // upload: pozice a žár (velikost/typ se mění jen při hodu)
     gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
