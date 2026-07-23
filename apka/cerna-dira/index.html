@@ -6,6 +6,17 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Interaktivni simulace cerne diry — prototyp DOLOZENO.">
 <meta name="theme-color" content="#050608">
+<!-- Náhled sdíleného odkazu na Facebooku. Adresy musí být absolutní —
+     relativní cestu si scraper nedomyslí. Obrázek 1200×630 zatím chybí,
+     dokud nedorazí grafika (bez něj je náhled jen text). -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dolozeno.cz/apka/cerna-dira/">
+<meta property="og:title" content="ČERNÁ DÍRA — vesmírná laboratoř DOLOŽENO">
+<meta property="og:description" content="Hoď do černé díry politika, Slunce nebo vlastní selfie a sleduj, jak ho slapové síly roztrhají na akreční disk. Fyzikálně poctivá 3D simulace včetně ohybu světla.">
+<meta property="og:image" content="https://dolozeno.cz/apka/cerna-dira/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="cs_CZ">
 <title>DOLOŽENO — ČERNÁ DÍRA (prototyp)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -74,6 +85,23 @@
   .chip .av{width:40px;height:40px;flex:0 0 40px;border-radius:50%;display:block}
   .chip.f .av{border:2px solid var(--franta)}
   .chip.p .av{border:2px solid var(--pepa)}
+
+  /* výzva ke sdílení — uprostřed, až si člověk hodí vlastní fotku */
+  #share{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.94);
+    z-index:12;display:none;opacity:0;transition:opacity .45s, transform .45s;
+    width:min(340px,86vw);padding:18px 18px 16px;border-radius:10px;
+    background:rgba(5,6,8,.94);border:1px solid var(--signal);
+    box-shadow:0 10px 40px rgba(0,0,0,.7);text-align:center}
+  #share.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  #share p{font-size:12.5px;line-height:1.55;color:#e8eaed;margin-bottom:14px}
+  #shareFb{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    background:#1877f2;color:#fff;border:none;border-radius:7px;
+    padding:15px 18px;font:inherit;font-size:12px;font-weight:700;letter-spacing:.5px}
+  #shareFb:hover{background:#3b8bf5}
+  #shareFb svg{width:17px;height:17px;display:block;fill:#fff}
+  #shareX{position:absolute;right:7px;top:5px;cursor:pointer;background:none;border:none;
+    color:#7a828c;font:inherit;font-size:19px;line-height:1;padding:11px 14px}
+  #shareX:hover{color:#e8eaed}
 
   /* Náhled velikosti (přerušovaný kruh) je SCHOVANÝ — ale musí zůstat
      v rozvržení: čte se z něj místo a velikost, kde se těleso zhmotní.
@@ -187,6 +215,17 @@
   </div>
 </div>
 <input type="file" id="imgFile" accept="image/*" style="display:none">
+
+<div id="share">
+  <button id="shareX" title="Zavřít">×</button>
+  <p>Líbila se ti tahle vesmírná laboratoř?<br>
+     Sdílej ji na Facebooku, ať si i ostatní zkusí hodit něco do černé díry
+     a ukojit svou frustraci :D</p>
+  <button id="shareFb">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+    SDÍLET NA FACEBOOKU
+  </button>
+</div>
 
 <div id="panel">
   <span class="lbl">SIMULACE</span>
@@ -888,7 +927,7 @@ function throwObject(builder, key, fallbackAcc){
   // Slunce nechme chvíli kroužit — teprve pak pozornost putuje na vlastní
   // fotku (řeší zkontrolujOdemceni), ať výzva nepřebije podívanou.
   if(key === 'slunce' && faze === 3) hozenoSlunce = posledniHod;
-  if(key === 'obrazek') hozenObrazek = true;
+  if(key === 'obrazek'){ hozenObrazek = true; if(!hozenaFotkaT) hozenaFotkaT = posledniHod; }
   aktualizujUI();
   return true;
 }
@@ -1092,6 +1131,11 @@ const CEKANI_RESET = 15;   // s od třetího politika, než pošleme na RESET
 const CEKANI_FOTO  = 20;   // s od hodu Slunce, než pošleme na vlastní fotku
 
 const CEKANI_COCKA = 18;   // s od vzniku disku, než upozorníme na ohyb světla
+const CEKANI_SDILENI = 30; // s od hodu vlastní fotky, než nabídneme sdílení
+
+// Sdílí se produkční adresa, ne location.href — z localhostu ani z artifactu
+// by odkaz nikomu nefungoval.
+const SDILENA_URL = 'https://dolozeno.cz/apka/cerna-dira/';
 
 function zkontrolujOdemceni(now){
   // Až disk chvíli krouží, je co pozorovat i na pozadí. Váže se na disk, který
@@ -1112,6 +1156,12 @@ function zkontrolujOdemceni(now){
     sayNow('p', 'A teď to nejlepší: dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 12000);
     return;
   }
+  // hodil si sám sebe do díry — po chvíli nabídneme sdílení
+  if(!sdileniZobrazeno && hozenaFotkaT > 0 && (now - hozenaFotkaT) > CEKANI_SDILENI){
+    sdileniZobrazeno = true;
+    ukazSdileni();
+  }
+
   // Slunce dojelo a vlastní fotka pořád nikde — Pepan pobídne znovu
   if(faze >= 4 && !pripomenutoFoto && !hozenObrazek && !OBJS.some(o => o.active)){
     const zbylo = OBJS.reduce((s, o) => s + Math.max(0, o.count - o.captured), 0);
@@ -1202,6 +1252,8 @@ let cockaRecena = false; // hláška o gravitační čočce — jen jednou za re
 let pripomenutoReset = false;
 let pripomenutoFoto = false;
 let hozenObrazek = false;  // vlastní fotku už někdo hodil — nemá smysl ho zvát
+let hozenaFotkaT = 0;      // čas hodu vlastní fotky (kvůli výzvě ke sdílení)
+let sdileniZobrazeno = false;
 
 function aktualizujUI(){
   const p1 = (faze === 1), veda = (faze >= 3), poSlunci = (faze >= 4);
@@ -1306,6 +1358,26 @@ $('imgFile').addEventListener('change', e => {
   if(f) launchImageFile(f);
   e.target.value = '';
 });
+function ukazSdileni(){
+  const b = $('share');
+  b.style.display = 'block';
+  // ne rAF: ten ve skryté záložce stojí a bublina by zůstala průhledná
+  setTimeout(() => b.classList.add('show'), 20);
+}
+function skryjSdileni(){
+  const b = $('share');
+  b.classList.remove('show');
+  setTimeout(() => { b.style.display = 'none'; }, 450);
+}
+$('shareX').addEventListener('click', skryjSdileni);
+$('shareFb').addEventListener('click', () => {
+  // sharer.php nepotřebuje app ID; text příspěvku Facebook předvyplnit nedovolí,
+  // náhled si tahá z Open Graph tagů v hlavičce
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SDILENA_URL),
+              'sdileni', 'width=620,height=560');
+  skryjSdileni();
+});
+
 $('resetBtn').addEventListener('click', () => {
   resetSun();
   // reset po třech politicích je zároveň přechod k vědecké části
