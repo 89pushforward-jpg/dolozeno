@@ -1437,7 +1437,8 @@ const SITE = [
 
 const CILE = {
   fb:      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SDILENA_URL),
-  threads: 'https://www.threads.net/intent/post?text=' +
+  // threads.net se jen přesměruje na .com — rovnou cílová adresa
+  threads: 'https://www.threads.com/intent/post?text=' +
            encodeURIComponent(SDIL_TEXT + ' ' + SDILENA_URL),
   ig:      'https://www.instagram.com/',
   tiktok:  'https://www.tiktok.com/',
@@ -1504,10 +1505,17 @@ async function sdilej(id, stav){
     }
     const ok = await zkopirujOdkaz();
     hlas(ok ? 'Odkaz zkopírován — vlož ho do příspěvku' : 'Zkopíruj si odkaz z adresního řádku');
-    window.open(CILE[id], '_blank', 'noopener');
+    otevri(CILE[id]);
     return;
   }
-  window.open(CILE[id], 'sdileni', 'width=620,height=560');
+  otevri(CILE[id]);
+}
+
+// Pojmenované okno s rozměry mobilní prohlížeče často ignorují nebo rovnou
+// zablokují — nová karta projde všude.
+function otevri(url){
+  const w = window.open(url, '_blank', 'noopener');
+  if(!w) location.href = url;   // blokovaná vyskakovací okna: jdeme rovnou
 }
 
 /* velká výzva */
