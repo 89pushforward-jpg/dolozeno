@@ -876,6 +876,7 @@ function throwObject(builder, key, fallbackAcc){
   slot.lines = lines;
   slot.politik = !!(LINES[key] && key !== 'slunce' && key !== 'obrazek');
   slot.diskSaid = false;
+  slot.diskT = 0;
   sayNow('p', lines.hod, 8000);
   $('hint').style.opacity = '0';
 
@@ -887,6 +888,7 @@ function throwObject(builder, key, fallbackAcc){
   // Slunce nechme chvíli kroužit — teprve pak pozornost putuje na vlastní
   // fotku (řeší zkontrolujOdemceni), ať výzva nepřebije podívanou.
   if(key === 'slunce' && faze === 3) hozenoSlunce = posledniHod;
+  if(key === 'obrazek') hozenObrazek = true;
   aktualizujUI();
   return true;
 }
@@ -1071,7 +1073,7 @@ function checkEvents(){
     if(o.active && o.disrupted && !o.diskSaid && o.count > 0 &&
        o.captured > o.count * 0.12){
       o.diskSaid = true;
-      if(diskOd === 0) diskOd = performance.now() / 1000;
+      o.diskT = performance.now() / 1000;
       if(o.politik) komentarKDisku();
     }
     if(o.active && !o.endSaid && o.count > 0 && o.captured >= o.count){
@@ -1089,15 +1091,18 @@ function checkEvents(){
 const CEKANI_RESET = 15;   // s od třetího politika, než pošleme na RESET
 const CEKANI_FOTO  = 20;   // s od hodu Slunce, než pošleme na vlastní fotku
 
-const CEKANI_COCKA = 8;    // s od vzniku disku, než upozorníme na ohyb světla
+const CEKANI_COCKA = 18;   // s od vzniku disku, než upozorníme na ohyb světla
 
 function zkontrolujOdemceni(now){
-  // Až disk chvíli krouží, je co pozorovat i na pozadí. Čeká se na klid na
-  // obrazovce — ve frontě za ostatními hláškami by ji smetlo první sayNow.
-  if(!cockaRecena && diskOd > 0 && (now - diskOd) > CEKANI_COCKA &&
+  // Až disk chvíli krouží, je co pozorovat i na pozadí. Váže se na disk, který
+  // je PRÁVĚ vidět — jinak hláška vyskočí u dalšího tělesa, které se ještě
+  // nestihlo roztrhnout. A čeká se na klid: ve frontě za ostatními hláškami
+  // by ji smetlo první sayNow.
+  const disk = OBJS.find(o => o.active && o.disrupted && o.diskSaid);
+  if(!cockaRecena && disk && (now - disk.diskT) > CEKANI_COCKA &&
      !chipBusy && !chipQ.length){
     cockaRecena = true;
-    say('f', 'Pohni si kamerou a mrkni kolem díry. Ty pokroucené hvězdy jsou ve skutečnosti ZA ní — díra zakřiví prostor a světlo tou zatáčkou jen projede. Tomuhle se říká gravitační čočka a astronomové s ní koukají za roh vesmíru.', 14000);
+    say('f', 'Pohni si kamerou a mrkni kolem díry. Ty pokroucené hvězdy jsou ve skutečnosti ZA ní — díra zakřiví prostor a světlo tou zatáčkou jen projede. Tomuhle se říká gravitační čočka a astronomové s ní koukají za roh vesmíru.', 24000);
   }
 
   // po Slunci: až se pokochá diskem, pozornost putuje na vlastní obrázek
@@ -1107,6 +1112,15 @@ function zkontrolujOdemceni(now){
     sayNow('p', 'A teď to nejlepší: dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 12000);
     return;
   }
+  // Slunce dojelo a vlastní fotka pořád nikde — Pepan pobídne znovu
+  if(faze >= 4 && !pripomenutoFoto && !hozenObrazek && !OBJS.some(o => o.active)){
+    const zbylo = OBJS.reduce((s, o) => s + Math.max(0, o.count - o.captured), 0);
+    if(zbylo === 0){
+      pripomenutoFoto = true;
+      sayNow('p', 'A je to v čudu. Tak co, troufneš si? Dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 13000);
+    }
+  }
+
   if(faze >= 3 || hozenoPolitiku < 1) return;
 
   // po třech politicích posíláme na RESET, ať se jde k vědě
@@ -1184,9 +1198,10 @@ let hozenoPolitiku = 0;
 let posledniHod = 0;
 let hozenoSlunce = 0;    // čas hodu Slunce (0 = ještě nebylo)
 let vyzvaReset = false;  // svítí šipka na RESET?
-let diskOd = 0;          // čas, kdy se poprvé zformoval akreční disk
 let cockaRecena = false; // hláška o gravitační čočce — jen jednou za relaci
 let pripomenutoReset = false;
+let pripomenutoFoto = false;
+let hozenObrazek = false;  // vlastní fotku už někdo hodil — nemá smysl ho zvát
 
 function aktualizujUI(){
   const p1 = (faze === 1), veda = (faze >= 3), poSlunci = (faze >= 4);
