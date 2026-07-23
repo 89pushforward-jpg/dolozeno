@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050608">
+<title>VESMÍRNÁ LABORATOŘ FRANTY A PEPANA — DOLOŽENO</title>
+<meta name="description" content="Vesmírná laboratoř Franty a Pepana — sbírka interaktivních vesmírných apek od DOLOŽENO.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dolozeno.cz/vesmirna-laborator/">
+<meta property="og:title" content="Vesmírná laboratoř Franty a Pepana">
+<meta property="og:description" content="Sbírka interaktivních vesmírných apek. Začni simulátorem černé díry.">
+<meta property="og:image" content="https://dolozeno.cz/vesmirna-laborator/cerna-dira.jpg">
+<meta property="og:image:width" content="1672">
+<meta property="og:image:height" content="941">
+<meta property="og:locale" content="cs_CZ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --signal:#f5a623;
+    --franta:#f2c40f;
+    --pepa:#ff6b6b;
+    --bg:#050608;
+    --text:#cfd3d8;
+    --muted:#8b929c;
+    --line:#2a2f36;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:'IBM Plex Mono',Consolas,monospace;
+    background:var(--bg);color:var(--text);
+    min-height:100vh;line-height:1.5;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 70% 20%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 60% 85%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1200px 600px at 50% -10%, rgba(245,166,35,.10), transparent);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:20px 20px 60px}
+
+  .back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);
+    text-decoration:none;font-size:12px;letter-spacing:1px;padding:6px 0}
+  .back:hover{color:var(--signal)}
+
+  header{text-align:center;padding:26px 10px 14px}
+  h1{font-weight:700;line-height:1.06;letter-spacing:.02em}
+  h1 .l1{display:block;color:#fff;font-size:clamp(30px,7vw,60px)}
+  h1 .l2{display:block;font-size:clamp(15px,3.4vw,26px);margin-top:6px;letter-spacing:.14em}
+  h1 .fr{color:var(--franta)} h1 .pe{color:var(--pepa)} h1 .a{color:var(--muted)}
+  header p.lead{color:var(--muted);font-size:13px;margin-top:16px;max-width:560px;
+    margin-left:auto;margin-right:auto}
+
+  /* výzva nad dlaždicemi — vypadá jako tlačítko */
+  .cta{display:flex;justify-content:center;margin:26px 0 30px}
+  .cta span{display:inline-block;text-align:center;
+    background:rgba(245,166,35,.10);border:1px solid var(--signal);color:var(--signal);
+    border-radius:999px;padding:12px 22px;font-size:clamp(12px,2.6vw,15px);font-weight:700;
+    letter-spacing:.04em;box-shadow:0 0 26px rgba(245,166,35,.18)}
+
+  /* mřížka dlaždic */
+  .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+  .tile{position:relative;display:block;border-radius:16px;overflow:hidden;
+    border:1px solid var(--line);background:#0b0e13;text-decoration:none;color:inherit;
+    aspect-ratio:16/9;transition:transform .18s, border-color .18s, box-shadow .18s}
+  .tile .img{position:absolute;inset:0;background-size:cover;background-position:center}
+  .tile .shade{position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(3,4,6,0) 45%, rgba(3,4,6,.82) 100%)}
+  .tile .label{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+  .tile .label h2{font-size:15px;font-weight:700;letter-spacing:.06em;color:#fff}
+  .tile .label .go{color:var(--signal);font-size:13px;font-weight:700;white-space:nowrap}
+  .tile.active{cursor:pointer}
+  .tile.active:hover{transform:translateY(-4px);border-color:var(--signal);
+    box-shadow:0 12px 34px rgba(0,0,0,.55), 0 0 22px rgba(245,166,35,.18)}
+
+  /* dlaždice ve výrobě */
+  .tile.soon{cursor:default}
+  .tile.soon .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-size:54px;filter:grayscale(.3) opacity(.55);
+    background:radial-gradient(120% 120% at 50% 30%, #12161d, #070a0e)}
+  .tile.soon .label h2{color:#c2c7ce}
+  .tile.soon .badge{background:#1a1e25;border:1px solid var(--line);color:var(--muted);
+    font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 9px;border-radius:6px;white-space:nowrap}
+  .tile.soon::after{content:"";position:absolute;inset:0;background:rgba(3,4,6,.28)}
+
+  footer{text-align:center;color:var(--muted);font-size:11px;margin-top:40px;letter-spacing:1px}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--signal)}
+
+  @media (max-width:520px){
+    .grid{grid-template-columns:1fr;gap:14px}
+    .wrap{padding:16px 14px 50px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="https://dolozeno.cz/">← DOLOŽENO.CZ</a>
+
+  <header>
+    <h1>
+      <span class="l1">VESMÍRNÁ LABORATOŘ</span>
+      <span class="l2"><span class="fr">FRANTY</span> <span class="a">A</span> <span class="pe">PEPANA</span></span>
+    </h1>
+    <p class="lead">Sbírka interaktivních vesmírných pokusů. Zatím tu máme jeden — další jsou ve výrobě.</p>
+  </header>
+
+  <div class="cta"><span>Vyber a vstup na vlastní nebezpečí — jen v zájmu vědy 😎</span></div>
+
+  <div class="grid">
+
+    <a class="tile active" href="cerna-dira/">
+      <div class="img" style="background-image:url('cerna-dira.jpg')"></div>
+      <div class="shade"></div>
+      <div class="label">
+        <h2>SIMULÁTOR ČERNÉ DÍRY</h2>
+        <span class="go">VSTOUPIT →</span>
+      </div>
+    </a>
+
+    <div class="tile soon">
+      <div class="ph">🔭</div>
+      <div class="shade"></div>
+      <div class="label">
+        <h2>SLEDOVÁNÍ OBLOHY</h2>
+        <span class="badge">VE VÝROBĚ</span>
+      </div>
+    </div>
+
+    <div class="tile soon">
+      <div class="ph">🪐</div>
+      <div class="shade"></div>
+      <div class="label">
+        <h2>PRŮLET SLUNEČNÍ SOUSTAVOU</h2>
+        <span class="badge">VE VÝROBĚ</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>© DOLOŽENO.CZ · <a href="https://dolozeno.cz/">dolozeno.cz</a></footer>
+</div>
+</body>
+</html>
