@@ -176,8 +176,9 @@
   @keyframes sipka{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(4px);opacity:1}}
   @media (prefers-reduced-motion: reduce){ .sip{animation:none !important} }
 
-  /* horní lišta presetů: miniatura + jméno, VŽDY v jedné řadě */
-  #presetBar{display:flex;gap:6px;flex-wrap:nowrap;justify-content:center}
+  /* horní lišta presetů: miniatura + jméno. Na širokém displeji jedna řada,
+     na mobilu se 8 tlačítek nevejde → zalomí se (viz grid v @media). */
+  #presetBar{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
   .presetItem{display:flex;flex-direction:column;align-items:center;gap:1px}
   /* pulzující šipka nad každým politikem */
   .sip{font-size:13px;color:var(--signal);line-height:1;user-select:none;
@@ -198,7 +199,8 @@
       width:min(340px, calc(100vw - 24px))}
     #presetWrap{top:58px;max-width:calc(100vw - 24px)}
     #presetCall{font-size:11px}
-    #presetBar{gap:4px}
+    /* 8 tlačítek do mřížky 4×2 (jinak by se lámalo nečistě 7+1) */
+    #presetBar{display:grid;grid-template-columns:repeat(4,auto);gap:4px;justify-content:center}
     button.preset{padding:4px 5px 4px}
     button.preset img{width:34px;height:34px}
     button.preset span{font-size:8px;letter-spacing:0.5px}
@@ -298,7 +300,7 @@
 
 <div id="err"></div>
 
-<script src="babis-data.js?v=2"></script>
+<script src="babis-data.js?v=3"></script>
 <script>
 'use strict';
 /* ============================================================
@@ -771,6 +773,24 @@ const LINES = {
     konF: 'Ani nejrychlejší stroj neunikne, jakmile překročí horizont. Je uvnitř.',
     konP: 'PECKA! Koho hodíme teď?! 🏍️',
   },
+  pekarova: {
+    hod:  'MARKÉTU?! Ve Sněmovně bude dusno. TAM S NÍ! 🔥',
+    trh:  'Slapové síly nehlasují o programu schůze — roztrhly ji bez rozpravy.',
+    konF: 'Je celá za horizontem. Předsednický zvonek ji odtud nesvolá zpět.',
+    konP: 'A je po Markétě! Koho hodíme dál?! 😆',
+  },
+  schillerova: {
+    hod:  'ALENU?! To si rozpočet nespočítá. TAM S NÍ! 🔥',
+    trh:  'Daňový balíček nepomohl — slapové síly ji roztrhly bez schodku i přebytku.',
+    konF: 'Zmizela za horizontem. Ani kreativní účetnictví tam nedosáhne.',
+    konP: 'FRRR, a je pryč! Dalšího! 💸',
+  },
+  konecna: {
+    hod:  'KATEŘINU?! Ta si zpátky nezavolá. TAM S NÍ! 🔥',
+    trh:  'Ani veto ji nezachránilo — slapové síly ji roztrhly jednomyslně.',
+    konF: 'Za horizontem končí i europoslanecký mandát. Odtud návrat není.',
+    konP: 'STAČILO! Koho hodíme teď?! 🌀',
+  },
   obrazek: {
     hod:  'Cokoli chceš, já to tam hodím. LETÍÍÍ! 🔥',
     trh:  'Slapové síly to roztrhly na kusy. Nic osobního — čistá gravitace.',
@@ -817,31 +837,49 @@ function imageToPayload(img, Rp, odstranitPozadi){
 
   // ODSTRANĚNÍ POZADÍ: záplavové vyplnění od okrajů. Pozadí je souvislá
   // plocha spojená s krajem, takže projde i přechod/vinětace — a přitom
-  // zůstane modré sako nebo kravata uvnitř postavy.
+  // zůstane tmavé sako nebo kravata uvnitř postavy.
   const jePozadi = new Uint8Array(cols * rows);
-  const zasobnik = [];
-  const zacni = (x, y) => {
-    const i = y * cols + x;
-    if(!jePozadi[i]){ jePozadi[i] = 1; zasobnik.push(i); }
-  };
   if(odstranitPozadi){
-  for(let x = 0; x < cols; x++){ zacni(x, 0); zacni(x, rows - 1); }
-  for(let y = 0; y < rows; y++){ zacni(0, y); zacni(cols - 1, y); }
-  const TOL2 = 34 * 34;                      // práh mezi SOUSEDNÍMI pixely
-  while(zasobnik.length){
-    const i = zasobnik.pop();
-    const x = i % cols, y = (i / cols) | 0, o = i * 4;
-    for(let k = 0; k < 4; k++){
-      const nx = x + (k === 0 ? 1 : k === 1 ? -1 : 0);
-      const ny = y + (k === 2 ? 1 : k === 3 ? -1 : 0);
-      if(nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
-      const j = ny * cols + nx;
-      if(jePozadi[j]) continue;
-      const oo = j * 4;
-      const dr = dat[o] - dat[oo], dg = dat[o+1] - dat[oo+1], db = dat[o+2] - dat[oo+2];
-      if(dr*dr + dg*dg + db*db < TOL2){ jePozadi[j] = 1; zasobnik.push(j); }
+    // DVĚ BRÁNY. Samotný práh mezi sousedy nestačí: u hladce stínované pleti
+    // (typicky mladší tváře) vede z pozadí do obličeje plynulý přechod pod
+    // prahem a fill přeteče přes celý obličej. Přidáme proto globální bránu —
+    // pixel je pozadí, jen když je i barevně blízko referenci pozadí. Ta se
+    // bere jako medián HORNÍCH DVOU ŘAD (hlava k hornímu okraji nesahá, takže
+    // jsou spolehlivě pozadí). Pleť je od modré vzdálená ~148, brána (100) ji
+    // zablokuje; tmavé sako i vinětace pozadí projdou.
+    const R = [], G = [], B = [];
+    for(let y = 0; y < 2 && y < rows; y++) for(let x = 0; x < cols; x++){
+      const o = (y * cols + x) * 4; R.push(dat[o]); G.push(dat[o+1]); B.push(dat[o+2]);
     }
-  }
+    const med = a => { a.sort((p, q) => p - q); return a[a.length >> 1]; };
+    const bR = med(R), bG = med(G), bB = med(B);
+    const GTOL2 = 100 * 100;
+    const blizkoPozadi = o => {
+      const dr = dat[o] - bR, dg = dat[o+1] - bG, db = dat[o+2] - bB;
+      return dr*dr + dg*dg + db*db < GTOL2;
+    };
+    const zasobnik = [];
+    const zacni = (x, y) => {
+      const i = y * cols + x;
+      if(!jePozadi[i] && blizkoPozadi(i * 4)){ jePozadi[i] = 1; zasobnik.push(i); }
+    };
+    for(let x = 0; x < cols; x++){ zacni(x, 0); zacni(x, rows - 1); }
+    for(let y = 0; y < rows; y++){ zacni(0, y); zacni(cols - 1, y); }
+    const TOL2 = 34 * 34;                      // práh mezi SOUSEDNÍMI pixely
+    while(zasobnik.length){
+      const i = zasobnik.pop();
+      const x = i % cols, y = (i / cols) | 0, o = i * 4;
+      for(let k = 0; k < 4; k++){
+        const nx = x + (k === 0 ? 1 : k === 1 ? -1 : 0);
+        const ny = y + (k === 2 ? 1 : k === 3 ? -1 : 0);
+        if(nx < 0 || ny < 0 || nx >= cols || ny >= rows) continue;
+        const j = ny * cols + nx;
+        if(jePozadi[j]) continue;
+        const oo = j * 4;
+        const dr = dat[o] - dat[oo], dg = dat[o+1] - dat[oo+1], db = dat[o+2] - dat[oo+2];
+        if(dr*dr + dg*dg + db*db < TOL2 && blizkoPozadi(oo)){ jePozadi[j] = 1; zasobnik.push(j); }
+      }
+    }
   }
 
   const ph = 2 * Rp, pw = ph * ar;
