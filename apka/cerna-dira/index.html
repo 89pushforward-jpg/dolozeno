@@ -86,22 +86,55 @@
   .chip.f .av{border:2px solid var(--franta)}
   .chip.p .av{border:2px solid var(--pepa)}
 
-  /* výzva ke sdílení — uprostřed, až si člověk hodí vlastní fotku */
-  #share{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.94);
+  /* ---- sdílení: stálý dock vpravo dole + vyskakovací nabídka sítí ---- */
+  #shareDock{position:fixed;right:14px;bottom:14px;z-index:11;
+    display:flex;align-items:center;gap:7px;cursor:pointer;
+    background:rgba(5,6,8,.82);border:1px solid #2a2f36;border-radius:8px;
+    padding:9px 12px;color:#c8ccd2;font:inherit;font-size:11px;letter-spacing:.5px;
+    user-select:none}
+  #shareDock:hover{color:#fff;border-color:#4a515a}
+  #shareDock svg{width:16px;height:16px;display:block;flex:0 0 16px}
+
+  #shareMenu{position:fixed;right:14px;bottom:60px;z-index:12;display:none;
+    opacity:0;transform:translateY(6px);transition:opacity .25s, transform .25s;
+    background:rgba(5,6,8,.95);border:1px solid #2a2f36;border-radius:10px;
+    padding:12px;box-shadow:0 10px 34px rgba(0,0,0,.7)}
+  #shareMenu.show{opacity:1;transform:none}
+
+  /* mřížka ikon — sdílí ji dock i velká výzva */
+  .shareGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .shareGrid button{display:flex;flex-direction:column;align-items:center;gap:4px;
+    width:74px;padding:8px 3px;cursor:pointer;border-radius:8px;
+    background:none;border:1px solid transparent;color:#c8ccd2;
+    font:inherit;font-size:9.5px;letter-spacing:.3px;text-align:center;line-height:1.25}
+  .shareGrid button:hover{background:rgba(255,255,255,.07);border-color:#3a4149;color:#fff}
+  .shareGrid svg{width:21px;height:21px;display:block}
+  .shareStatus{margin-top:9px;font-size:10px;color:var(--signal);
+    text-align:center;min-height:13px;letter-spacing:.3px}
+
+  /* velká výzva — pod lištou politiků, ať nezakrývá díru (polohu dopočítá layoutUI) */
+  #share{position:fixed;left:50%;transform:translateX(-50%) scale(.94);
     z-index:12;display:none;opacity:0;transition:opacity .45s, transform .45s;
-    width:min(340px,86vw);padding:18px 18px 16px;border-radius:10px;
+    width:min(342px,92vw);padding:13px 13px 9px;border-radius:10px;
     background:rgba(5,6,8,.94);border:1px solid var(--signal);
     box-shadow:0 10px 40px rgba(0,0,0,.7);text-align:center}
-  #share.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
-  #share p{font-size:12.5px;line-height:1.55;color:#e8eaed;margin-bottom:14px}
-  #shareFb{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
-    background:#1877f2;color:#fff;border:none;border-radius:7px;
-    padding:15px 18px;font:inherit;font-size:12px;font-weight:700;letter-spacing:.5px}
-  #shareFb:hover{background:#3b8bf5}
-  #shareFb svg{width:17px;height:17px;display:block;fill:#fff}
-  #shareX{position:absolute;right:7px;top:5px;cursor:pointer;background:none;border:none;
+  #share.show{opacity:1;transform:translateX(-50%) scale(1)}
+  #share p{font-size:11.5px;line-height:1.45;color:#e8eaed;margin-bottom:10px}
+  #share .shareGrid{justify-items:center;gap:4px}
+  #share .shareStatus{margin-top:6px}
+  #shareX{position:absolute;right:5px;top:3px;cursor:pointer;background:none;border:none;
     color:#7a828c;font:inherit;font-size:19px;line-height:1;padding:11px 14px}
   #shareX:hover{color:#e8eaed}
+
+  /* Na mobilu je mezi lištou politiků a dírou málo místa, takže ikony
+     do jedné řady — jinak by výzva zakryla horní okraj díry. */
+  @media (max-width:430px){
+    #share{width:min(342px,94vw);padding:11px 9px 8px}
+    #share p{font-size:11px;margin-bottom:9px}
+    #share .shareGrid{grid-template-columns:repeat(6,1fr);gap:1px}
+    #share .shareGrid button{width:auto;padding:6px 1px;gap:3px;font-size:8px}
+    #share .shareGrid svg{width:18px;height:18px}
+  }
 
   /* Náhled velikosti (přerušovaný kruh) je SCHOVANÝ — ale musí zůstat
      v rozvržení: čte se z něj místo a velikost, kde se těleso zhmotní.
@@ -216,15 +249,28 @@
 </div>
 <input type="file" id="imgFile" accept="image/*" style="display:none">
 
+<div id="shareDock" role="button" tabindex="0" title="Sdílej odkaz na simulaci">
+  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+       stroke-width="1.8" stroke-linecap="round">
+    <path d="M9.2 14.8l5.6-5.6"/>
+    <path d="M11 6.9l1.9-1.9a4.2 4.2 0 016 6L17 12.9"/>
+    <path d="M13 17.1l-1.9 1.9a4.2 4.2 0 01-6-6L7 11.1"/>
+  </svg>
+  <span>Sdílej link</span>
+</div>
+
+<div id="shareMenu">
+  <div class="shareGrid"></div>
+  <div class="shareStatus"></div>
+</div>
+
 <div id="share">
   <button id="shareX" title="Zavřít">×</button>
   <p>Líbila se ti tahle vesmírná laboratoř?<br>
-     Sdílej ji na Facebooku, ať si i ostatní zkusí hodit něco do černé díry
+     Sdílej ji, ať si i ostatní zkusí hodit něco do černé díry
      a ukojit svou frustraci :D</p>
-  <button id="shareFb">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-    SDÍLET NA FACEBOOKU
-  </button>
+  <div class="shareGrid"></div>
+  <div class="shareStatus"></div>
 </div>
 
 <div id="panel">
@@ -1131,7 +1177,7 @@ const CEKANI_RESET = 15;   // s od třetího politika, než pošleme na RESET
 const CEKANI_FOTO  = 20;   // s od hodu Slunce, než pošleme na vlastní fotku
 
 const CEKANI_COCKA = 18;   // s od vzniku disku, než upozorníme na ohyb světla
-const CEKANI_SDILENI = 30; // s od hodu vlastní fotky, než nabídneme sdílení
+const CEKANI_SDILENI = 15; // s od hodu vlastní fotky, než nabídneme sdílení
 
 // Sdílí se produkční adresa, ne location.href — z localhostu ani z artifactu
 // by odkaz nikomu nefungoval.
@@ -1358,9 +1404,111 @@ $('imgFile').addEventListener('change', e => {
   if(f) launchImageFile(f);
   e.target.value = '';
 });
+/* ---------------- sdílení ----------------
+   Odkaz na síť umí přijmout jen Facebook a Threads. Instagram, TikTok ani
+   YouTube žádnou adresu pro sdílení nemají — u nich se odkaz zkopíruje do
+   schránky a otevře se síť, kam si ho člověk vloží. Na mobilu se místo toho
+   nabídne systémové sdílení, které do těch aplikací pošle odkaz rovnou. */
+const SDIL_TEXT = 'Hodil jsem se do černé díry. Zkus to taky:';
+
+const SITE = [
+  { id:'copy', popis:'Kopírovat<br>odkaz', ikona:
+    '<path d="M9.2 14.8l5.6-5.6"/><path d="M11 6.9l1.9-1.9a4.2 4.2 0 016 6L17 12.9"/>' +
+    '<path d="M13 17.1l-1.9 1.9a4.2 4.2 0 01-6-6L7 11.1"/>', tah:true },
+  { id:'fb', popis:'Facebook', ikona:
+    '<path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.29-.04-1.28-.13-2.44-.13-2.4 0-4.06 1.47-4.06 4.18V9.9H7.5V13h2.7v8z"/>' },
+  { id:'ig', popis:'Instagram', ikona:
+    '<rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4"/>' +
+    '<circle cx="17.1" cy="6.9" r="1.15" fill="currentColor" stroke="none"/>', tah:true },
+  { id:'threads', popis:'Threads', ikona:
+    '<circle cx="12" cy="12" r="8.6"/><path d="M15.4 9.6c-.7-.9-1.9-1.4-3.2-1.4-2.3 0-3.9 1.6-3.9 3.9s1.5 3.8 3.6 3.8c1.8 0 3-1 3.3-2.6.2-1.2.2-2.6.2-3.9v3.1c0 1 .4 1.5 1.2 1.5 1 0 1.6-1 1.6-2.6"/>', tah:true },
+  { id:'tiktok', popis:'TikTok', ikona:
+    '<path d="M9.6 16a3 3 0 103-3V4.2c.9 2.3 2.7 3.7 5 3.8"/>', tah:true },
+  { id:'yt', popis:'YouTube', ikona:
+    '<rect x="2.6" y="6" width="18.8" height="12" rx="3.6"/>' +
+    '<path d="M10.3 9.5l4.7 2.5-4.7 2.5z" fill="currentColor" stroke="none"/>', tah:true }
+];
+
+const CILE = {
+  fb:      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SDILENA_URL),
+  threads: 'https://www.threads.net/intent/post?text=' +
+           encodeURIComponent(SDIL_TEXT + ' ' + SDILENA_URL),
+  ig:      'https://www.instagram.com/',
+  tiktok:  'https://www.tiktok.com/',
+  yt:      'https://www.youtube.com/'
+};
+
+function ikonaSvg(s){
+  const styl = s.tah
+    ? 'fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"'
+    : 'fill="currentColor"';
+  return '<svg viewBox="0 0 24 24" aria-hidden="true" ' + styl + '>' + s.ikona + '</svg>';
+}
+
+// starší prohlížeče, http bez TLS a nefokusované okno: přes dočasné pole
+function kopieZalohou(){
+  const t = document.createElement('textarea');
+  t.value = SDILENA_URL;
+  t.style.cssText = 'position:fixed;opacity:0';
+  document.body.appendChild(t); t.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch(e){}
+  t.remove();
+  return ok;
+}
+// vrací true, když se odkaz opravdu dostal do schránky. Clipboard API umí
+// spadnout (nefokusovaný dokument, chybějící oprávnění) — bez zachycení by
+// výjimka shodila celou akci včetně otevření sítě.
+function zkopirujOdkaz(){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(SDILENA_URL)
+      .then(() => true)
+      .catch(() => kopieZalohou());
+  }
+  return Promise.resolve(kopieZalohou());
+}
+
+function naplnIkony(root){
+  const grid = root.querySelector('.shareGrid');
+  const stav = root.querySelector('.shareStatus');
+  grid.innerHTML = '';
+  SITE.forEach(s => {
+    const b = document.createElement('button');
+    b.innerHTML = ikonaSvg(s) + '<span>' + s.popis + '</span>';
+    b.addEventListener('click', () => sdilej(s.id, stav));
+    grid.appendChild(b);
+  });
+}
+
+async function sdilej(id, stav){
+  const hlas = t => { if(stav){ stav.textContent = t; setTimeout(() => {
+    if(stav.textContent === t) stav.textContent = ''; }, 3500); } };
+
+  if(id === 'copy'){
+    hlas(await zkopirujOdkaz() ? 'Odkaz zkopírován ✓' : 'Nešlo zkopírovat — vezmi ho z adresního řádku');
+    return;
+  }
+  // Instagram, TikTok a YouTube odkaz z webu nepřijmou — na mobilu to zachrání
+  // systémové sdílení, jinak zbývá schránka.
+  if(id === 'ig' || id === 'tiktok' || id === 'yt'){
+    if(navigator.share){
+      try { await navigator.share({ title: 'ČERNÁ DÍRA — DOLOŽENO',
+                                    text: SDIL_TEXT, url: SDILENA_URL }); return; }
+      catch(e){ if(e && e.name === 'AbortError') return; }
+    }
+    const ok = await zkopirujOdkaz();
+    hlas(ok ? 'Odkaz zkopírován — vlož ho do příspěvku' : 'Zkopíruj si odkaz z adresního řádku');
+    window.open(CILE[id], '_blank', 'noopener');
+    return;
+  }
+  window.open(CILE[id], 'sdileni', 'width=620,height=560');
+}
+
+/* velká výzva */
 function ukazSdileni(){
   const b = $('share');
   b.style.display = 'block';
+  layoutUI();
   // ne rAF: ten ve skryté záložce stojí a bublina by zůstala průhledná
   setTimeout(() => b.classList.add('show'), 20);
 }
@@ -1370,13 +1518,24 @@ function skryjSdileni(){
   setTimeout(() => { b.style.display = 'none'; }, 450);
 }
 $('shareX').addEventListener('click', skryjSdileni);
-$('shareFb').addEventListener('click', () => {
-  // sharer.php nepotřebuje app ID; text příspěvku Facebook předvyplnit nedovolí,
-  // náhled si tahá z Open Graph tagů v hlavičce
-  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SDILENA_URL),
-              'sdileni', 'width=620,height=560');
-  skryjSdileni();
+
+/* dock vpravo dole */
+function prepniMenu(zobraz){
+  const m = $('shareMenu');
+  const chci = (zobraz === undefined) ? (m.style.display !== 'block') : zobraz;
+  if(chci){ m.style.display = 'block'; setTimeout(() => m.classList.add('show'), 20); }
+  else { m.classList.remove('show'); setTimeout(() => { m.style.display = 'none'; }, 250); }
+}
+$('shareDock').addEventListener('click', e => { e.stopPropagation(); prepniMenu(); });
+$('shareDock').addEventListener('keydown', e => {
+  if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); prepniMenu(); }
 });
+// klik jinam nabídku zavře, ale klik uvnitř ní ne
+$('shareMenu').addEventListener('click', e => e.stopPropagation());
+document.addEventListener('click', () => prepniMenu(false));
+
+naplnIkony($('shareMenu'));
+naplnIkony($('share'));
 
 $('resetBtn').addEventListener('click', () => {
   resetSun();
@@ -1414,6 +1573,12 @@ function layoutUI(){
   const ch = chips.getBoundingClientRect();
   const kolize = wrap.bottom > 44 && wrap.right > ch.left && wrap.left < ch.right;
   chips.style.top = (kolize ? Math.round(wrap.bottom) + 8 : 44) + 'px';
+
+  // výzva ke sdílení sedí pod lištou politiků, ne přes díru
+  const sh = document.getElementById('share');
+  if(sh.style.display === 'block'){
+    sh.style.top = Math.round(Math.max(wrap.bottom + 10, 56)) + 'px';
+  }
 }
 window.addEventListener('resize', resize);
 // přepočítat, kdykoli panel nebo tlačítka změní výšku (zalomení, načtení fontu)
