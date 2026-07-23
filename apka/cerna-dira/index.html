@@ -199,11 +199,13 @@
       width:min(340px, calc(100vw - 24px))}
     #presetWrap{top:58px;max-width:calc(100vw - 24px)}
     #presetCall{font-size:11px}
-    /* 8 tlačítek do mřížky 4×2 (jinak by se lámalo nečistě 7+1) */
-    #presetBar{display:grid;grid-template-columns:repeat(4,auto);gap:4px;justify-content:center}
-    button.preset{padding:4px 5px 4px}
-    button.preset img{width:34px;height:34px}
-    button.preset span{font-size:8px;letter-spacing:0.5px}
+    /* 8 tlačítek do JEDNÉ řady: pevná úzká šířka, ať dlouhý popisek
+       (Schiller.) nerozšíří tlačítko a nezalomí řadu */
+    #presetBar{gap:2px;flex-wrap:nowrap}
+    .presetItem{width:38px}
+    button.preset{padding:4px 1px;width:100%}
+    button.preset img{width:30px;height:30px}
+    button.preset span{font-size:6.5px;letter-spacing:0;white-space:nowrap}
   }
 
   #err{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
@@ -300,7 +302,7 @@
 
 <div id="err"></div>
 
-<script src="babis-data.js?v=3"></script>
+<script src="babis-data.js?v=4"></script>
 <script>
 'use strict';
 /* ============================================================
