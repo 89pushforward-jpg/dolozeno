@@ -460,6 +460,7 @@ in vec3  vColor;
 in float vGlow;
 uniform float uJas;      // jas žhavé hmoty (slunce)
 uniform float uJasFoto;  // jas pixelů fotky — ladí se zvlášť, fotky se přepalují dřív
+uniform float uTlum;     // ztlumení celistvého tělesa; po roztržení náběh zpět na 1
 out vec4 fragColor;
 void main(){
   if(vKill > 0.5) discard;
@@ -485,7 +486,7 @@ void main(){
   col += vec3(1.0, 0.9, 0.7) * max(h - 0.85, 0.0) * 2.0;
   // Čím větší a početnější částice, tím víc se jejich světlo sčítá — jas
   // se proto ladí uniformy, ne konstantou schovanou v shaderu.
-  float bright = mix(uJasFoto, (0.35 + 0.75 * h) * uJas, vGlow);
+  float bright = mix(uJasFoto, (0.35 + 0.75 * h) * uJas, vGlow) * uTlum;
   fragColor = vec4(col * a * bright, a);
 }`;
 
@@ -527,11 +528,18 @@ function uniforms(prog, names){
   return o;
 }
 const UQ = uniforms(progQuad, ['uRes','uTime','uCamPos','uCamBasis','uTanHalfFov','uSteps','uDiskGain','uDiskOn']);
-const UP = uniforms(progPts,  ['uRes','uCamPos','uCamBasis','uTanHalfFov','uJas','uJasFoto']);
+const UP = uniforms(progPts,  ['uRes','uCamPos','uCamBasis','uTanHalfFov','uJas','uJasFoto','uTlum']);
 const progTone = makeProg(VS_QUAD, FS_TONE);
 const UT = uniforms(progTone, ['uTex','uRes']);
 let JAS_CASTIC = 0.45;   // jas žhavé hmoty (slunce)
 let JAS_FOTO   = 0.28;   // jas pixelů fotky; níž = fotka si udrží barvy místo běloby
+// Celistvé těleso má všechny částice namačkané na sobě, takže se jejich světlo
+// sčítá nejvíc — po vhození proto svítí ztlumeně a plnou sílu nabere, jak se
+// roztrhne a hmota se rozprostře.
+// Pozor: tonemapping vstup komprimuje, takže ztlumení na 0.8 je vidět jen jako
+// −8 %. Na požadovaných −20 % je potřeba jít na polovinu.
+const TLUM_CELISTVE = 0.5;
+const TLUM_NABEH    = 60;   // za jak dlouho po roztržení je jas zpátky na 100 %
 
 /* HDR mezikrok: scéna se skládá do plovoucí textury a tonemapuje se až
    nakonec. Bez toho se světlo hustě nahromaděných částic vypálí do bílé. */
@@ -1340,7 +1348,8 @@ const t0 = lastT;
    slabém výkonu přehraje pomaleji, ale plynule. */
 const DT_SUB = 0.04;
 const MAX_SUB = 40;        // tvrdý strop (odpovídá ~30 fps při rychlosti 38)
-const ROZPOCET_MS = 12;    // kolik smí fyzika ukrojit ze snímku (cíl 30 fps = 33 ms)
+const ROZPOCET_MS = 20;    // kolik smí fyzika ukrojit ze snímku; víc = svižnější
+                           // děj, míň = vyšší fps. 20 ms cílí zhruba na 40 fps.
 let dluhSim = 0;           // herní čas čekající na odsimulování
 let kroku = MAX_SUB;       // aktuální rozpočet, doladí se podle výkonu
 
@@ -1444,7 +1453,16 @@ function frame(){
   gl.uniform1f(UP.uTanHalfFov, tanHF);
   gl.uniform1f(UP.uJas, JAS_CASTIC);
   gl.uniform1f(UP.uJasFoto, JAS_FOTO);
-  gl.drawArrays(gl.POINTS, 0, N);
+  // Kreslí se každé těleso zvlášť: jednak má každé vlastní fázi (a tím i jas),
+  // jednak se tím přeskočí prázdné sloty — jediný draw call přes všechny tři
+  // hnal vertex shaderem 24 000 bodů i kvůli jednomu tělesu.
+  for(const o of OBJS){
+    if(!o.active || o.count === 0) continue;
+    const tD = (o.disrupted && o.disruptT >= 0) ? (simT - o.disruptT) : -1;
+    const nabeh = tD < 0 ? 0 : Math.min(1, tD / TLUM_NABEH);
+    gl.uniform1f(UP.uTlum, TLUM_CELISTVE + (1 - TLUM_CELISTVE) * nabeh);
+    gl.drawArrays(gl.POINTS, o.base, o.count);
+  }
 
   // 3) tonemapping: HDR scéna se stlačí do zobrazitelného rozsahu
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
