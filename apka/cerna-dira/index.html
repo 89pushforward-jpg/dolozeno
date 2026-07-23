@@ -1428,11 +1428,14 @@ const SITE = [
     '<circle cx="17.1" cy="6.9" r="1.15" fill="currentColor" stroke="none"/>', tah:true },
   { id:'threads', popis:'Threads', ikona:
     '<circle cx="12" cy="12" r="8.6"/><path d="M15.4 9.6c-.7-.9-1.9-1.4-3.2-1.4-2.3 0-3.9 1.6-3.9 3.9s1.5 3.8 3.6 3.8c1.8 0 3-1 3.3-2.6.2-1.2.2-2.6.2-3.9v3.1c0 1 .4 1.5 1.2 1.5 1 0 1.6-1 1.6-2.6"/>', tah:true },
-  { id:'tiktok', popis:'TikTok', ikona:
-    '<path d="M9.6 16a3 3 0 103-3V4.2c.9 2.3 2.7 3.7 5 3.8"/>', tah:true },
-  { id:'yt', popis:'YouTube', ikona:
-    '<rect x="2.6" y="6" width="18.8" height="12" rx="3.6"/>' +
-    '<path d="M10.3 9.5l4.7 2.5-4.7 2.5z" fill="currentColor" stroke="none"/>', tah:true }
+  { id:'wa', popis:'WhatsApp', ikona:
+    '<path d="M20.4 11.8a8.4 8.4 0 01-12.5 7.3L3.6 20.4l1.4-4.2a8.4 8.4 0 1115.4-4.4z"/>' +
+    '<path d="M9.4 8.6h.9l1 2.2-.9 1c.5 1 1.4 1.9 2.5 2.4l1-.9 2.2 1v.9c0 .6-.5 1.1-1.1 1.2-3.3.2-6.6-3.1-6.8-6.6a1.2 1.2 0 011.2-1.2z"/>', tah:true },
+  // systémové sdílení: jediná cesta, jak se odkaz dostane do Instagramu,
+  // TikToku nebo YouTube — ty vlastní adresu pro sdílení nemají
+  { id:'vice', popis:'Další…', ikona:
+    '<circle cx="12" cy="5.5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18.5" r="1.7"/>',
+    tah:true, jenNativni:true }
 ];
 
 const CILE = {
@@ -1440,9 +1443,8 @@ const CILE = {
   // threads.net se jen přesměruje na .com — rovnou cílová adresa
   threads: 'https://www.threads.com/intent/post?text=' +
            encodeURIComponent(SDIL_TEXT + ' ' + SDILENA_URL),
-  ig:      'https://www.instagram.com/',
-  tiktok:  'https://www.tiktok.com/',
-  yt:      'https://www.youtube.com/'
+  wa:      'https://wa.me/?text=' + encodeURIComponent(SDIL_TEXT + ' ' + SDILENA_URL),
+  ig:      'https://www.instagram.com/'
 };
 
 function ikonaSvg(s){
@@ -1480,6 +1482,7 @@ function naplnIkony(root){
   const stav = root.querySelector('.shareStatus');
   grid.innerHTML = '';
   SITE.forEach(s => {
+    if(s.jenNativni && !navigator.share) return;   // bez systémového sdílení nemá co dělat
     const b = document.createElement('button');
     b.innerHTML = ikonaSvg(s) + '<span>' + s.popis + '</span>';
     b.addEventListener('click', () => sdilej(s.id, stav));
@@ -1495,9 +1498,9 @@ async function sdilej(id, stav){
     hlas(await zkopirujOdkaz() ? 'Odkaz zkopírován ✓' : 'Nešlo zkopírovat — vezmi ho z adresního řádku');
     return;
   }
-  // Instagram, TikTok a YouTube odkaz z webu nepřijmou — na mobilu to zachrání
-  // systémové sdílení, jinak zbývá schránka.
-  if(id === 'ig' || id === 'tiktok' || id === 'yt'){
+  // Instagram (a odtud i TikTok či YouTube) odkaz z webu nepřijme — jediná
+  // funkční cesta je systémové sdílení, jinak zbývá schránka.
+  if(id === 'vice' || id === 'ig'){
     if(navigator.share){
       try { await navigator.share({ title: 'ČERNÁ DÍRA — DOLOŽENO',
                                     text: SDIL_TEXT, url: SDILENA_URL }); return; }
@@ -1505,7 +1508,7 @@ async function sdilej(id, stav){
     }
     const ok = await zkopirujOdkaz();
     hlas(ok ? 'Odkaz zkopírován — vlož ho do příspěvku' : 'Zkopíruj si odkaz z adresního řádku');
-    otevri(CILE[id]);
+    if(CILE[id]) otevri(CILE[id]);
     return;
   }
   otevri(CILE[id]);
