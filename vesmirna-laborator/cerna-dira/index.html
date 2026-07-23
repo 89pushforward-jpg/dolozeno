@@ -33,15 +33,16 @@
   canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
   canvas:active{cursor:grabbing}
 
-  /* logo — stejný font i řez jako hlavní web, prokliknutelné na dolozeno.cz */
+  /* hlavička: název apky nahoře + dva zpětné odkazy (laboratoř, dolozeno.cz) */
   .brand{position:fixed;top:12px;left:16px;user-select:none;z-index:7;
-    text-decoration:none;display:block}
-  .brand .logo{color:var(--signal);font-weight:700;font-size:26px;letter-spacing:.04em;
-    line-height:1;text-shadow:2px 2px 8px rgba(0,0,0,.75),0 0 24px rgba(0,0,0,.5)}
-  .brand .sub{color:#8b929c;font-size:11px;margin-top:3px;letter-spacing:1px}
-  .brand:hover .logo{color:#ffc257}
-  .brand:focus-visible{outline:2px solid var(--signal);outline-offset:4px;border-radius:4px}
-  @media (max-width: 700px){ .brand .logo{font-size:19px} }
+    display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+  .brand .app-title{color:#fff;font-weight:700;font-size:23px;letter-spacing:.03em;
+    line-height:1.05;text-shadow:2px 2px 8px rgba(0,0,0,.75),0 0 24px rgba(0,0,0,.5)}
+  .brand .nav-back{color:#8b929c;font-size:11px;letter-spacing:.05em;text-decoration:none;
+    text-shadow:0 1px 4px rgba(0,0,0,.7)}
+  .brand .nav-back:hover{color:var(--signal)}
+  .brand .nav-back:focus-visible{outline:2px solid var(--signal);outline-offset:3px;border-radius:3px}
+  @media (max-width: 700px){ .brand .app-title{font-size:17px} }
 
   #fps{position:fixed;top:14px;right:16px;font-size:11px;color:#8b929c;user-select:none;text-align:right}
 
@@ -197,7 +198,8 @@
     /* bublina Franty/Pepana je na mobilu vycentrovaná (pořád pod ikonami) */
     #chips{left:50%;right:auto;transform:translateX(-50%);align-items:center;
       width:min(340px, calc(100vw - 24px))}
-    #presetWrap{top:58px;max-width:calc(100vw - 24px)}
+    /* lišta politiků níž, ať se nepřekrývá s hlavičkou (název + 2 odkazy) */
+    #presetWrap{top:76px;max-width:calc(100vw - 24px)}
     #presetCall{font-size:11px}
     /* 8 tlačítek do JEDNÉ řady: pevná úzká šířka, ať dlouhý popisek
        (Schiller.) nerozšíří tlačítko a nezalomí řadu */
@@ -215,10 +217,11 @@
 <body>
 <canvas id="c"></canvas>
 
-<a class="brand" href="https://dolozeno.cz/" title="Zpět na dolozeno.cz">
-  <div class="logo">DOLOŽENO.CZ</div>
-  <div class="sub">VESMÍRNÁ LABORATOŘ FRANTY A PEPANA</div>
-</a>
+<div class="brand">
+  <div class="app-title">SIMULÁTOR ČERNÉ DÍRY</div>
+  <a class="nav-back" href="https://dolozeno.cz/vesmirna-laborator/">← zpět na Vesmírnou Laboratoř</a>
+  <a class="nav-back" href="https://dolozeno.cz/">← zpět na dolozeno.cz</a>
+</div>
 <div id="fps"></div>
 <div id="hint">táhni = otočit &nbsp;·&nbsp; pravé tl. / 2 prsty = posun &nbsp;·&nbsp; kolečko = zoom &nbsp;·&nbsp; dvojklik = střed</div>
 <div id="chips"></div>
