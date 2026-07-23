@@ -458,7 +458,8 @@ in float vHeat;
 in float vKill;
 in vec3  vColor;
 in float vGlow;
-uniform float uJas;      // celkový jas částic (ladí se proti přepalu)
+uniform float uJas;      // jas žhavé hmoty (slunce)
+uniform float uJasFoto;  // jas pixelů fotky — ladí se zvlášť, fotky se přepalují dřív
 out vec4 fragColor;
 void main(){
   if(vKill > 0.5) discard;
@@ -483,8 +484,8 @@ void main(){
   vec3 col = mix(zaklad, vec3(1.0, 0.85, 0.55), mix(glowT, clamp((h - 0.55) * 1.8, 0.0, 1.0), vGlow));
   col += vec3(1.0, 0.9, 0.7) * max(h - 0.85, 0.0) * 2.0;
   // Čím větší a početnější částice, tím víc se jejich světlo sčítá — jas
-  // se proto ladí uniformem uJas, ne konstantou schovanou v shaderu.
-  float bright = mix(1.0, 0.35 + 0.75 * h, vGlow) * uJas;
+  // se proto ladí uniformy, ne konstantou schovanou v shaderu.
+  float bright = mix(uJasFoto, (0.35 + 0.75 * h) * uJas, vGlow);
   fragColor = vec4(col * a * bright, a);
 }`;
 
@@ -526,10 +527,11 @@ function uniforms(prog, names){
   return o;
 }
 const UQ = uniforms(progQuad, ['uRes','uTime','uCamPos','uCamBasis','uTanHalfFov','uSteps','uDiskGain','uDiskOn']);
-const UP = uniforms(progPts,  ['uRes','uCamPos','uCamBasis','uTanHalfFov','uJas']);
+const UP = uniforms(progPts,  ['uRes','uCamPos','uCamBasis','uTanHalfFov','uJas','uJasFoto']);
 const progTone = makeProg(VS_QUAD, FS_TONE);
 const UT = uniforms(progTone, ['uTex','uRes']);
-let JAS_CASTIC = 0.45;   // jas částic; níž = fotky si udrží barvy místo běloby
+let JAS_CASTIC = 0.45;   // jas žhavé hmoty (slunce)
+let JAS_FOTO   = 0.28;   // jas pixelů fotky; níž = fotka si udrží barvy místo běloby
 
 /* HDR mezikrok: scéna se skládá do plovoucí textury a tonemapuje se až
    nakonec. Bez toho se světlo hustě nahromaděných částic vypálí do bílé. */
@@ -680,8 +682,6 @@ const LINES = {
 // každý vrací {pts: [{a,b,c, r,g,b2, h0}], scale}
 function makeBallPayload(Rp){
   const pts = [];
-  // méně částic než u fotek (kvůli plynulosti), zato větší —
-  // pokrytá plocha, a tím i dojem objemu, zůstává stejná
   const M = 6000;
   for(let i = 0; i < M; i++){
     let x, y, z, d2;
@@ -694,7 +694,9 @@ function makeBallPayload(Rp){
     pts.push({ a: x * Rp, b: y * Rp, c: z * Rp,
                r: 1.0, g: 0.38 + 0.44 * t, b2: 0.06 + 0.39 * t, h0: h0 });
   }
-  return { pts, scale: 0.32, glow: 1 };   // hvězda: měkká záře
+  // Velikost spritu stejná jako u fotek: ta se odvozuje od poloměru tělesa
+  // (viz imageToPayload), takže konstanta by při jiném Rp neseděla.
+  return { pts, scale: Rp * 0.039, glow: 1 };   // hvězda: měkká záře
 }
 
 // z obrázku: každý pixel = jedna barevná částice.
@@ -1417,6 +1419,7 @@ function frame(){
   gl.uniformMatrix3fv(UP.uCamBasis, false, basis);
   gl.uniform1f(UP.uTanHalfFov, tanHF);
   gl.uniform1f(UP.uJas, JAS_CASTIC);
+  gl.uniform1f(UP.uJasFoto, JAS_FOTO);
   gl.drawArrays(gl.POINTS, 0, N);
 
   // 3) tonemapping: HDR scéna se stlačí do zobrazitelného rozsahu
