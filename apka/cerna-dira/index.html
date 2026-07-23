@@ -1071,6 +1071,7 @@ function checkEvents(){
     if(o.active && o.disrupted && !o.diskSaid && o.count > 0 &&
        o.captured > o.count * 0.12){
       o.diskSaid = true;
+      if(diskOd === 0) diskOd = performance.now() / 1000;
       if(o.politik) komentarKDisku();
     }
     if(o.active && !o.endSaid && o.count > 0 && o.captured >= o.count){
@@ -1088,7 +1089,17 @@ function checkEvents(){
 const CEKANI_RESET = 15;   // s od třetího politika, než pošleme na RESET
 const CEKANI_FOTO  = 20;   // s od hodu Slunce, než pošleme na vlastní fotku
 
+const CEKANI_COCKA = 8;    // s od vzniku disku, než upozorníme na ohyb světla
+
 function zkontrolujOdemceni(now){
+  // Až disk chvíli krouží, je co pozorovat i na pozadí. Čeká se na klid na
+  // obrazovce — ve frontě za ostatními hláškami by ji smetlo první sayNow.
+  if(!cockaRecena && diskOd > 0 && (now - diskOd) > CEKANI_COCKA &&
+     !chipBusy && !chipQ.length){
+    cockaRecena = true;
+    say('f', 'Pohni si kamerou a mrkni kolem díry. Ty pokroucené hvězdy jsou ve skutečnosti ZA ní — díra zakřiví prostor a světlo tou zatáčkou jen projede. Tomuhle se říká gravitační čočka a astronomové s ní koukají za roh vesmíru.', 14000);
+  }
+
   // po Slunci: až se pokochá diskem, pozornost putuje na vlastní obrázek
   if(faze === 3 && hozenoSlunce > 0 && (now - hozenoSlunce) > CEKANI_FOTO){
     faze = 4;
@@ -1109,8 +1120,19 @@ function zkontrolujOdemceni(now){
   if(OBJS.some(o => o.active)) return;
   const zbyva = OBJS.reduce((s, o) => s + Math.max(0, o.count - o.captured), 0);
   if(zbyva > 0) return;
-  // všechno spolknuto dřív, než došlo na výzvu — pustíme vědu rovnou
-  if(hozenoPolitiku >= 3 || (now - posledniHod) > 30) spustVedu();
+
+  // spadla poslední částice. Po třech politicích se dál jde jen přes RESET —
+  // kdo dokoukal až sem, ať nečeká, na co se čeká.
+  if(hozenoPolitiku >= 3){
+    if(!vyzvaReset){ vyzvaReset = true; aktualizujUI(); }
+    if(!pripomenutoReset){
+      pripomenutoReset = true;
+      sayNow('f', 'A je po nich — díra nevrací. Zmáčkni RESET a jdeme na něco pořádnýho.', 13000);
+    }
+    return;
+  }
+  // s míň než třemi ať člověk neuvízne, věda se pustí sama
+  if((now - posledniHod) > 30) spustVedu();
 }
 
 /* chip s hláškou — vždy jen JEDEN, s avatarem postavy, drží 12 s */
@@ -1162,6 +1184,9 @@ let hozenoPolitiku = 0;
 let posledniHod = 0;
 let hozenoSlunce = 0;    // čas hodu Slunce (0 = ještě nebylo)
 let vyzvaReset = false;  // svítí šipka na RESET?
+let diskOd = 0;          // čas, kdy se poprvé zformoval akreční disk
+let cockaRecena = false; // hláška o gravitační čočce — jen jednou za relaci
+let pripomenutoReset = false;
 
 function aktualizujUI(){
   const p1 = (faze === 1), veda = (faze >= 3), poSlunci = (faze >= 4);
