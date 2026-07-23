@@ -180,7 +180,10 @@
       <div id="imgArrow" class="sip">▼</div>
       <button id="imgBtn" class="ghost">NAHRAJ OBRÁZEK</button>
     </div>
-    <button id="resetBtn" class="ghost">RESET</button>
+    <div class="sunItem">
+      <div id="resetArrow" class="sip">▼</div>
+      <button id="resetBtn" class="ghost">RESET</button>
+    </div>
   </div>
 </div>
 <input type="file" id="imgFile" accept="image/*" style="display:none">
@@ -881,10 +884,9 @@ function throwObject(builder, key, fallbackAcc){
     hozenoPolitiku++;
     if(faze === 1){ faze = 2; }      // šipky nad ikonami už splnily účel
   }
-  if(key === 'slunce' && faze === 3){
-    faze = 4;                        // pozornost se přesune na vlastní obrázek
-    say('p', 'A teď to nejlepší: dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 12000);
-  }
+  // Slunce nechme chvíli kroužit — teprve pak pozornost putuje na vlastní
+  // fotku (řeší zkontrolujOdemceni), ať výzva nepřebije podívanou.
+  if(key === 'slunce' && faze === 3) hozenoSlunce = posledniHod;
   aktualizujUI();
   return true;
 }
@@ -1081,12 +1083,33 @@ function checkEvents(){
 }
 
 // odemčení vědecké části: politici snědení a scéna je zase prázdná
+/* Posouvání děje dál. Nečeká se, až díra všechno spolkne — dojezd posledních
+   trosek trvá dlouho a člověk by mezitím nevěděl, co má dělat. */
+const CEKANI_RESET = 15;   // s od třetího politika, než pošleme na RESET
+const CEKANI_FOTO  = 20;   // s od hodu Slunce, než pošleme na vlastní fotku
+
 function zkontrolujOdemceni(now){
+  // po Slunci: až se pokochá diskem, pozornost putuje na vlastní obrázek
+  if(faze === 3 && hozenoSlunce > 0 && (now - hozenoSlunce) > CEKANI_FOTO){
+    faze = 4;
+    aktualizujUI();
+    sayNow('p', 'A teď to nejlepší: dej NAHRAJ OBRÁZEK, vlož svoje selfie a hoď sám sebe do nicoty! 🤳', 12000);
+    return;
+  }
   if(faze >= 3 || hozenoPolitiku < 1) return;
+
+  // po třech politicích posíláme na RESET, ať se jde k vědě
+  if(hozenoPolitiku >= 3 && !vyzvaReset && (now - posledniHod) > CEKANI_RESET){
+    vyzvaReset = true;
+    aktualizujUI();
+    sayNow('f', 'Tak dost srandy. Zmáčkni RESET a pojď si hodit do díry něco pořádnýho — Slunce.', 14000);
+    return;
+  }
+
   if(OBJS.some(o => o.active)) return;
   const zbyva = OBJS.reduce((s, o) => s + Math.max(0, o.count - o.captured), 0);
   if(zbyva > 0) return;
-  // po třech politicích hned; jinak ať člověk neuvízne — po chvíli taky
+  // všechno spolknuto dřív, než došlo na výzvu — pustíme vědu rovnou
   if(hozenoPolitiku >= 3 || (now - posledniHod) > 30) spustVedu();
 }
 
@@ -1137,6 +1160,8 @@ function chipDalsi(){
 let faze = 1;
 let hozenoPolitiku = 0;
 let posledniHod = 0;
+let hozenoSlunce = 0;    // čas hodu Slunce (0 = ještě nebylo)
+let vyzvaReset = false;  // svítí šipka na RESET?
 
 function aktualizujUI(){
   const p1 = (faze === 1), veda = (faze >= 3), poSlunci = (faze >= 4);
@@ -1146,11 +1171,13 @@ function aktualizujUI(){
   $('presetCall').style.display = veda ? 'none' : '';
   $('throwBtn').parentNode.style.display = veda ? '' : 'none';   // .sunItem se šipkou
   $('imgBtn').parentNode.style.display   = veda ? '' : 'none';
-  $('resetBtn').style.display = (hozenoPolitiku > 0 || veda) ? '' : 'none';
+  $('resetBtn').parentNode.style.display = (hozenoPolitiku > 0 || veda) ? '' : 'none';
 
-  // pozornost putuje dál: po hodu Slunce na nahrání vlastního obrázku
+  // pozornost putuje dál: politici → RESET → Slunce → vlastní obrázek
+  $('resetArrow').style.visibility = vyzvaReset ? 'visible' : 'hidden';
   $('sunArrow').style.visibility = (veda && !poSlunci) ? 'visible' : 'hidden';
   $('imgArrow').style.visibility = poSlunci ? 'visible' : 'hidden';
+  $('resetBtn').classList.toggle('ghost', !vyzvaReset);
   $('throwBtn').classList.toggle('ghost', poSlunci);
   $('imgBtn').classList.toggle('ghost', !poSlunci);
   layoutUI();
@@ -1159,6 +1186,7 @@ function aktualizujUI(){
 function spustVedu(){
   if(faze >= 3) return;
   faze = 3;
+  vyzvaReset = false;
   aktualizujUI();
   sayNow('f', 'Tak teď sis zablbnul — a hezky zpátky k vědě. Hoď do díry Slunce.', 14000);
 }
@@ -1238,7 +1266,12 @@ $('imgFile').addEventListener('change', e => {
   if(f) launchImageFile(f);
   e.target.value = '';
 });
-$('resetBtn').addEventListener('click', resetSun);
+$('resetBtn').addEventListener('click', () => {
+  resetSun();
+  // reset po třech politicích je zároveň přechod k vědecké části
+  if(faze < 3 && hozenoPolitiku >= 3){ vyzvaReset = false; spustVedu(); }
+  else aktualizujUI();
+});
 $('peri').addEventListener('input', e => {
   $('periVal').textContent = parseFloat(e.target.value).toFixed(1) + ' rs';
 });
