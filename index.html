@@ -263,16 +263,28 @@
 <div class="wrap">
 
   <div class="status">
-    <span><span class="dot"></span><span class="live">nejžhavější událost</span></span>
+    <span><span class="dot"></span><span class="live">Nejžhavější události</span></span>
     <span id="status-right">— · —</span>
   </div>
 
+  <style>
+    .hl-split{display:flex;gap:10px;flex-wrap:wrap}
+    .hl-split>.highlight{width:auto;flex:1 1 260px}
+    .hl-lab{text-decoration:none}
+  </style>
+  <div class="hl-split">
   <button class="highlight" id="filmBanner">
     <img id="bannerImg" class="hl-img" alt="" loading="lazy">
     <span class="hl-sep" aria-hidden="true"></span>
     <span class="ht"><b>Nejnovější článek</b></span>
     <span class="go">číst →</span>
   </button>
+  <a class="highlight hl-lab" href="vesmirna-laborator/">
+    <img class="hl-img" src="vesmirna-laborator/hero.jpg" alt="Vesmírná laboratoř">
+    <span class="ht"><b>Vesmírná laboratoř</b><small>interaktivní vesmírné pokusy</small></span>
+    <span class="go">vstoupit →</span>
+  </a>
+  </div>
 
   <header>
     <div class="kicker">UAP/UFO · VLÁDNÍ SPISY · VESMÍRNÉ ZÁHADY</div>

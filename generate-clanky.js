@@ -229,6 +229,9 @@ ${bodyHtml}
 }
 
 const sitemap=[{loc:`${BASE}/`,lastmod:new Date().toISOString().slice(0,10),pri:'1.0',freq:'daily'}];
+// Vesmírná laboratoř (interaktivní apky) — statická stránka mimo FEED
+sitemap.push({loc:`${BASE}/vesmirna-laborator/`,lastmod:new Date().toISOString().slice(0,10),pri:'0.7',freq:'monthly'});
+sitemap.push({loc:`${BASE}/vesmirna-laborator/cerna-dira/`,lastmod:new Date().toISOString().slice(0,10),pri:'0.6',freq:'monthly'});
 // předpočítej slugy všech článků (kvůli interním odkazům "Související články")
 const SLUGS=[]; { const s2={}; FEED.forEach(a=>{ let sl=a.id||slug(a.title); if(s2[sl])sl=sl+'-'+(++s2[sl]); s2[sl]=1; SLUGS.push(sl); }); }
 function relatedFor(i){
