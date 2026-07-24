@@ -90,6 +90,15 @@
   .tile.active:hover{transform:translateY(-4px);border-color:var(--signal);
     box-shadow:0 12px 34px rgba(0,0,0,.55), 0 0 22px rgba(245,166,35,.18)}
 
+  /* DOČASNÝ zámek dlaždice (do zítřka) — obrázek vidět, ale nejde vstoupit */
+  .tile.locked{cursor:default}
+  .tile.locked .img{filter:brightness(.5) saturate(.85)}
+  .tile.locked .lockcue{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:8px;text-align:center;padding:12px}
+  .tile.locked .lockicon{font-size:34px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.8))}
+  .tile.locked .locktext{color:var(--signal);font-weight:700;font-size:16px;letter-spacing:.04em;
+    text-shadow:0 2px 8px rgba(0,0,0,.85)}
+
   /* dlaždice ve výrobě */
   .tile.soon{cursor:default}
   .tile.soon .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
@@ -136,9 +145,14 @@
 
   <div class="grid">
 
-    <a class="tile active" href="cerna-dira/" aria-label="Simulátor černé díry — vstoupit">
+    <!-- DOČASNĚ ZAMČENO do zítřka. Odemknout = vrátit zpět na <a class="tile active" href="cerna-dira/"> jen s .img -->
+    <div class="tile locked" aria-label="Simulátor černé díry — otevřeme zítra">
       <div class="img" style="background-image:url('cerna-dira.jpg')"></div>
-    </a>
+      <div class="lockcue">
+        <span class="lockicon">🔒</span>
+        <span class="locktext">Zítra to otevřeme</span>
+      </div>
+    </div>
 
     <div class="tile soon">
       <div class="ph">🔭</div>
