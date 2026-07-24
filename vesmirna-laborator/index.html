@@ -60,13 +60,13 @@
   @keyframes downbob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
   @media (prefers-reduced-motion: reduce){ .downcue svg{animation:none} }
 
-  header{text-align:center;padding:26px 10px 14px}
-  h1{font-weight:700;line-height:1.06;letter-spacing:.02em}
+  h1{font-weight:700;line-height:1.06;letter-spacing:.02em;text-align:center;
+    margin:20px 0 0;padding:0 10px}
   h1 .l1{display:block;color:#fff;font-size:clamp(30px,7vw,60px)}
   h1 .l2{display:block;font-size:clamp(15px,3.4vw,26px);margin-top:6px;letter-spacing:.14em}
   h1 .fr{color:var(--franta)} h1 .pe{color:var(--pepa)} h1 .a{color:var(--muted)}
-  header p.lead{color:var(--muted);font-size:13px;line-height:1.6;margin-top:16px;max-width:620px;
-    margin-left:auto;margin-right:auto}
+  .lead{color:var(--muted);font-size:13px;line-height:1.6;margin:16px auto 0;max-width:620px;
+    text-align:center;padding:0 10px}
 
   /* výzva nad dlaždicemi — vypadá jako tlačítko */
   .cta{display:flex;justify-content:center;margin:26px 0 30px}
@@ -115,17 +115,16 @@
 <div class="wrap">
   <a class="back" href="https://dolozeno.cz/">← zpět na dolozeno.cz</a>
 
+  <h1>
+    <span class="l1">VESMÍRNÁ LABORATOŘ</span>
+    <span class="l2"><span class="fr">FRANTY</span> <span class="a">A</span> <span class="pe">PEPANA</span></span>
+  </h1>
+
   <div class="hero">
     <img src="hero.jpg" alt="Vesmírná laboratoř Franty a Pepana — Franta a Pepan v kosmické laboratoři">
   </div>
 
-  <header>
-    <h1>
-      <span class="l1">VESMÍRNÁ LABORATOŘ</span>
-      <span class="l2"><span class="fr">FRANTY</span> <span class="a">A</span> <span class="pe">PEPANA</span></span>
-    </h1>
-    <p class="lead">Vesmír na jedno kliknutí. Online fyzikální pokusy a vzdělávací apky, kde si můžeš sáhnout na černou díru, projet sluneční soustavu i najít, co ti zrovna svítí nad hlavou. Zatím jedna, další ve výrobě.</p>
-  </header>
+  <p class="lead">Vesmír na jedno kliknutí. Online fyzikální pokusy a vzdělávací apky, kde si můžeš sáhnout na černou díru, projet sluneční soustavu i najít, co ti zrovna svítí nad hlavou. Zatím jedna, další ve výrobě.</p>
 
   <div class="cta"><span>Vyber a vstup na vlastní nebezpečí — jen v zájmu vědy 😎</span></div>
 
