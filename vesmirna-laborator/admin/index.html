@@ -44,7 +44,7 @@
   /* grafy */
   .legend{font-size:11px;color:var(--muted);margin-bottom:10px}
   .chartwrap{overflow-x:auto;padding-bottom:4px}
-  .chart{display:block}
+  .chart{display:block;width:100%;height:auto}
   .chrow{display:flex;align-items:center;gap:10px;padding:5px 0}
   .chname{width:130px;flex:0 0 auto;font-size:12px;color:#fff}
   .chrow.win .chname{color:var(--ok);font-weight:700}
@@ -201,39 +201,43 @@ function fillDays(days){
 }
 
 // spojnicový graf jedné statistiky po dnech (svislá osa = počet, vodorovná = dny)
+// Fixní viewBox roztažený přes celou šířku karty → body jdou přes celou šířku,
+// čára jasně stoupá zleva (včera) doprava (dnes).
 function lineChart(days, key, color){
   var keys = Object.keys(days||{}).sort().slice(-30);
   if(!keys.length) return '<div class="sub">zatím žádná data</div>';
   var vals = keys.map(function(d){ return days[d][key]||0; });
   var max = Math.max.apply(null, vals.concat([1]));
-  var padL=30, padR=16, padT=16, padB=22, H=160;
-  var stepX = 46, plotW = (keys.length>1 ? (keys.length-1)*stepX : 0);
-  var W = padL + plotW + padR + (keys.length===1 ? 40 : 0);
-  var plotH = H - padT - padB;
-  function X(i){ return keys.length>1 ? padL + i*stepX : padL + 20; }
+  var VBW=640, H=180, padL=40, padR=24, padT=22, padB=26;
+  var plotW = VBW - padL - padR, plotH = H - padT - padB;
+  var n = keys.length;
+  function X(i){ return n>1 ? padL + plotW * (i/(n-1)) : padL + plotW/2; }
   function Y(v){ return padT + plotH*(1 - v/max); }
 
   // osy: základní čára (0), přerušovaná na maximu, popisky počtu
   var g = '';
-  g += '<line x1="'+padL+'" y1="'+Y(0)+'" x2="'+(W-padR)+'" y2="'+Y(0)+'" stroke="#2a2f36"/>';
-  g += '<line x1="'+padL+'" y1="'+Y(max)+'" x2="'+(W-padR)+'" y2="'+Y(max)+'" stroke="#1c2129" stroke-dasharray="3 3"/>';
-  g += '<text x="'+(padL-6)+'" y="'+(Y(max)+3)+'" text-anchor="end" font-size="8" fill="#8b929c">'+max+'</text>';
-  g += '<text x="'+(padL-6)+'" y="'+(Y(0)+3)+'" text-anchor="end" font-size="8" fill="#8b929c">0</text>';
+  g += '<line x1="'+padL+'" y1="'+Y(0)+'" x2="'+(VBW-padR)+'" y2="'+Y(0)+'" stroke="#2a2f36"/>';
+  g += '<line x1="'+padL+'" y1="'+Y(max)+'" x2="'+(VBW-padR)+'" y2="'+Y(max)+'" stroke="#1c2129" stroke-dasharray="4 4"/>';
+  g += '<text x="'+(padL-8)+'" y="'+(Y(max)+4)+'" text-anchor="end" font-size="11" fill="#8b929c">'+max+'</text>';
+  g += '<text x="'+(padL-8)+'" y="'+(Y(0)+4)+'" text-anchor="end" font-size="11" fill="#8b929c">0</text>';
 
-  var pts = vals.map(function(v,i){ return X(i)+','+Y(v); }).join(' ');
-  var line = keys.length>1
-    ? '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+  var pts = vals.map(function(v,i){ return X(i).toFixed(1)+','+Y(v).toFixed(1); }).join(' ');
+  var area = n>1
+    ? '<polygon points="'+X(0).toFixed(1)+','+Y(0)+' '+pts+' '+X(n-1).toFixed(1)+','+Y(0)
+      +'" fill="'+color+'" opacity="0.10"/>' : '';
+  var line = n>1
+    ? '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
     : '';
   var dots='', xl='';
   keys.forEach(function(d,i){
     var v = vals[i];
-    dots += '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" fill="'+color+'"><title>'+d+': '+v+'</title></circle>';
-    dots += '<text x="'+X(i)+'" y="'+(Y(v)-7)+'" text-anchor="middle" font-size="8" fill="#cfd3d8">'+v+'</text>';
-    xl   += '<text x="'+X(i)+'" y="'+(H-7)+'" text-anchor="middle" font-size="8" fill="#8b929c">'
+    dots += '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="4" fill="'+color+'"><title>'+d+': '+v+'</title></circle>';
+    dots += '<text x="'+X(i).toFixed(1)+'" y="'+(Y(v)-9)+'" text-anchor="middle" font-size="11" fill="#e8eaed" font-weight="700">'+v+'</text>';
+    xl   += '<text x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="10" fill="#8b929c">'
           + d.slice(8,10)+'.'+d.slice(5,7)+'.</text>';
   });
-  return '<div class="chartwrap"><svg width="'+Math.max(W,140)+'" height="'+H+'" class="chart">'
-    + g + line + dots + xl + '</svg></div>';
+  return '<svg viewBox="0 0 '+VBW+' '+H+'" preserveAspectRatio="xMidYMid meet" class="chart">'
+    + g + area + line + dots + xl + '</svg>';
 }
 
 // žebříček (nejvíc nahoře, vítěz zvýrazněn) — pro kanály i politiky
