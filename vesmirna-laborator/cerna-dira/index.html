@@ -1030,6 +1030,7 @@ function throwObject(builder, key, fallbackAcc){
 
 /* ---------- spouštěče ---------- */
 function launchSun(){
+  if(window.__track) window.__track('slunce');   // klik na Hoď Slunce
   throwObject(Rp => makeBallPayload(Rp), 'slunce');
 }
 function launchPreset(p){
@@ -1039,6 +1040,7 @@ function launchPreset(p){
   im.src = p.src;
 }
 function launchImageFile(file){
+  if(window.__track) window.__track('foto');   // nahrál a hodil vlastní fotku
   const rd = new FileReader();
   rd.onload = () => {
     const im = new Image();
@@ -1610,6 +1612,7 @@ naplnIkony($('shareMenu'));
 naplnIkony($('share'));
 
 $('resetBtn').addEventListener('click', () => {
+  if(window.__track) window.__track('reset');   // zmáčkl reset
   resetSun();
   // reset po třech politicích je zároveň přechod k vědecké části
   if(faze < 3 && hozenoPolitiku >= 3){ vyzvaReset = false; spustVedu(); }

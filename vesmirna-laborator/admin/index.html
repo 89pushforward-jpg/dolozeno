@@ -53,6 +53,14 @@
   .chrow.win .chbar>i{background:var(--ok)}
   .chval{width:74px;flex:0 0 auto;text-align:right;font-size:12px;color:#fff;font-weight:700}
   .chval em{color:var(--muted);font-weight:400;font-style:normal;font-size:11px}
+  /* tabulka hráčů */
+  .tablewrap{overflow-x:auto}
+  .ptable{white-space:nowrap}
+  .ptable th{text-align:left;color:var(--muted);font-size:10px;text-transform:uppercase;
+    letter-spacing:.05em;font-weight:700;padding:6px 14px 6px 0;border-bottom:1px solid var(--line)}
+  .ptable td{padding:6px 14px 6px 0;border-bottom:1px solid rgba(255,255,255,.05);
+    text-align:left;color:var(--text);font-weight:400}
+  .ptable td:first-child{color:#fff;font-weight:700}
   .msg{background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:20px;text-align:center;color:var(--muted);font-size:13px}
   .msg.err{border-color:var(--pepa);color:var(--pepa)}
@@ -254,6 +262,44 @@ function rankChart(obj, total, names, prazdno){
   }).join('');
 }
 
+// cesta hráče (funnel) — kolik návštěv dosáhlo kterého kroku, % z otevření
+function funnelChart(f){
+  f = f || {}; var base = f.opened || 0;
+  if(!base) return '<div class="sub">zatím žádní hráči</div>';
+  var steps = [
+    ['Otevřeli černou díru', f.opened||0, '#f5a623'],
+    ['Hodili aspoň 1 politika', f.politik||0, '#ff6b6b'],
+    ['Hodili Slunce', f.slunce||0, '#ffd166'],
+    ['Zmáčkli reset', f.reset||0, '#c792ea'],
+    ['Nahráli vlastní fotku', f.foto||0, '#5b9dff'],
+    ['Sdíleli', f.share||0, '#39d98a']
+  ];
+  return steps.map(function(s){
+    var pct = Math.round(s[1]/base*100);
+    return '<div class="chrow"><span class="chname" style="width:180px">'+s[0]+'</span>'
+      + '<span class="chbar"><i style="width:'+pct+'%;background:'+s[2]+'"></i></span>'
+      + '<span class="chval">'+s[1]+' <em>'+pct+'%</em></span></div>';
+  }).join('');
+}
+
+// tabulka jednotlivých hráčů (jedna návštěva = jeden řádek)
+function playersTable(players){
+  players = players || [];
+  if(!players.length) return '<div class="sub">zatím žádní hráči</div>';
+  var head = '<tr><th>Hráč</th><th>Politiků</th><th>Slunce</th><th>Reset</th>'
+           + '<th>Vlastní foto</th><th>Sdílel</th><th>Čas hraní</th></tr>';
+  var body = players.map(function(p){
+    var ch = Object.keys(p.channels||{}).map(function(k){ return KAN[k]||k; }).join(', ');
+    return '<tr><td>'+p.id+'</td>'
+      + '<td>'+(p.politik||0)+'</td><td>'+(p.slunce||0)+'</td><td>'+(p.reset||0)+'</td>'
+      + '<td>'+(p.foto?'✓':'–')+'</td>'
+      + '<td>'+(p.share?('✓'+(ch?' '+ch:'')):'–')+'</td>'
+      + '<td>'+fmtTime(p.playSec||0)+'</td></tr>';
+  }).join('');
+  return '<div class="tablewrap"><table class="ptable">'+head+body+'</table></div>'
+       + '<div class="sub">poslední '+players.length+' návštěv (jedna anonymní návštěva = jeden řádek)</div>';
+}
+
 function kpi(val, label, sub, color){
   return '<div class="kpi" style="border-top:3px solid '+color+'">'
        + '<div class="kpi-n" style="color:'+color+'">'+val+'</div>'
@@ -289,7 +335,9 @@ function render(d){
     + cardFull('🔥 Žebříček nenávisti — kolikrát kdo hozen do díry',
         rankChart(pol.byName, pol.total||0, POLIT, 'zatím nikdo nikoho nehodil'))
     + cardFull('Nejsdílenější kanál',
-        rankChart(sh.byChannel, sh.total||0, KAN, 'zatím nikdo nesdílel'));
+        rankChart(sh.byChannel, sh.total||0, KAN, 'zatím nikdo nesdílel'))
+    + cardFull('Cesta hráče — kolik jich došlo kam', funnelChart(d.funnel))
+    + cardFull('Jednotliví hráči', playersTable(d.players));
 }
 function cardFull(t, body){ return '<div class="card full" style="margin-top:14px"><h2>'+t+'</h2>'+body+'</div>'; }
 
