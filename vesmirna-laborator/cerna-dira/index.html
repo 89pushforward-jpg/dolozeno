@@ -1539,6 +1539,7 @@ function naplnIkony(root){
 }
 
 async function sdilej(id, stav){
+  if(window.__track) window.__track('share', { ch: id });   // anonymní statistika sdílení
   const hlas = t => { if(stav){ stav.textContent = t; setTimeout(() => {
     if(stav.textContent === t) stav.textContent = ''; }, 3500); } };
 
@@ -1875,5 +1876,7 @@ setTimeout(() => {
   say('f', 'Vítej v simulátoru černé díry. Chceš vědět, co se stane, když tam hodíš nejmíň oblíbenýho politika? Vyzkoušej. Ale jinak tady děláme seriózní vědu 🙂', 13000);
 }, 900);
 </script>
+<script>window.LAB_PAGE='bh'</script>
+<script src="/vesmirna-laborator/analytics.js"></script>
 </body>
 </html>

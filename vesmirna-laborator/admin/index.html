@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050608">
+<title>Statistiky — Vesmírná laboratoř</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{--signal:#f5a623;--franta:#f2c40f;--pepa:#ff6b6b;--bg:#050608;
+    --text:#cfd3d8;--muted:#8b929c;--line:#2a2f36;--card:#0d1016;--ok:#39d98a}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'IBM Plex Mono',Consolas,monospace;background:var(--bg);
+    color:var(--text);line-height:1.5;padding:20px 16px 60px}
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:20px;color:#fff;letter-spacing:.04em}
+  h1 small{display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:4px}
+  .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:14px 0 22px}
+  button{font-family:inherit;cursor:pointer;background:var(--card);color:var(--text);
+    border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:13px}
+  button:hover{border-color:var(--signal);color:#fff}
+  .upd{color:var(--muted);font-size:11px}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+  .card h2{font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.08em;
+    text-transform:uppercase;margin-bottom:10px}
+  .big{font-size:34px;color:#fff;font-weight:700;line-height:1}
+  .big span{font-size:14px;color:var(--muted);font-weight:400}
+  .sub{color:var(--muted);font-size:12px;margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:4px}
+  td{padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+  td:last-child{text-align:right;color:#fff;font-weight:700}
+  .full{grid-column:1/-1}
+  .rate{height:8px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden;margin-top:8px}
+  .rate>i{display:block;height:100%;background:var(--ok)}
+  .msg{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:20px;text-align:center;color:var(--muted);font-size:13px}
+  .msg.err{border-color:var(--pepa);color:var(--pepa)}
+  input{font-family:inherit;background:#05070c;border:1px solid var(--line);color:#fff;
+    border-radius:8px;padding:9px 11px;font-size:13px;width:260px;max-width:70vw}
+  a.back{color:var(--signal);text-decoration:none;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="/vesmirna-laborator/">← zpět na laboratoř</a>
+  <h1 style="margin-top:10px">Statistiky Vesmírné laboratoře
+    <small>anonymní data • aktualizace: <span id="upd">—</span></small></h1>
+
+  <div class="bar">
+    <button id="refresh">↻ Načíst znovu</button>
+    <button id="logout" style="display:none">Odhlásit klíč</button>
+    <span class="upd" id="range"></span>
+  </div>
+
+  <div id="stage"><div class="msg">Načítám…</div></div>
+</div>
+
+<script>
+/* Adresa se vyplní po nasazení Apps Scriptu (stejná jako v analytics.js). */
+var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxUdeu73DlPTQWuEtMtvmBIV7yI_dudoaoKM0zWVcu3Fsy348YeQ3U1rtPQLb9UXMN13g/exec';
+
+var KAN = {copy:'Odkaz (kopie)', fb:'Facebook', threads:'Threads',
+           wa:'WhatsApp', ig:'Instagram', vice:'Systémové (další)', '?':'Neznámý'};
+
+var stage = document.getElementById('stage');
+var elUpd = document.getElementById('upd');
+
+function needsKey(){
+  if(!ENDPOINT || ENDPOINT.indexOf('PASTE') === 0){
+    stage.innerHTML = '<div class="msg err">Dashboard ještě nemá adresu Apps Scriptu. '
+      + 'Až bude web nasazený s měřením, tohle zmizí.</div>';
+    return true;
+  }
+  return false;
+}
+
+function getKey(){ try{ return localStorage.getItem('lab_key')||''; }catch(e){ return ''; } }
+function askKey(msg){
+  document.getElementById('logout').style.display='none';
+  stage.innerHTML = '<div class="msg'+(msg?' err':'')+'">'+(msg||'Zadej přístupový klíč ke statistikám:')
+    + '<div style="margin-top:12px"><input id="k" type="password" placeholder="klíč"> '
+    + '<button id="ok">Zobrazit</button></div></div>';
+  document.getElementById('ok').onclick = function(){
+    var v = document.getElementById('k').value.trim();
+    if(v){ try{ localStorage.setItem('lab_key', v); }catch(e){} load(); }
+  };
+  document.getElementById('k').addEventListener('keydown', function(e){
+    if(e.key==='Enter') document.getElementById('ok').click();
+  });
+}
+
+function load(){
+  if(needsKey()) return;
+  var key = getKey();
+  if(!key){ askKey(); return; }
+  stage.innerHTML = '<div class="msg">Načítám…</div>';
+  var cbName = '__labcb';
+  window[cbName] = function(d){
+    cleanup();
+    if(d && d.error){ askKey('Špatný klíč. Zkus to znovu:'); return; }
+    render(d);
+  };
+  var s = document.createElement('script');
+  s.id = '__labscript';
+  s.onerror = function(){ cleanup(); stage.innerHTML =
+    '<div class="msg err">Nepodařilo se spojit s Apps Scriptem. Zkontroluj nasazení a adresu.</div>'; };
+  s.src = ENDPOINT + '?key=' + encodeURIComponent(key) + '&callback=' + cbName + '&_=' + Date.now();
+  document.body.appendChild(s);
+}
+function cleanup(){
+  var s = document.getElementById('__labscript'); if(s) s.remove();
+}
+
+function fmtTime(sec){
+  if(!sec) return '0 s';
+  var m = Math.floor(sec/60), s = sec%60;
+  return m ? (m+' min '+s+' s') : (s+' s');
+}
+function rows(obj, mapNames){
+  var keys = Object.keys(obj||{}).sort(function(a,b){ return obj[b]-obj[a]; });
+  if(!keys.length) return '<tr><td colspan="2" style="color:#8b929c">zatím nic</td></tr>';
+  return keys.map(function(k){
+    var name = mapNames ? (mapNames[k]||k) : k;
+    return '<tr><td>'+name+'</td><td>'+obj[k]+'</td></tr>';
+  }).join('');
+}
+// Google Sheet občas přetypuje textové datum na Date → klíč přijde jako
+// "Sat Jul 25 2026 …". Sjednotíme na 2026-07-25 (a sloučíme případné duplicity).
+var MON = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',
+           Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+function normDay(k){
+  k = String(k);
+  if(/^\d{4}-\d{2}-\d{2}/.test(k)) return k.slice(0,10);
+  var p = k.split(' ');                 // ["Sat","Jul","25","2026",…]
+  if(p.length >= 4 && MON[p[1]]) return p[3]+'-'+MON[p[1]]+'-'+('0'+p[2]).slice(-2);
+  return k;
+}
+function normByDay(obj){
+  var out = {};
+  for(var k in (obj||{})){ var d = normDay(k); out[d] = (out[d]||0) + obj[k]; }
+  return out;
+}
+function byDayRows(obj){
+  obj = normByDay(obj);
+  var keys = Object.keys(obj).sort().reverse();
+  if(!keys.length) return '<tr><td colspan="2" style="color:#8b929c">zatím nic</td></tr>';
+  return keys.map(function(k){ return '<tr><td>'+k+'</td><td>'+obj[k]+'</td></tr>'; }).join('');
+}
+
+function render(d){
+  document.getElementById('logout').style.display='';
+  elUpd.textContent = d.updated || '—';
+  var b = d.bh || {}, lv = d.labViews || {}, ac = d.appClicks || {};
+
+  stage.innerHTML =
+  '<div class="grid">'
+  + card('Návštěvy laboratoře',
+      '<div class="big">'+ (lv.total||0) +' <span>zobrazení</span></div>'
+      + '<div class="sub">'+ (lv.unique||0) +' unikátních návštěv</div>')
+  + card('Kliknutí na apky',
+      '<table>'+ rows(ac.byApp) +'</table>'
+      + '<div class="sub">celkem '+ (ac.total||0) +' kliků</div>')
+  + card('Černá díra — otevření',
+      '<div class="big">'+ (b.opensTotal||0) +' <span>otevření</span></div>'
+      + '<div class="sub">'+ (b.opensUnique||0) +' unikátních</div>')
+  + card('Průměrný čas hraní',
+      '<div class="big">'+ fmtTime(b.avgPlaySec||0) +'</div>'
+      + '<div class="sub">z '+ (b.playSessions||0) +' návštěv</div>')
+  + card('Sdílení — kolik lidí sdílelo',
+      '<div class="big">'+ (b.sharePct||0) +' <span>%</span></div>'
+      + '<div class="rate"><i style="width:'+ Math.min(100,b.sharePct||0) +'%"></i></div>'
+      + '<div class="sub">'+ (b.sharedSessions||0) +' z '+ (b.openedSessions||0) +' co otevřeli</div>')
+  + card('Sdílení — podle kanálu',
+      '<table>'+ rows((b.shares||{}).byChannel, KAN) +'</table>'
+      + '<div class="sub">celkem '+ ((b.shares||{}).total||0) +' sdílení</div>')
+  + cardFull('Otevření černé díry po dnech',
+      '<table>'+ byDayRows(b.opensByDay) +'</table>')
+  + cardFull('Návštěvy laboratoře po dnech',
+      '<table>'+ byDayRows(lv.byDay) +'</table>')
+  + '</div>';
+}
+function card(t, body){ return '<div class="card"><h2>'+t+'</h2>'+body+'</div>'; }
+function cardFull(t, body){ return '<div class="card full"><h2>'+t+'</h2>'+body+'</div>'; }
+
+document.getElementById('refresh').onclick = load;
+document.getElementById('logout').onclick = function(){
+  try{ localStorage.removeItem('lab_key'); }catch(e){}
+  askKey();
+};
+load();
+</script>
+</body>
+</html>
