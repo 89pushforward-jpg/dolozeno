@@ -181,6 +181,25 @@ function mergeDaysFallback(lv, b){
   return out;
 }
 
+// souvislá řada dnů: od včerejška (nebo nejstaršího dne s daty) do dneška,
+// chybějící dny doplní nulami → graf roste z nuly
+function ymd(dt){ return dt.getFullYear()+'-'+('0'+(dt.getMonth()+1)).slice(-2)+'-'+('0'+dt.getDate()).slice(-2); }
+function fillDays(days){
+  days = days || {};
+  var today = new Date(); today.setHours(12,0,0,0);
+  var start = new Date(today); start.setDate(start.getDate()-1);   // startovací den = včera
+  Object.keys(days).forEach(function(k){
+    var d = new Date(k+'T12:00:00'); if(d < start) start = d;      // starší data → posuň start
+  });
+  var out = {}, cur = new Date(start);
+  while(cur <= today){
+    var key = ymd(cur);
+    out[key] = days[key] || {lab:0, opens:0, shares:0, clicks:0};
+    cur.setDate(cur.getDate()+1);
+  }
+  return out;
+}
+
 // spojnicový graf jedné statistiky po dnech (svislá osa = počet, vodorovná = dny)
 function lineChart(days, key, color){
   var keys = Object.keys(days||{}).sort().slice(-30);
@@ -249,7 +268,7 @@ function render(d){
   elUpd.textContent = d.updated || '—';
   var b = d.bh || {}, lv = d.labViews || {}, ac = d.appClicks || {}, sh = b.shares || {};
   var pol = d.politiks || {total:0, byName:{}};
-  var days = d.days || mergeDaysFallback(lv, b);
+  var days = fillDays(d.days || mergeDaysFallback(lv, b));
 
   stage.innerHTML =
     '<div class="kpis">'
