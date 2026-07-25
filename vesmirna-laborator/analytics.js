@@ -69,5 +69,7 @@
       else { visible = true; last = Date.now(); }
     });
     window.addEventListener('pagehide', flush);
+    // průběžně: kdyby se beacon při odchodu ztratil, čas hraní neztratíme
+    setInterval(flush, 15000);
   }
 })();
