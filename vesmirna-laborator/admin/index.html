@@ -181,31 +181,40 @@ function mergeDaysFallback(lv, b){
   return out;
 }
 
-// denní graf: seskupené sloupce (návštěvy / otevření / sdílení) po dnech
-function dailyChart(days){
-  var keys = Object.keys(days||{}).sort().slice(-21);
+// spojnicový graf jedné statistiky po dnech (svislá osa = počet, vodorovná = dny)
+function lineChart(days, key, color){
+  var keys = Object.keys(days||{}).sort().slice(-30);
   if(!keys.length) return '<div class="sub">zatím žádná data</div>';
-  var S = [{k:'lab',n:'Návštěvy',c:'#5b9dff'},
-           {k:'opens',n:'Otevření ČD',c:'#f5a623'},
-           {k:'shares',n:'Sdílení',c:'#39d98a'}];
-  var max = 1;
-  keys.forEach(function(d){ S.forEach(function(s){ max = Math.max(max, days[d][s.k]||0); }); });
-  var H=170, pad=24, gap=9, bw=10, gw=S.length*bw+gap*2, W=keys.length*gw, bars='', labs='';
+  var vals = keys.map(function(d){ return days[d][key]||0; });
+  var max = Math.max.apply(null, vals.concat([1]));
+  var padL=30, padR=16, padT=16, padB=22, H=160;
+  var stepX = 46, plotW = (keys.length>1 ? (keys.length-1)*stepX : 0);
+  var W = padL + plotW + padR + (keys.length===1 ? 40 : 0);
+  var plotH = H - padT - padB;
+  function X(i){ return keys.length>1 ? padL + i*stepX : padL + 20; }
+  function Y(v){ return padT + plotH*(1 - v/max); }
+
+  // osy: základní čára (0), přerušovaná na maximu, popisky počtu
+  var g = '';
+  g += '<line x1="'+padL+'" y1="'+Y(0)+'" x2="'+(W-padR)+'" y2="'+Y(0)+'" stroke="#2a2f36"/>';
+  g += '<line x1="'+padL+'" y1="'+Y(max)+'" x2="'+(W-padR)+'" y2="'+Y(max)+'" stroke="#1c2129" stroke-dasharray="3 3"/>';
+  g += '<text x="'+(padL-6)+'" y="'+(Y(max)+3)+'" text-anchor="end" font-size="8" fill="#8b929c">'+max+'</text>';
+  g += '<text x="'+(padL-6)+'" y="'+(Y(0)+3)+'" text-anchor="end" font-size="8" fill="#8b929c">0</text>';
+
+  var pts = vals.map(function(v,i){ return X(i)+','+Y(v); }).join(' ');
+  var line = keys.length>1
+    ? '<polyline points="'+pts+'" fill="none" stroke="'+color+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'
+    : '';
+  var dots='', xl='';
   keys.forEach(function(d,i){
-    var gx=i*gw;
-    S.forEach(function(s,j){
-      var v=days[d][s.k]||0, h=Math.round(v/max*(H-pad)), x=gx+gap+j*bw, y=H-pad-h;
-      bars+='<rect x="'+x+'" y="'+y+'" width="'+(bw-1.5)+'" height="'+Math.max(h,v?1:0)
-           +'" rx="1.5" fill="'+s.c+'"><title>'+d+' — '+s.n+': '+v+'</title></rect>';
-      if(v>0) bars+='<text x="'+(x+(bw-1.5)/2)+'" y="'+(y-2)+'" text-anchor="middle" font-size="7" fill="#9aa1ab">'+v+'</text>';
-    });
-    labs+='<text x="'+(gx+gw/2)+'" y="'+(H-7)+'" text-anchor="middle" font-size="8" fill="#8b929c">'
-        + d.slice(8,10)+'.'+d.slice(5,7)+'.</text>';
+    var v = vals[i];
+    dots += '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" fill="'+color+'"><title>'+d+': '+v+'</title></circle>';
+    dots += '<text x="'+X(i)+'" y="'+(Y(v)-7)+'" text-anchor="middle" font-size="8" fill="#cfd3d8">'+v+'</text>';
+    xl   += '<text x="'+X(i)+'" y="'+(H-7)+'" text-anchor="middle" font-size="8" fill="#8b929c">'
+          + d.slice(8,10)+'.'+d.slice(5,7)+'.</text>';
   });
-  var legend = S.map(function(s){ return '<span style="color:'+s.c+'">■</span> '+s.n; }).join('&nbsp;&nbsp;&nbsp;');
-  return '<div class="legend">'+legend+'</div>'
-    + '<div class="chartwrap"><svg width="'+Math.max(W,120)+'" height="'+H+'" class="chart">'
-    + bars+labs+'</svg></div>';
+  return '<div class="chartwrap"><svg width="'+Math.max(W,140)+'" height="'+H+'" class="chart">'
+    + g + line + dots + xl + '</svg></div>';
 }
 
 // žebříček (nejvíc nahoře, vítěz zvýrazněn) — pro kanály i politiky
@@ -250,7 +259,9 @@ function render(d){
     + kpi((b.sharePct||0)+' %', 'sdílelo z těch co otevřeli', (b.sharedSessions||0)+' z '+(b.openedSessions||0))
     + kpi(pol.total||0, 'hozených politiků', 'nej: '+topKey(pol.byName, POLIT))
     + '</div>'
-    + cardFull('Po dnech — návštěvy, otevření a sdílení', dailyChart(days))
+    + cardFull('Návštěvy laboratoře po dnech', lineChart(days, 'lab', '#5b9dff'))
+    + cardFull('Otevření černé díry po dnech', lineChart(days, 'opens', '#f5a623'))
+    + cardFull('Sdílení po dnech', lineChart(days, 'shares', '#39d98a'))
     + cardFull('🔥 Žebříček nenávisti — kolikrát kdo hozen do díry',
         rankChart(pol.byName, pol.total||0, POLIT, 'zatím nikdo nikoho nehodil'))
     + cardFull('Nejsdílenější kanál',
