@@ -254,8 +254,9 @@ function rankChart(obj, total, names, prazdno){
   }).join('');
 }
 
-function kpi(val, label, sub){
-  return '<div class="kpi"><div class="kpi-n">'+val+'</div>'
+function kpi(val, label, sub, color){
+  return '<div class="kpi" style="border-top:3px solid '+color+'">'
+       + '<div class="kpi-n" style="color:'+color+'">'+val+'</div>'
        + '<div class="kpi-l">'+label+'</div>'
        + '<div class="kpi-s">'+(sub||'')+'</div></div>';
 }
@@ -276,11 +277,11 @@ function render(d){
 
   stage.innerHTML =
     '<div class="kpis">'
-    + kpi(lv.total||0, 'návštěvy laboratoře', (lv.unique||0)+' unikátních')
-    + kpi(b.opensTotal||0, 'otevření černé díry', (b.opensUnique||0)+' unikátních')
-    + kpi(fmtTime(b.avgPlaySec||0), 'prům. čas hraní', 'z '+(b.playSessions||0)+' návštěv')
-    + kpi((b.sharePct||0)+' %', 'sdílelo z těch co otevřeli', (b.sharedSessions||0)+' z '+(b.openedSessions||0))
-    + kpi(pol.total||0, 'hozených politiků', 'nej: '+topKey(pol.byName, POLIT))
+    + kpi(lv.total||0, 'návštěvy laboratoře', (lv.unique||0)+' unikátních', '#5b9dff')
+    + kpi(b.opensTotal||0, 'otevření černé díry', (b.opensUnique||0)+' unikátních', '#f5a623')
+    + kpi(fmtTime(b.avgPlaySec||0), 'prům. čas hraní', 'z '+(b.playSessions||0)+' návštěv', '#c792ea')
+    + kpi((b.sharePct||0)+' %', 'sdílelo z těch co otevřeli', (b.sharedSessions||0)+' z '+(b.openedSessions||0), '#39d98a')
+    + kpi(pol.total||0, 'hozených politiků', 'nej: '+topKey(pol.byName, POLIT), '#ff6b6b')
     + '</div>'
     + cardFull('Návštěvy laboratoře po dnech', lineChart(days, 'lab', '#5b9dff'))
     + cardFull('Otevření černé díry po dnech', lineChart(days, 'opens', '#f5a623'))
