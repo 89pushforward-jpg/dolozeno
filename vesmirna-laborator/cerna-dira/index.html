@@ -1447,7 +1447,10 @@ if(typeof PRESETS !== 'undefined'){
     const sp = document.createElement('span');
     sp.textContent = p.label;
     b.appendChild(im); b.appendChild(sp);
-    b.addEventListener('click', () => launchPreset(p));
+    b.addEventListener('click', () => {
+      if(window.__track) window.__track('politik', { app: p.id });   // který politik se hází nejvíc
+      launchPreset(p);
+    });
     item.appendChild(sip); item.appendChild(b);
     bar.appendChild(item);
   });
