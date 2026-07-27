@@ -76,10 +76,10 @@
 
   /* mřížka dlaždic */
   .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-  .tile{display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
+  .tile{display:block;border-radius:16px;overflow:hidden;
     border:1px solid var(--line);background:#0b0e13;text-decoration:none;color:inherit;
     transition:transform .18s, border-color .18s, box-shadow .18s}
-  .tile .img{aspect-ratio:16/9;background-size:cover;background-position:center}
+  .tile .img{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center}
   .tile .body{padding:15px 16px 17px}
   .tile .body h2{font-size:16px;font-weight:700;letter-spacing:.03em;color:#fff;margin:0 0 6px}
   .tile .body p{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0 0 12px}
