@@ -125,7 +125,8 @@
   .chip-spekulace{color:var(--spec);border-color:rgba(255,107,107,.4);background:rgba(255,107,107,.08)}
   .chip-topic{color:var(--cyan);border-color:rgba(54,214,231,.32);background:rgba(54,214,231,.06)}
   .chip-franta{color:var(--franta);border-color:rgba(242,196,15,.45);background:rgba(242,196,15,.10)}
-  .legend-help{font-size:11px;color:var(--ink-faint);font-family:var(--mono)}
+  .legend-title{display:block;font-family:var(--mono);font-weight:700;font-size:16px;
+    letter-spacing:.04em;color:var(--cyan);margin-bottom:12px}
   .filter{cursor:pointer;font-family:var(--mono);transition:transform .12s,box-shadow .15s}
   .filter:hover{transform:translateY(-1px)}
   .filter.active.chip-overeno{box-shadow:0 0 0 2px rgba(62,207,142,.55) inset,0 0 14px rgba(62,207,142,.3)}
@@ -324,6 +325,7 @@
   <div id="pager-top" class="pager"></div>
 
   <section class="legend" aria-label="Filtry">
+    <span class="legend-title">Filtruj podle:</span>
     <div class="frow">
       <span class="frow-lbl">DŮVĚRA</span>
       <button class="chip chip-overeno filter" data-group="tag" data-val="overeno" aria-pressed="false">ZPRÁVA</button>
@@ -340,7 +342,6 @@
       <span class="frow-lbl">RUBRIKA</span>
       <button class="chip-fp filter" data-group="tag" data-val="franta" aria-pressed="false" aria-label="Franta a Pepan"><span class="fp-f">Franta</span><span class="fp-p">Pepan</span></button>
     </div>
-    <span class="legend-help">klikni a filtruj, co chceš číst</span>
   </section>
 
   <div class="search-wrap">
