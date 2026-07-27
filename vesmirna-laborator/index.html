@@ -76,29 +76,26 @@
 
   /* mřížka dlaždic */
   .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-  .tile{position:relative;display:block;border-radius:16px;overflow:hidden;
+  .tile{display:flex;flex-direction:column;border-radius:16px;overflow:hidden;
     border:1px solid var(--line);background:#0b0e13;text-decoration:none;color:inherit;
-    aspect-ratio:16/9;transition:transform .18s, border-color .18s, box-shadow .18s}
-  .tile .img{position:absolute;inset:0;background-size:cover;background-position:center}
-  .tile .shade{position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(3,4,6,0) 45%, rgba(3,4,6,.82) 100%)}
-  .tile .label{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
-    display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
-  .tile .label h2{font-size:15px;font-weight:700;letter-spacing:.06em;color:#fff}
-  .tile .label .go{color:var(--signal);font-size:13px;font-weight:700;white-space:nowrap}
+    transition:transform .18s, border-color .18s, box-shadow .18s}
+  .tile .img{aspect-ratio:16/9;background-size:cover;background-position:center}
+  .tile .body{padding:15px 16px 17px}
+  .tile .body h2{font-size:16px;font-weight:700;letter-spacing:.03em;color:#fff;margin:0 0 6px}
+  .tile .body p{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0 0 12px}
+  .tile .body .go{display:inline-block;color:var(--signal);font-size:13px;font-weight:700;letter-spacing:.04em}
   .tile.active{cursor:pointer}
   .tile.active:hover{transform:translateY(-4px);border-color:var(--signal);
     box-shadow:0 12px 34px rgba(0,0,0,.55), 0 0 22px rgba(245,166,35,.18)}
 
   /* dlaždice ve výrobě */
   .tile.soon{cursor:default}
-  .tile.soon .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  .tile.soon .ph{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;
     font-size:54px;filter:grayscale(.3) opacity(.55);
     background:radial-gradient(120% 120% at 50% 30%, #12161d, #070a0e)}
-  .tile.soon .label h2{color:#c2c7ce}
-  .tile.soon .badge{background:#1a1e25;border:1px solid var(--line);color:var(--muted);
+  .tile.soon .body h2{color:#c2c7ce}
+  .tile.soon .badge{display:inline-block;background:#1a1e25;border:1px solid var(--line);color:var(--muted);
     font-size:11px;font-weight:700;letter-spacing:.1em;padding:4px 9px;border-radius:6px;white-space:nowrap}
-  .tile.soon::after{content:"";position:absolute;inset:0;background:rgba(3,4,6,.28)}
 
   footer{text-align:center;color:var(--muted);font-size:11px;margin-top:40px;letter-spacing:1px}
   footer a{color:var(--muted)}
@@ -123,7 +120,7 @@
     <img src="hero.jpg" alt="Vesmírná laboratoř Franty a Pepana — Franta a Pepan v kosmické laboratoři">
   </div>
 
-  <p class="lead">Vesmír na jedno kliknutí. Online fyzikální pokusy a vzdělávací apky, kde si můžeš sáhnout na černou díru, projet sluneční soustavu i najít, co ti zrovna svítí nad hlavou. Zatím jedna, další ve výrobě.</p>
+  <p class="lead">Tady se o vesmíru jen nečte. Tady si ho můžeš vyzkoušet. Hoď politika do černé díry, zjisti, co se dnes děje na obloze, nebo se vydej na průlet Sluneční soustavou.</p>
 
   <div class="cta"><span>Vyber a vstup na vlastní nebezpečí — jen v zájmu vědy 😎</span></div>
 
@@ -136,24 +133,29 @@
 
   <div class="grid">
 
-    <a class="tile active" href="cerna-dira/" data-app="cerna-dira" aria-label="Simulátor černé díry — vstoupit">
+    <a class="tile active" href="cerna-dira/" data-app="cerna-dira" aria-label="Simulátor černé díry — spustit experiment">
       <div class="img" style="background-image:url('cerna-dira.jpg')"></div>
+      <div class="body">
+        <h2>Simulátor černé díry</h2>
+        <p>Vyber politika, Slunce nebo vlastní fotografii a sleduj, co s nimi udělá gravitace.</p>
+        <span class="go">SPUSTIT EXPERIMENT →</span>
+      </div>
     </a>
 
     <div class="tile soon">
       <div class="ph">🔭</div>
-      <div class="shade"></div>
-      <div class="label">
-        <h2>SLEDOVÁNÍ OBLOHY</h2>
+      <div class="body">
+        <h2>Obloha dnes večer</h2>
+        <p>Připravujeme průvodce, který ti ukáže, co můžeš dnes pozorovat na obloze.</p>
         <span class="badge">VE VÝROBĚ</span>
       </div>
     </div>
 
     <div class="tile soon">
       <div class="ph">🚀</div>
-      <div class="shade"></div>
-      <div class="label">
-        <h2>PRŮLET SLUNEČNÍ SOUSTAVOU</h2>
+      <div class="body">
+        <h2>Průlet Sluneční soustavou</h2>
+        <p>Připravujeme interaktivní cestu od Slunce přes planety až k hranicím Sluneční soustavy.</p>
         <span class="badge">VE VÝROBĚ</span>
       </div>
     </div>

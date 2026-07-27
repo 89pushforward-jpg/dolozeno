@@ -290,7 +290,7 @@
   <header>
     <div class="kicker">UAP/UFO · VLÁDNÍ SPISY · VESMÍRNÉ ZÁHADY</div>
     <div class="brand">DOLOŽENO</div>
-    <p class="tag-line">Jediné české místo, kde se o UFO a vesmíru mluví narovinu — s vtipem, s důkazy a se soubojem dvou týpků: <strong style="color:var(--franta)">Franta</strong> griluje fakty, <strong style="color:var(--pepa)">Pepan</strong> věří všemu z internetu.</p>
+    <p class="tag-line">DOLOŽENO je český vědecko-zábavní projekt o vesmíru, UFO, záhadách a tvrzeních, která si zaslouží ověřit. Přinášíme krátká videa, dohledatelné články, glosy <strong style="color:var(--franta)">Franty</strong> a <strong style="color:var(--pepa)">Pepana</strong> a interaktivní experimenty ve Vesmírné laboratoři. <strong style="color:var(--cyan)">Fakta oddělíme od blbostí.</strong></p>
   </header>
 
   <div class="duel">
@@ -305,8 +305,8 @@
   </div>
 
   <section class="hero">
-    <h2 style="color:var(--cyan)"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít to nejlepší</h2>
-    <p style="color:var(--cyan)">Chystáme pravidelný přehled ze světa UAP a vesmírných záhad, k tomu hlubší rozbory — všechno přímo do e-mailu. Nech nám adresu. Bez spamu, kdykoli se odhlásíš.</p>
+    <h2 style="color:var(--cyan)"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít, co chystáme</h2>
+    <p style="color:var(--cyan)">Připravujeme pravidelný přehled ze světa vesmíru, UAP a vědeckých záhad. Postupně také vzniknou hlubší Doložené spisy, nové experimenty a další aplikace Vesmírné laboratoře. Nech nám adresu a dáme ti vědět, až bude něco nového.</p>
     <div aria-hidden="true" style="color:var(--cyan);font-size:30px;line-height:1;margin:2px 0 8px">↓</div>
     <form id="waitlist" novalidate>
       <input type="email" id="email" name="email" placeholder="tvuj@email.cz" autocomplete="email" required>
@@ -350,6 +350,16 @@
 
   <div id="feed"></div>
   <div id="pager-bot" class="pager"></div>
+
+  <section class="how" aria-label="Jak pracujeme" style="max-width:820px;margin:56px auto 0;padding:26px 22px;border:1px solid var(--line);border-radius:14px;background:rgba(54,214,231,.04)">
+    <h2 style="font-family:var(--mono);font-weight:700;font-size:clamp(20px,5vw,28px);letter-spacing:.06em;text-transform:uppercase;color:var(--cyan);margin:0 0 12px">Jak pracujeme</h2>
+    <p style="font-size:15px;line-height:1.6;margin:0 0 16px">Neříkáme, že všechno je mimozemské. Neříkáme ani, že všechno je nesmysl. Hledáme původní zdroje, oddělujeme doložená fakta od tvrzení a otevřeně přiznáme, když odpověď neznáme.</p>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:13.5px;letter-spacing:.02em">
+      <li><span style="color:var(--cyan)">▸</span> <strong>Dohledatelné zdroje</strong></li>
+      <li><span style="color:var(--cyan)">▸</span> <strong>Fakta oddělená od spekulací</strong></li>
+      <li><span style="color:var(--cyan)">▸</span> <strong>Poctivé „nevíme" místo vymyšlené jistoty</strong></li>
+    </ul>
+  </section>
 
   <footer>
     <div class="mono"><strong>DOLOŽENO</strong> — testovací verze</div>
@@ -2000,8 +2010,8 @@ function openArticle(i,push){
   document.getElementById("d-premium").innerHTML = `
     <div style="border-top:1px solid var(--line);margin-top:40px"></div>
     <div class="premium" style="border-color:rgba(54,214,231,.4);margin-top:26px">
-      <div style="color:var(--cyan);font-weight:800;font-size:18px;margin-bottom:8px"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít to nejlepší</div>
-      <p style="color:var(--cyan);font-size:14.5px;line-height:1.55;margin:0 0 14px">Chystáme pravidelný přehled ze světa UAP a vesmírných záhad, k tomu hlubší rozbory — všechno přímo do e-mailu. Nech nám adresu. Bez spamu, kdykoli se odhlásíš.</p>
+      <div style="color:var(--cyan);font-weight:800;font-size:18px;margin-bottom:8px"><span style="font-variant-emoji:text;font-size:1.35em">✉︎</span> Nenech si ujít, co chystáme</div>
+      <p style="color:var(--cyan);font-size:14.5px;line-height:1.55;margin:0 0 14px">Připravujeme pravidelný přehled ze světa vesmíru, UAP a vědeckých záhad. Postupně také vzniknou hlubší Doložené spisy, nové experimenty a další aplikace Vesmírné laboratoře. Nech nám adresu a dáme ti vědět, až bude něco nového.</p>
       <button class="buybtn" style="background:var(--cyan)" onclick="goWaitlist()">Chci být u toho →</button>
     </div>`;
   document.getElementById("d-sources").innerHTML=`<h5>Zdroje</h5>`+it.sources.map(s=>`<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.name}<span>${s.lang} ↗</span></a>`).join("");
