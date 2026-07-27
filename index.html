@@ -386,7 +386,6 @@
     <div class="d-cover" id="d-cover"></div>
     <div class="sheet-body">
       <div class="d-caption" id="d-caption"></div>
-      <div class="hook" id="d-hook"></div>
       <span id="d-chip"></span>
       <h2 id="d-title"></h2>
       <div id="d-video"></div>
@@ -1922,7 +1921,6 @@ function cardHTML(item,i){return `
   <article class="card kind-${item.kind}" data-i="${i}" data-tag="${item.tag}" data-topic="${item.topic}">
     <div class="cover">${coverHTML(item,i)}</div>
     <div class="card-body">
-      <div class="hook"><b>REDAKCE:</b> ${item.hook}</div>
       ${tagChip(item.tag)}
       <h4>${item.title}</h4>
       <p class="teaser">${item.teaser}</p>
@@ -2017,7 +2015,6 @@ function openArticle(i,push){
   document.getElementById("d-caption").innerHTML = it.imgType==="ai"
     ? "Ilustrace vygenerovaná umělou inteligencí (AI)"
     : (it.image ? `Foto: ${it.imgCredit||"zdroj"}${it.imgSource?` · <a href="${it.imgSource}" target="_blank" rel="noopener noreferrer">zdroj ↗</a>`:""}` : "Ilustrace");
-  document.getElementById("d-hook").innerHTML=`<b>REDAKCE:</b> ${it.hook}`;
   document.getElementById("d-chip").outerHTML=tagChip(it.tag,"d-chip");
   document.getElementById("d-title").textContent=it.title;
   document.getElementById("d-video").innerHTML=it.video?`<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${it.video}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:"";

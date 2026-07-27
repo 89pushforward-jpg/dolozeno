@@ -46,7 +46,6 @@ function page(a,sl,i){
     `</div>`:'';
   const factHtml=a.fact?`\n      <div class="fact ${a.factLabel==='FIKCE'?'fikce':''}"><b>${esc(a.factLabel||'Zajímavost')}</b>${esc(a.fact)}</div>`:'';
   const captionHtml=a.imgType==='ai'?'Ilustrace vygenerovaná umělou inteligencí (AI)':(a.image?`Foto: ${esc(a.imgCredit||'zdroj')}${a.imgSource?` · <a href="${esc(a.imgSource)}" target="_blank" rel="noopener noreferrer">zdroj ↗</a>`:''}`:'Ilustrace');
-  const hookHtml=a.hook?`\n      <div class="hook"><b>REDAKCE:</b> ${esc(a.hook)}</div>`:'';
   const videoHtml=a.video?`\n      <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${esc(a.video)}" title="Trailer" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`:'';
   const premiumHtml=`\n      <div style="border-top:1px solid var(--line);margin-top:40px"></div>
       <div class="premium" style="border-color:rgba(54,214,231,.4);margin-top:26px">
@@ -216,7 +215,7 @@ function page(a,sl,i){
     </header>
     <div class="d-cover">${coverInner(a,i)}</div>
     <div class="sheet-body">
-      <div class="d-caption">${captionHtml}</div>${hookHtml}
+      <div class="d-caption">${captionHtml}</div>
       ${chipHtml(a.tag)}
       <h1>${esc(a.title)}</h1>${videoHtml}${factHtml}
       <div class="d-body">
