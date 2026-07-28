@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/vesmirna-laborator/sledovani-oblohy/sw.js', { scope: '/vesmirna-laborator/sledovani-oblohy/' })})}
