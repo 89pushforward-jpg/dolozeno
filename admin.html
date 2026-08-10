@@ -96,6 +96,29 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 
 /* GENERATED CODE */
 .code-box{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:14px;margin:12px 0;font:13px/1.5 var(--mono);color:#c9d1d9;overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-height:300px;overflow-y:auto}
+
+/* grafy se přizpůsobí šířce (na mobilu se nevejdou v 660px) */
+canvas{max-width:100%;height:auto}
+/* ikonová tlačítka ve frontě mají velikost obsahu (jinak .btn width:100% je roztáhne) */
+.qctrls .btn{width:auto;flex:0 0 auto}
+.qctrls .qdate{width:auto}
+
+/* MOBIL */
+@media(max-width:520px){
+  .nav button{padding:12px 6px;font-size:12px}
+  .page{padding:16px 12px 90px}
+  h1{font-size:20px}
+  h2{font-size:16px}
+  /* fronta: ovládání pod názvem — datum přes celou šířku, pod ním badge + tlačítka */
+  .qrow .qctrls{flex-basis:100%;justify-content:flex-start;gap:8px;padding-top:6px}
+  .qrow .qctrls .qdate{flex:1 1 100%;order:-1}
+  /* poslední návštěvy / hloubka čtení – ať se dlouhé řetězce nelámou přes okraj */
+  .card{padding:14px}
+}
+@media(max-width:380px){
+  /* KPI dlaždice pod sebou na úzkých telefonech */
+  #pg-stats > div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}
+}
 </style>
 </head>
 <body>
@@ -889,15 +912,17 @@ function renderQueue(){
     const hidden=isHiddenDate(o.published);
     return `<div class="qrow" data-idx="${idx}" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--surface)${hidden?";opacity:.6":""}">
       <input type="checkbox" class="qcheck" style="width:auto;margin:0">
-      <div style="flex:1;min-width:120px">
+      <div class="qtitle" style="flex:1;min-width:140px">
         <div style="font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${(o.title||"(bez názvu)").replace(/</g,"&lt;")}</div>
         <div style="font:400 11px var(--sans);color:var(--ink-dim)">${o.kind||"?"}${o.id?" · "+o.id:""}${hidden?" · 🙈 skrytý":""}</div>
       </div>
-      <span style="font:600 12px var(--sans);color:${col};white-space:nowrap">${lbl}</span>
-      <input type="date" class="qdate" value="${czToISO(o.published)}" style="width:auto">
-      <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="toggleHide(${idx})" title="${hidden?"Zobrazit":"Skrýt"}">${hidden?"👁":"🙈"}</button>
-      <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="editArticle(${idx})" title="Upravit">✏️</button>
-      <button class="btn btn-secondary" style="padding:6px 9px;margin:0;color:#ff6b6b;border-color:rgba(255,107,107,.4)" onclick="deleteArticle(${idx})" title="Smazat">🗑️</button>
+      <div class="qctrls" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span style="font:600 12px var(--sans);color:${col};white-space:nowrap">${lbl}</span>
+        <input type="date" class="qdate" value="${czToISO(o.published)}" style="width:auto">
+        <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="toggleHide(${idx})" title="${hidden?"Zobrazit":"Skrýt"}">${hidden?"👁":"🙈"}</button>
+        <button class="btn btn-secondary" style="padding:6px 9px;margin:0" onclick="editArticle(${idx})" title="Upravit">✏️</button>
+        <button class="btn btn-secondary" style="padding:6px 9px;margin:0;color:#ff6b6b;border-color:rgba(255,107,107,.4)" onclick="deleteArticle(${idx})" title="Smazat">🗑️</button>
+      </div>
     </div>`;}).join("");
 }
 
