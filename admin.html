@@ -296,6 +296,7 @@ canvas{max-width:100%;height:auto}
     <label>Název souboru obrázku</label>
     <input id="imgName2" placeholder="nazev-tematu.jpg">
 
+    <div id="pasteStatus"></div>
     <button class="btn btn-primary" onclick="usePastedCode()" style="margin-top:24px">Použít kód →</button>
   </div>
 
@@ -729,8 +730,43 @@ ${bodyStr}
   goPublish();
 }
 
+function normalizeArticleCode(raw){
+  let code=(raw||"").trim();
+  code=code.replace(/^```(?:javascript|js)?\s*/i,"").replace(/\s*```$/,"").trim();
+  const assigned=code.match(/^(?:const|let|var)\s+[A-Za-z_$][\w$]*\s*=\s*([\s\S]*?);?$/);
+  if(assigned)code=assigned[1].trim().replace(/;$/,"").trim();
+  return code;
+}
+
+function validateArticleCode(raw){
+  const code=normalizeArticleCode(raw);
+  if(!code)throw new Error("Vlož celý objekt článku.");
+  if(code[0]!=="{"||code[code.length-1]!=="}")
+    throw new Error("Kód musí začínat { a končit }. Vypadá to, že je vložená jen část článku.");
+  if((new RegExp("<"+"/script","i")).test(code))
+    throw new Error("Kód nesmí obsahovat uzavírací značku script.");
+  try{new Function('"use strict"; return ('+code+'\n);');}
+  catch(e){throw new Error("Kód není platný JavaScript: "+e.message);}
+  const required=["kind","tag","topic","id","hook","title","teaser","body","published","image","sources"];
+  const missing=required.filter(name=>!(new RegExp("\\b"+name+"\\s*:")).test(code));
+  if(missing.length)throw new Error("Chybí povinná pole: "+missing.join(", ")+".");
+  if(!/\bid\s*:\s*"[^"]+"/.test(code))throw new Error("Pole id nesmí být prázdné.");
+  if(!/\btitle\s*:\s*"[^"]+"/.test(code))throw new Error("Pole title nesmí být prázdné.");
+  if(!/\bbody\s*:\s*\[/.test(code))throw new Error("Pole body musí být seznam odstavců v hranatých závorkách.");
+  return code;
+}
+
 function usePastedCode(){
-  articleCode=document.getElementById("pasteCode").value.trim();
+  const pasteStatus=document.getElementById("pasteStatus");
+  try{
+    articleCode=validateArticleCode(document.getElementById("pasteCode").value);
+    pasteStatus.innerHTML='<div class="status show ok">✓ Kód je platný a obsahuje povinná pole.</div>';
+  }catch(e){
+    articleCode="";
+    pasteStatus.innerHTML='<div class="status show err">❌ '+e.message+'</div>';
+    document.getElementById("btnPublish").disabled=true;
+    return;
+  }
   imageName=document.getElementById("imgName2").value||"";
   if(imageName&&!imageName.startsWith("img/"))imageName="img/"+imageName;
 
@@ -801,6 +837,9 @@ async function publish(){
   status.innerHTML='<div class="status show info">Nahrávám...</div>';
 
   try{
+    // Než se nahraje obrázek nebo změní web, ověř celý objekt článku ještě jednou.
+    articleCode=validateArticleCode(articleCode);
+
     // 1. Upload image if present
     if(imageData&&imageName){
       status.innerHTML='<div class="status show info">📷 Nahrávám obrázek...</div>';
