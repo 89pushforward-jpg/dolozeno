@@ -2841,7 +2841,7 @@ function openArticle(i,push){
     var arr = it.glosy;
     if(!arr){ arr=[]; if(it.frantaGlosa) arr.push({spk:"f",label:"Franta dodává",text:it.frantaGlosa}); if(it.pepanGlosa) arr.push({spk:"p",label:"Pepan dodává",text:it.pepanGlosa}); }
     if(!arr.length) return "";
-    return arr.map(function(g){ var isP=g.spk==="p"; var av=isP?"img/pepan-avatar.jpg":"img/franta-avatar.jpg"; var cls=isP?"glosa glosa-p":"glosa"; var nm=isP?"Pepan":"Franta";
+    return arr.map(function(g){ var isP=g.spk==="p"; var av=isP?"/img/pepan-avatar.jpg":"/img/franta-avatar.jpg"; var cls=isP?"glosa glosa-p":"glosa"; var nm=isP?"Pepan":"Franta";
       return '<div class="'+cls+'"><div class="glosa-ava"><img src="'+av+'" alt="'+nm+'"></div><div class="glosa-text"><b>'+(g.label||(nm+" dodává"))+'</b><p>\u201e'+g.text+'\u201c</p></div></div>'; }).join("");
   })();
   document.getElementById("d-premium").innerHTML = `
