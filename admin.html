@@ -212,11 +212,7 @@ canvas{max-width:100%;height:auto}
       </div>
       <div style="flex:1">
         <label>Téma</label>
-        <select id="artTopic">
-          <option value="uap">UAP/UFO</option>
-          <option value="disclosure">Disclosure</option>
-          <option value="zahady">Záhady</option>
-        </select>
+        <select id="artTopic"><option value="ufo">UFO / UAP</option><option value="civilizace">Ztracené civilizace</option><option value="vesmir">Věda a vesmír</option><option value="zivot">Mimozemský život</option><option value="technologie">Technologie</option><option value="konspirace">Konspirace</option></select>
       </div>
     </div>
 
@@ -868,7 +864,7 @@ async function publish(){
     status.innerHTML='<div class="status show info">📝 Ukládám článek...</div>';
     await ghPutFile("index.html", newContent, file.sha, `Add article: ${document.getElementById("pubTitle").textContent||"new"}`);
 
-    status.innerHTML='<div class="status show ok">✅ Publikováno! Web se aktualizuje za ~1 minutu.</div>';
+    status.innerHTML='<div class="status show ok">✅ Publikováno! Uloženo na GitHub. Web se aktualizuje po dokončení nasazení.</div>';
     btn.textContent="✓ Publikováno";
 
     // Reset
@@ -998,7 +994,7 @@ async function saveQueue(){
       content=content.slice(0,o.absStart)+newText+content.slice(o.absEnd);
     });
     await ghPutFile("index.html",content,QUEUE.sha,"Aktualizace fronty článků (admin)");
-    el.className="status show ok";el.textContent="✅ Fronta uložena! Web se aktualizuje za ~1 min.";
+    el.className="status show ok";el.textContent="✅ Fronta uložena! Web se aktualizuje po dokončení nasazení.";
     QUEUE=null;setTimeout(loadQueue,1800);
   }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
 }
@@ -1195,7 +1191,7 @@ async function saveEdit(){
       if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
       content=content.replace(orig,()=>codeText);
       await ghPutFile("index.html",content,fresh.sha,"Úprava článku "+(o.id||"")+" (kód, admin)");
-      st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje za ~1 min.";
+      st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje po dokončení nasazení.";
       QUEUE=null;setTimeout(()=>{cancelEdit();loadQueue();},1600);
       return;
     }
@@ -1219,7 +1215,7 @@ async function saveEdit(){
     if(content.indexOf(orig)<0)throw new Error("Článek se na webu mezitím změnil — dej „Načíst frontu“ a zkus znovu.");
     content=content.replace(orig,t);
     await ghPutFile("index.html",content,fresh.sha,"Úprava článku "+(o.id||"")+" (admin)");
-    st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje za ~1 min.";
+    st.className="status show ok";st.textContent="✅ Uloženo! Web se aktualizuje po dokončení nasazení.";
     QUEUE=null;setTimeout(()=>{cancelEdit();loadQueue();},1600);
   }catch(e){st.className="status show err";st.textContent="❌ "+(e.message||"Chyba");}
 }
@@ -1265,7 +1261,7 @@ async function toggleHide(idx){
     content=content.replace(orig,nt);
     const res=await ghPutFile("index.html",content,fresh.sha,verb+" článku "+(o.id||"")+" (admin)");
     if(res&&res.message&&!res.content)throw new Error(res.message);
-    el.className="status show ok";el.textContent="✅ "+verb+" hotovo. Web se aktualizuje za ~1 min.";
+    el.className="status show ok";el.textContent="✅ "+verb+" hotovo. Web se aktualizuje po dokončení nasazení.";
     QUEUE=null;setTimeout(loadQueue,1600);
   }catch(e){el.className="status show err";el.textContent="❌ "+(e.message||"Chyba");}
 }

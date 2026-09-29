@@ -1,0 +1,16 @@
+{
+  "name": "dolozeno-web",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.cjs",
+    "build:production": "node tools/build.cjs --production",
+    "dev": "node tools/server.cjs",
+    "test": "node tools/verify.cjs",
+    "test:browser": "node tools/browser-test.cjs",
+    "test:publication": "node --test tools/publication.test.cjs",
+    "test:production": "node tools/verify-production.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

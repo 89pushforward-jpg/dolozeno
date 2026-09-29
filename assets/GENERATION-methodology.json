@@ -1,0 +1,23 @@
+{
+  "tool": "built-in image_gen",
+  "images": [
+    {
+      "key": "research",
+      "prompt": "Create one cinematic editorial illustration, landscape 16:9, for the 'How we work' section of a Czech independent investigative science website. A tactile dark research desk, original-looking archival sheets with illegible indistinct marks (no readable text), monochrome astronomical photographic plates, an old star atlas opened to a faint star chart, a magnifying lens catching warm amber lamplight, a small rough meteorite sample. Carefully arranged as active comparative research, no detective crime tropes, no red string, no conspiracy wall, no people, no aliens. Rich navy black shadows, restrained amber highlights and subtle cool cyan reflection, documentary photographic realism, sophisticated quiet curiosity, genuine paper and stone textures, side angle close shot. No letters, no titles, no logos, no UI, no watermarks. Standalone atmospheric illustration, not a purported historical evidence photo.",
+      "original": "research-original.png",
+      "variants": [
+        "research.webp",
+        "research-640.webp"
+      ]
+    },
+    {
+      "key": "method",
+      "prompt": "Create one cinematic editorial illustration, very wide landscape 3:1 composition for a research methodology page of a Czech investigative science website. Modern optical telescope inside a real-looking dark observatory dome, dome slit opening toward a richly detailed but realistic midnight star field. Telescope occupies right third, foreground left shows modest out-of-focus scientific instruments and a dark desk with anonymous observation sheets, no readable text. Evidence-driven observation, precision, exploration of unknown hypotheses. Elegant navy black palette, controlled warm amber instrument light with tiny restrained cyan highlights. Cinematic photographic realism, tangible surfaces, restrained contrast, quiet sophisticated atmosphere. No humans, no aliens, no spacecraft, no magic beams, no text or typography, no logos, no watermark, no interface. Clean standalone illustration, not a screenshot or factual depiction of a named observatory.",
+      "original": "method-original.png",
+      "variants": [
+        "method.webp",
+        "method-640.webp"
+      ]
+    }
+  ]
+}
