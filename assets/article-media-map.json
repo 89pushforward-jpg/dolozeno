@@ -520,5 +520,11 @@
     "large": "/assets/article-images/tremonton-filmovy-dukaz-hero-v01-1600.webp",
     "width": 1672,
     "height": 941
+  },
+  "img/tutanchamon-dyka-vesmir-v2.jpg": {
+    "small": "/assets/article-images/tutanchamon-dyka-vesmir-v2-720.webp",
+    "large": "/assets/article-images/tutanchamon-dyka-vesmir-v2-1600.webp",
+    "width": 1672,
+    "height": 941
   }
 }
