@@ -23,7 +23,7 @@ npm run test:production
 
 Production pages use `index,follow`, self-canonical URLs, sitemap and structured metadata. Admin is `noindex`. `npm run build` generates a separate local preview with `noindex`; never deploy that build.
 
-The original Google Apps Script endpoint is reused for analytics and email opt-in. Requests only run on the production domain. Newsletter delivery and storage cannot be confirmed from an opaque cross-origin response; the UI confirms request submission only. No real subscriber is added by automated checks.
+The original Google Apps Script endpoint is reused for analytics only, running on the production domain. The redesign has no newsletter form or email collection.
 
 A replacement `sw.js` retires the old service worker and its `dolozeno` caches. Source images and original content stay in Git; no credentials are bundled.
 

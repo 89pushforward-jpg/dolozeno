@@ -16,12 +16,4 @@
  if(articleId){track('article',{articleId});addEventListener('scroll',()=>{maxDepth=Math.max(maxDepth,depth())},{passive:true})}
  function flush(){if(flushed)return;flushed=true;const seconds=Math.round((Date.now()-started)/1000);if(articleId)track('read',{articleId,maxDepth:Math.max(maxDepth,depth()),closedAt:depth(),seconds});track('time',{duration:seconds})}
  addEventListener('pagehide',flush);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flush()});
- const form=document.querySelector('#newsletter');
- form?.addEventListener('submit',async event=>{
-  event.preventDefault();if(!form.reportValidity())return;
-  const button=form.querySelector('button'),message=form.querySelector('[role="status"]');button.disabled=true;
-  try{await fetch(endpoint,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({type:'email',email:form.elements.email.value.trim()})});message.textContent='Požadavek na odběr byl odeslán. Děkujeme!';form.reset()}
-  catch{message.textContent='Odeslání se nezdařilo. Zkuste to prosím znovu.'}
-  finally{button.disabled=false}
- });
 })();
