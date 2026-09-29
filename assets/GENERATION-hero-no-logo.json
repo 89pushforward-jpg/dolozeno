@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "source": "hero-original.png",
+  "output": "hero-no-logo.png",
+  "prompt": "Edit this exact website hero banner. Remove ONLY the small amber/gold 'DOLOŽENO' wordmark at the top center and the two amber vertical bars immediately flanking it (roughly x 878..1188 y 150..202 in the original 2020x779 image). Seamlessly inpaint that small area with the surrounding dark starry sky. Preserve the rest of the image unchanged: exact framing and wide aspect ratio, the pyramid, desert, sky, lighting, all colors. Preserve both large white Czech headline lines exactly as they are, in the same size and position: 'PROVĚŘUJEME VESMÍRNÉ' and 'ZÁHADY A KONSPIRACE'. Preserve the small white subtitle exactly 'Odvážné otázky. Důkazy. Možné souvislosti.' in its original position. Do NOT remove, alter, reflow or replace these white texts. Do not add anything. This is a minimal local removal of the small top amber logo only.",
+  "webAssets": [
+    "hero-no-logo.webp",
+    "hero-no-logo-800.webp"
+  ]
+}

@@ -1,0 +1,263 @@
+Postav funkční redesign webu DOLOŽENO podle přiložených
+schválených desktopových a mobilních návrhů.
+
+Nejde jen o maketu. Výsledkem má být funkční web s migrací
+stávajících článků, jejich jednotlivými stránkami, vyhledáváním,
+filtry, správnou sitemapou a zachovanými původními adresami.
+
+Pracuj samostatně až do dokončeného a otestovaného náhledu.
+O změnu produkční domény/DNS a přepnutí ostrého webu požádej
+až po předložení konkrétního výsledku ke schválení.
+
+1. NEJDŘÍVE AUDIT SOUČASNÉHO WEBU
+
+- Projdi aktuální repozitář webu dolozeno.cz, jeho instrukce,
+  FEED/datový model, administraci, generátor článků a publikaci.
+- Načti relevantní skilly DOLOŽENO pro články a publikaci.
+  Toto zadání výslovně povoluje redesign a přípravu migrace;
+  starý zákaz redesignu ve skillech tuto práci neblokuje.
+- Nespoléhej na historicky uváděný počet článků.
+  Zjisti skutečný současný počet a seznam URL.
+- Vytvoř zálohu a samostatnou pracovní větev.
+- Zjisti, které části současného adminu, analytiky a dalších
+  integrací musíme zachovat.
+- Starý web musí během práce dál fungovat.
+
+2. ÚČEL A ARCHITEKTURA
+
+Web je veřejný archiv a důvěryhodné zázemí DOLOŽENO:
+články, jejich zdroje a verdikty, vložená videa, informace
+o projektu, kontakt a propojení na HeroHero.
+
+Preferuj staticky generovaný web bez databáze.
+Kód zůstane na GitHubu, cílový hosting Cloudflare Pages Free.
+Nezaváděj Workers, placené API ani další služby bez potřeby.
+
+Využij současný generátor, pokud dovolí čisté řešení.
+Pokud je vhodnější Astro se statickým výstupem, použij ho,
+ale zachovej původní URL i kompatibilní publikační postup.
+Nevytvářej aplikaci, která zobrazuje celé články až pomocí JS.
+
+3. DESIGN
+
+Přiložené návrhy jsou hlavní vizuální reference.
+Zachovej jejich vzhled, kompozici, hierarchii a atmosféru.
+Neprováděj vlastní zásadní redesign.
+
+- Tmavé modročerné pozadí, výrazné bílé nadpisy.
+- Novou žlutou odeber z přiloženého návrhu.
+- Amber odeber z dodaného loga.
+- Ulož obě barvy do centrálních CSS proměnných a používej je
+  konzistentně pro primární a sekundární akce.
+- Nepřebarvuj svévolně logo ani dodaný hero banner.
+- Zajisti čitelnost, kontrast a viditelné ovládání klávesnicí.
+- Mezi hlavními sekcemi zachovej výrazné vertikální mezery:
+  orientačně 64–96 px desktop, 40–64 px mobil.
+- Mobil navrhni skutečně responzivně, ne jako zmenšený desktop.
+  Návrh je reference; čitelnost a ovladatelnost mají přednost
+  před kopírováním příliš drobného textu.
+- Ověř šířky 360, 390, 768, 1280 a 1440 px.
+
+Šest tematických kategorií:
+UFO / UAP
+Ztracené civilizace
+Věda a vesmír
+Mimozemský život
+Technologie
+Konspirace
+
+Vesmírné anomálie jsou součástí Vědy a vesmíru.
+Samostatnou sedmou kategorii nevytvářej.
+
+4. OBRÁZKY
+
+Dodám logo a hlavní hero banner. Ty použij beze změny.
+
+Ostatní nové designové ilustrace vygeneruj kvalitně podle
+schválených návrhů. Nevystřihuj je z obrázku celé stránky.
+Generuj jednotlivé čisté podklady bez nápisů a UI.
+Texty, rámečky, tlačítka a ikony vytvoř v HTML/CSS/SVG.
+
+Použij dostupný schválený obrazový nástroj; pro DOLOŽENO
+nepoužívej Higgsfield. Pokud generování není dostupné,
+oznam přesně chybějící podklady a nepředstírej dokončení.
+
+Zachovej existující obrázky starých článků, zejména dokumenty,
+snímky důkazů a věcně významné ilustrace. Nenahrazuj je
+novými AI obrazy. Nové obrázky jsou hlavně pro nový design
+a tematické bannery.
+
+Optimalizuj soubory do WebP/AVIF, připrav vhodné velikosti,
+rozměry a alt texty. Hero nenačítej líně, další obrázky ano.
+
+5. HLAVNÍ SPISY A HEROHERO
+
+Spisy musí být vizuálně odlišené od běžných článků:
+samostatný výrazný blok, široké obrazové bannery,
+označení formátu a odkaz na HeroHero.
+
+Použij text:
+„Známé i nové záhady s novými důkazy a hypotézami.“
+
+HeroHero teprve budujeme. Obsah a bannery budou přibývat.
+Tři ukázkové bannery z návrhu nejsou důkazem, že tyto spisy
+již existují.
+
+- Spravuj spisy přes jednoduchý datový soubor.
+- Každý má ID, název, popis, obrázek, formát, pořadí,
+  stav draft/published a skutečný odkaz.
+- Zobrazuj jen publikované položky s platným odkazem.
+- Podporuj nula, jedna i více položek bez rozbitého layoutu.
+- Při nule zobraz střídmou informaci, že spisy připravujeme.
+- Obecný odkaz na HeroHero použij pouze tehdy, když je známý.
+- Nevymýšlej URL, dostupnost, ceny ani počty dokumentů.
+
+6. MIGRACE VŠECH ČLÁNKŮ
+
+Zachovej všechny dosavadní články.
+
+Beze změny uchovej jejich:
+ID, názvy, původní URL, datum publikace, informace,
+hlavní text, zdroje, verdikty a věcný význam.
+
+Odstraň pouze:
+glosy Franty a Pepana, jejich dialogy a komentáře,
+jejich portréty a související prezentační prvky.
+
+Neodstraňuj celé články kvůli přítomnosti těchto postav.
+Nepřepisuj závěry ani nepřidávej nové interpretace.
+Nepoužívej plošný regex, který může odstranit věcný obsah.
+Nejednoznačné pasáže vypiš do migračního reportu.
+
+Vytvoř kontrolní seznam před/po:
+- počet článků,
+- seznam ID a URL,
+- zachování textu mimo výslovně odstraněné glosy,
+- zdroje, verdikty a obrázky,
+- přesný přehled odstraněných bloků.
+
+Pokud narazíš na skutečné uživatelské komentáře,
+neodstraňuj je automaticky. Požadavek se týká postav
+Franty a Pepana, ne libovolných čtenářských komentářů.
+
+7. ARCHIV A DETAIL ČLÁNKU
+
+Sekce se jmenuje pouze „ARCHIV ČLÁNKŮ“.
+
+- Funkční vyhledávání podle názvu a obsahu.
+- Filtr tématu.
+- Filtr typu: Vše / Zpráva / Spekulace / Svědectví.
+- Kombinování vyhledávání a filtrů, reset, počet výsledků
+  a srozumitelný stav bez výsledků.
+- Stav filtrů uchovávej v URL.
+- Zachovej současné typy článků; klasifikaci nevymýšlej
+  z názvu nebo vzhledu ilustrační fotografie.
+- Pokud původní data obsahují další typy, vypiš je před
+  rozhodnutím o jejich mapování. Nic tiše neztrácej.
+- Chip typu zobraz na kartě i v detailu.
+
+Každý článek má samostatnou stránku s plným textem,
+zdroji, verdiktem a souvisejícími články.
+
+Reely nejsou samostatná sekce archivu.
+U článku podporuj volitelné youtubeVideoId.
+Pokud video existuje, vlož ho do článku jako responzivní
+YouTube přehrávač s načtením až po aktivaci návštěvníkem.
+Nehostuj MP4 v repozitáři.
+Nevymýšlej ID videí ani odkazy.
+
+8. AUTOMATICKÉ ASTRONOMICKÉ NOVINKY
+
+Desktop: boční panel u archivu.
+Mobil: samostatný blok pod archivem.
+
+Jde o krátké karty s jednou českou větou, zdrojem
+a skutečným datem původní zprávy.
+Kliknutí vede přímo na původní oficiální web.
+Nevytvářej pro ně lokální články ani URL v sitemapě.
+
+Preferuj oficiální tematické RSS NASA a ESA.
+Nejdřív ověř skutečné endpointy, obsah a podmínky použití.
+RSS existence sama nezaručuje právo přebírat fotografie.
+
+Návrh automatizace:
+- GitHub Actions přibližně 2× denně, mimo celou hodinu.
+- Stáhnout povolené zdroje, filtrovat astronomická témata.
+- Odstranit duplicity podle GUID a normalizované URL.
+- Přeložit krátký titulek, případně jednu původní větu.
+- Zachovat míru nejistoty, čísla a názvy objektů.
+- Vygenerovat validní news.json a aktualizovat web.
+- Použít cache, aby se stejný text nepřekládal opakovaně.
+- Novinky oddělit od ručně spravovaných článků.
+
+Pro bezplatný překlad ověř lokální běh otevřeného modelu
+Helsinki-NLP/opus-mt-en-cs v CI. Nepoužívej placené inference
+API ani neoficiální Google Translate endpoint.
+Ověř kvalitu na reprezentativním vzorku astronomických titulků.
+Před automatickým publikováním předlož ukázky překladu.
+
+Povol jen validní HTTPS odkazy na schválené zdrojové domény,
+sanitizuj přebíraný obsah, nastav timeouty a limity.
+Při chybě nepřepiš platná data prázdným souborem.
+
+Použij vlastní tematické pozadí, nebo fotografii zdroje jen
+s ověřeným oprávněním a potřebným kreditem.
+Nezaměňuj ilustrační obrázek za skutečný snímek objevu.
+
+Neoznačuj staré zprávy jako „Téma dne“.
+Použij raději „Aktuálně“ a vždy zobraz skutečné datum.
+Zprávy starší než 7 dní skryj. Skrytí musí fungovat i tehdy,
+když přestane běžet automatizace. Pokud nezbývají platné
+zprávy, skryj celý panel a rozšiř archiv.
+
+Pokud nelze zajistit rozumnou kvalitu, bezplatný provoz
+a automatickou aktualizaci, sekci zatím vypni.
+Nenechávej na ostrém webu fiktivní ani ručně stárnoucí obsah.
+
+9. ADMINISTRACE A PUBLIKOVÁNÍ
+
+Zachovej použitelný způsob přidávání článků.
+Nezruš existující admin bez funkční náhrady.
+
+Pokud měníš interní datový model, zachovej kompatibilní
+import současného článkového formátu nebo dodej ověřený
+převodník a aktualizovanou copy-paste šablonu.
+
+Validuj povinná pole před uložením. Chyby musí jasně říct,
+které pole chybí. Zajisti náhled a draft/published stav.
+
+Autorizaci řeš podle skutečného současného systému.
+Nikdy nezabaluj GitHub token ani jiné tajné údaje do
+veřejného JavaScriptu, repozitáře nebo statického výstupu.
+
+10. SEO A FUNKČNOST
+
+- Zachovat staré URL; ideálně je vůbec neměnit.
+- Kde je změna nezbytná, připrav skutečné 301 přesměrování.
+- Jedinečné title, description, canonical a OG metadata.
+- Article/NewsArticle strukturovaná data podle obsahu.
+- Původní datePublished zachovat.
+- Datum migrace nevydávat za datum publikace.
+- Sitemap obsahuje každý publikovaný článek právě jednou.
+- Robots.txt odkazuje na sitemap.
+- Náhledové prostředí nesmí být indexované.
+- Žádné drafty ani externí novinky v sitemapě.
+- Žádné nefunkční odkazy, chybějící obrázky nebo chyby konzole.
+- Zachovat relevantní současné integrace.
+- Kontakt použít pouze ověřený; nevymýšlet adresy ani e-mail.
+- Sociální sítě pouze Facebook, Instagram a YouTube.
+  Odstranit X/Twitter.
+
+11. PŘEDÁNÍ
+
+Dodej:
+- funkční náhled desktopu a mobilu,
+- migrační report všech článků a odstraněných glos,
+- výsledek kontroly starých URL, zdrojů a verdiktů,
+- stručný návod na nový článek, video a HeroHero spis,
+- stav automatických novinek: ověřeně funkční / vypnuté,
+- potřebné přístupy a případné skutečné náklady,
+- postup nasazení na Cloudflare a návratu ke staré verzi.
+
+Neprováděj přepnutí produkce ani změny DNS před schválením
+hotového náhledu a migračního reportu.

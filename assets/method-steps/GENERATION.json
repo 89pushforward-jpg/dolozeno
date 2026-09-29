@@ -1,0 +1,35 @@
+{
+  "tool": "image_gen",
+  "date": "2026-09-27",
+  "purpose": "Thematic illustrative images for methodology steps",
+  "images": [
+    {
+      "key": "question",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: A single magnifying lens held on a brass stand over one small meteorite specimen on a dark laboratory desk, deliberate investigation of a specific object. No hand or person."
+    },
+    {
+      "key": "sources",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: Open archival drawer with aged primary source folders and one old astronomical photographic glass plate resting across it, meticulous original research materials, no readable writing."
+    },
+    {
+      "key": "verification",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: Two separate precision measuring instruments beside matching rock specimens on a scientific workbench, independent measurement and replication, realistic hardware, no visible numbers or text."
+    },
+    {
+      "key": "evidence",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: A clear sharply focused mineral specimen beside a softly out-of-focus translucent glass model of the same shape, differentiating tangible evidence from a tentative model. Scientific desk, not magical."
+    },
+    {
+      "key": "secrecy",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: Partly open steel archive cabinet in a quiet document repository, one closed archival folder lit by warm desk light. Reserved investigative atmosphere, no conspiracy imagery, no people, no readable labels."
+    },
+    {
+      "key": "hypotheses",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: Overlapping translucent astronomical chart plates on a light table, different orbital curves crossing a sparse star field, a researcher comparing possible paths, no person, no readable symbols or text."
+    },
+    {
+      "key": "limits",
+      "prompt": "Generate one clean standalone cinematic editorial photo illustration as a VERY WIDE NARROW HORIZONTAL STRIP, aspect ratio 4:1. For a small image accompanying one research methodology step on a premium Czech science website. Navy-black shadows, restrained amber practical light, tiny hints of cool blue, realistic textured materials, uncluttered composition, main subject readable at small size centered vertically. No typography, no logos, no interface, no watermark, no collage, no people. Illustrative scene, not claimed to be factual archival evidence. Subject: A precision telescope lens in foreground, distant mountain ridge partially disappearing into quiet midnight mist, a restrained visual metaphor for limits of observation. No dramatic fantasy."
+    }
+  ]
+}

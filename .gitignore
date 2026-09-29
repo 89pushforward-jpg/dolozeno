@@ -1,0 +1,5 @@
+dist/
+reports/screenshots/
+reports/browser-report.json
+reports/verification.json
+node_modules/

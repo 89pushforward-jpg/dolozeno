@@ -1,0 +1,524 @@
+{
+  "img/film.jpg": {
+    "small": "/assets/article-images/film-720.webp",
+    "large": "/assets/article-images/film-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/pursue.jpg": {
+    "small": "/assets/article-images/pursue-720.webp",
+    "large": "/assets/article-images/pursue-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/apollo-videa.jpg": {
+    "small": "/assets/article-images/apollo-videa-720.webp",
+    "large": "/assets/article-images/apollo-videa-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/grusch.jpg": {
+    "small": "/assets/article-images/grusch-720.webp",
+    "large": "/assets/article-images/grusch-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/apollo-svetla.jpg": {
+    "small": "/assets/article-images/apollo-svetla-720.webp",
+    "large": "/assets/article-images/apollo-svetla-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/navy-pilot.jpg": {
+    "small": "/assets/article-images/navy-pilot-720.webp",
+    "large": "/assets/article-images/navy-pilot-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/loeb.jpg": {
+    "small": "/assets/article-images/loeb-720.webp",
+    "large": "/assets/article-images/loeb-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/racek.jpg": {
+    "small": "/assets/article-images/racek-720.webp",
+    "large": "/assets/article-images/racek-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/corbell.jpg": {
+    "small": "/assets/article-images/corbell-720.webp",
+    "large": "/assets/article-images/corbell-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/astrobiologie.jpg": {
+    "small": "/assets/article-images/astrobiologie-720.webp",
+    "large": "/assets/article-images/astrobiologie-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/pyramidy-sken.jpg": {
+    "small": "/assets/article-images/pyramidy-sken-720.webp",
+    "large": "/assets/article-images/pyramidy-sken-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/pursue-release.jpg": {
+    "small": "/assets/article-images/pursue-release-720.webp",
+    "large": "/assets/article-images/pursue-release-1600.webp",
+    "width": 1200,
+    "height": 675
+  },
+  "img/pursue3-prehled.jpg": {
+    "small": "/assets/article-images/pursue3-prehled-720.webp",
+    "large": "/assets/article-images/pursue3-prehled-1600.webp",
+    "width": 1600,
+    "height": 556
+  },
+  "img/pursue3-orby.jpg": {
+    "small": "/assets/article-images/pursue3-orby-720.webp",
+    "large": "/assets/article-images/pursue3-orby-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/pursue3-nasa.jpg": {
+    "small": "/assets/article-images/pursue3-nasa-720.webp",
+    "large": "/assets/article-images/pursue3-nasa-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/pursue3-rekonstrukce.jpg": {
+    "small": "/assets/article-images/pursue3-rekonstrukce-720.webp",
+    "large": "/assets/article-images/pursue3-rekonstrukce-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/robertson-panel.jpg": {
+    "small": "/assets/article-images/robertson-panel-720.webp",
+    "large": "/assets/article-images/robertson-panel-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/wow-signal.jpg": {
+    "small": "/assets/article-images/wow-signal-720.webp",
+    "large": "/assets/article-images/wow-signal-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/dyson-sfery.jpg": {
+    "small": "/assets/article-images/dyson-sfery-720.webp",
+    "large": "/assets/article-images/dyson-sfery-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/u2-spy.jpg": {
+    "small": "/assets/article-images/u2-spy-720.webp",
+    "large": "/assets/article-images/u2-spy-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/k2-18b.jpg": {
+    "small": "/assets/article-images/k2-18b-720.webp",
+    "large": "/assets/article-images/k2-18b-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/aaro-40.jpg": {
+    "small": "/assets/article-images/aaro-40-720.webp",
+    "large": "/assets/article-images/aaro-40-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/toi-1452b.jpg": {
+    "small": "/assets/article-images/toi-1452b-720.webp",
+    "large": "/assets/article-images/toi-1452b-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/humanoid-video.jpg": {
+    "small": "/assets/article-images/humanoid-video-720.webp",
+    "large": "/assets/article-images/humanoid-video-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/disclosure-forum-2026.jpg": {
+    "small": "/assets/article-images/disclosure-forum-2026-720.webp",
+    "large": "/assets/article-images/disclosure-forum-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/langley-drony.jpg": {
+    "small": "/assets/article-images/langley-drony-720.webp",
+    "large": "/assets/article-images/langley-drony-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/3i-atlas.jpg": {
+    "small": "/assets/article-images/3i-atlas-720.webp",
+    "large": "/assets/article-images/3i-atlas-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/cervena-koule-plazma.jpg": {
+    "small": "/assets/article-images/cervena-koule-plazma-720.webp",
+    "large": "/assets/article-images/cervena-koule-plazma-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/voyager-svetelny-den.jpg": {
+    "small": "/assets/article-images/voyager-svetelny-den-720.webp",
+    "large": "/assets/article-images/voyager-svetelny-den-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/mars-leopardi-skvrny.jpg": {
+    "small": "/assets/article-images/mars-leopardi-skvrny-720.webp",
+    "large": "/assets/article-images/mars-leopardi-skvrny-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/ztraceny-svet-meteorit.jpg": {
+    "small": "/assets/article-images/ztraceny-svet-meteorit-720.webp",
+    "large": "/assets/article-images/ztraceny-svet-meteorit-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/webb-99-zivot.jpg": {
+    "small": "/assets/article-images/webb-99-zivot-720.webp",
+    "large": "/assets/article-images/webb-99-zivot-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/cern-lhc-odstavka.jpg": {
+    "small": "/assets/article-images/cern-lhc-odstavka-720.webp",
+    "large": "/assets/article-images/cern-lhc-odstavka-1600.webp",
+    "width": 1671,
+    "height": 759
+  },
+  "img/signal-magnetar.jpg": {
+    "small": "/assets/article-images/signal-magnetar-720.webp",
+    "large": "/assets/article-images/signal-magnetar-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/meteor-sopka-svetlo.jpg": {
+    "small": "/assets/article-images/meteor-sopka-svetlo-720.webp",
+    "large": "/assets/article-images/meteor-sopka-svetlo-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/los-alamos-1949.jpg": {
+    "small": "/assets/article-images/los-alamos-1949-720.webp",
+    "large": "/assets/article-images/los-alamos-1949-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/hvezdice-zlute-more-2025.jpg": {
+    "small": "/assets/article-images/hvezdice-zlute-more-2025-720.webp",
+    "large": "/assets/article-images/hvezdice-zlute-more-2025-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/meduza-atlantik-2020.jpg": {
+    "small": "/assets/article-images/meduza-atlantik-2020-720.webp",
+    "large": "/assets/article-images/meduza-atlantik-2020-1600.webp",
+    "width": 849,
+    "height": 435
+  },
+  "img/zahadne-signaly-transienty.jpg": {
+    "small": "/assets/article-images/zahadne-signaly-transienty-720.webp",
+    "large": "/assets/article-images/zahadne-signaly-transienty-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/cerna-dira-starsi-galaxie.jpg": {
+    "small": "/assets/article-images/cerna-dira-starsi-galaxie-720.webp",
+    "large": "/assets/article-images/cerna-dira-starsi-galaxie-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/atmosfera-lhs1140b.jpg": {
+    "small": "/assets/article-images/atmosfera-lhs1140b-720.webp",
+    "large": "/assets/article-images/atmosfera-lhs1140b-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/zahadny-signal-pluto-titan.jpg": {
+    "small": "/assets/article-images/zahadny-signal-pluto-titan-720.webp",
+    "large": "/assets/article-images/zahadny-signal-pluto-titan-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/slunce-skryty-vypinac.jpg": {
+    "small": "/assets/article-images/slunce-skryty-vypinac-720.webp",
+    "large": "/assets/article-images/slunce-skryty-vypinac-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/kamen-co-zabil-dinosaury.jpg": {
+    "small": "/assets/article-images/kamen-co-zabil-dinosaury-720.webp",
+    "large": "/assets/article-images/kamen-co-zabil-dinosaury-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/zmizele-hvezdy-1952.jpg": {
+    "small": "/assets/article-images/zmizele-hvezdy-1952-720.webp",
+    "large": "/assets/article-images/zmizele-hvezdy-1952-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/beta-pictoris-d.jpg": {
+    "small": "/assets/article-images/beta-pictoris-d-720.webp",
+    "large": "/assets/article-images/beta-pictoris-d-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/jal-1628.jpg": {
+    "small": "/assets/article-images/jal-1628-720.webp",
+    "large": "/assets/article-images/jal-1628-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/zatmeni-slunce-2026.jpg": {
+    "small": "/assets/article-images/zatmeni-slunce-2026-720.webp",
+    "large": "/assets/article-images/zatmeni-slunce-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/signal-male-zelene-muzicky.jpg": {
+    "small": "/assets/article-images/signal-male-zelene-muzicky-720.webp",
+    "large": "/assets/article-images/signal-male-zelene-muzicky-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/ztraceni-kosmonauti.jpg": {
+    "small": "/assets/article-images/ztraceni-kosmonauti-720.webp",
+    "large": "/assets/article-images/ztraceni-kosmonauti-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/europa-ocean-2026.jpg": {
+    "small": "/assets/article-images/europa-ocean-2026-720.webp",
+    "large": "/assets/article-images/europa-ocean-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/asteroid-nysa-2026.jpg": {
+    "small": "/assets/article-images/asteroid-nysa-2026-720.webp",
+    "large": "/assets/article-images/asteroid-nysa-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/bloudici-cerna-dira-2026.jpg": {
+    "small": "/assets/article-images/bloudici-cerna-dira-2026-720.webp",
+    "large": "/assets/article-images/bloudici-cerna-dira-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/supervulkan-kikai-2026.jpg": {
+    "small": "/assets/article-images/supervulkan-kikai-2026-720.webp",
+    "large": "/assets/article-images/supervulkan-kikai-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/tabbyina-hvezda.jpg": {
+    "small": "/assets/article-images/tabbyina-hvezda-720.webp",
+    "large": "/assets/article-images/tabbyina-hvezda-1600.webp",
+    "width": 1200,
+    "height": 780
+  },
+  "img/pluto-tekuty-dusik-2026.jpg": {
+    "small": "/assets/article-images/pluto-tekuty-dusik-2026-720.webp",
+    "large": "/assets/article-images/pluto-tekuty-dusik-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/antarktida-vejir-2026.jpg": {
+    "small": "/assets/article-images/antarktida-vejir-2026-720.webp",
+    "large": "/assets/article-images/antarktida-vejir-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/io-zar-pod-povrchem-2026.jpg": {
+    "small": "/assets/article-images/io-zar-pod-povrchem-2026-720.webp",
+    "large": "/assets/article-images/io-zar-pod-povrchem-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/uap-virginie-100-2026.jpg": {
+    "small": "/assets/article-images/uap-virginie-100-2026-720.webp",
+    "large": "/assets/article-images/uap-virginie-100-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/mesic-skryte-sopky-2026.jpg": {
+    "small": "/assets/article-images/mesic-skryte-sopky-2026-720.webp",
+    "large": "/assets/article-images/mesic-skryte-sopky-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/velrybi-kost-pacifik-2026.jpg": {
+    "small": "/assets/article-images/velrybi-kost-pacifik-2026-720.webp",
+    "large": "/assets/article-images/velrybi-kost-pacifik-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/zeme-zmizela-za-phobosem-2026.jpg": {
+    "small": "/assets/article-images/zeme-zmizela-za-phobosem-2026-720.webp",
+    "large": "/assets/article-images/zeme-zmizela-za-phobosem-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/bermudy-skryta-vrstva-2026.jpg": {
+    "small": "/assets/article-images/bermudy-skryta-vrstva-2026-720.webp",
+    "large": "/assets/article-images/bermudy-skryta-vrstva-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/lhs3844b-povrch-exoplanety-2026.jpg": {
+    "small": "/assets/article-images/lhs3844b-povrch-exoplanety-2026-720.webp",
+    "large": "/assets/article-images/lhs3844b-povrch-exoplanety-2026-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/magnetar-prazdny-vesmir-2026.jpg": {
+    "small": "/assets/article-images/magnetar-prazdny-vesmir-2026-720.webp",
+    "large": "/assets/article-images/magnetar-prazdny-vesmir-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/project-sign-spis-1947-2026.jpg": {
+    "small": "/assets/article-images/project-sign-spis-1947-2026-720.webp",
+    "large": "/assets/article-images/project-sign-spis-1947-2026-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/trojuhelnik-bagram-2026.jpg": {
+    "small": "/assets/article-images/trojuhelnik-bagram-2026-720.webp",
+    "large": "/assets/article-images/trojuhelnik-bagram-2026-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/s301-nejrychlejsi-hvezda-2026.jpg": {
+    "small": "/assets/article-images/s301-nejrychlejsi-hvezda-2026-720.webp",
+    "large": "/assets/article-images/s301-nejrychlejsi-hvezda-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/mikroby-mesic-jizni-pol-2026.jpg": {
+    "small": "/assets/article-images/mikroby-mesic-jizni-pol-2026-720.webp",
+    "large": "/assets/article-images/mikroby-mesic-jizni-pol-2026-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/1998-sh2-skryta-kometa-2026.jpg": {
+    "small": "/assets/article-images/1998-sh2-skryta-kometa-2026-720.webp",
+    "large": "/assets/article-images/1998-sh2-skryta-kometa-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/uap-pr149-rychlost-2026.jpg": {
+    "small": "/assets/article-images/uap-pr149-rychlost-2026-720.webp",
+    "large": "/assets/article-images/uap-pr149-rychlost-2026-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/menkaure-dve-dutiny-2026.jpg": {
+    "small": "/assets/article-images/menkaure-dve-dutiny-2026-720.webp",
+    "large": "/assets/article-images/menkaure-dve-dutiny-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/m57-zelezna-pricka-2026.jpg": {
+    "small": "/assets/article-images/m57-zelezna-pricka-2026-720.webp",
+    "large": "/assets/article-images/m57-zelezna-pricka-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/neil-armstrong-cueva-tayos-1976.jpg": {
+    "small": "/assets/article-images/neil-armstrong-cueva-tayos-1976-720.webp",
+    "large": "/assets/article-images/neil-armstrong-cueva-tayos-1976-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/saturn-jizni-pol-dekagon-2026.jpg": {
+    "small": "/assets/article-images/saturn-jizni-pol-dekagon-2026-720.webp",
+    "large": "/assets/article-images/saturn-jizni-pol-dekagon-2026-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/quaoar-prstence-misto-mesice-2026.jpg": {
+    "small": "/assets/article-images/quaoar-prstence-misto-mesice-2026-720.webp",
+    "large": "/assets/article-images/quaoar-prstence-misto-mesice-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/ruda-svetla-hodinky-2026.jpg": {
+    "small": "/assets/article-images/ruda-svetla-hodinky-2026-720.webp",
+    "large": "/assets/article-images/ruda-svetla-hodinky-2026-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/merkur-smrstovani-skryte-vrasky-2026.jpg": {
+    "small": "/assets/article-images/merkur-smrstovani-skryte-vrasky-2026-720.webp",
+    "large": "/assets/article-images/merkur-smrstovani-skryte-vrasky-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/deimos-naraz-hladky-povrch-2026.jpg": {
+    "small": "/assets/article-images/deimos-naraz-hladky-povrch-2026-720.webp",
+    "large": "/assets/article-images/deimos-naraz-hladky-povrch-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/slunce-spolklo-superzemi-2026.jpg": {
+    "small": "/assets/article-images/slunce-spolklo-superzemi-2026-720.webp",
+    "large": "/assets/article-images/slunce-spolklo-superzemi-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/prusvitny-trojuhelnik-colorado-springs-2023.jpg": {
+    "small": "/assets/article-images/prusvitny-trojuhelnik-colorado-springs-2023-720.webp",
+    "large": "/assets/article-images/prusvitny-trojuhelnik-colorado-springs-2023-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/north-pole-dome-nejstarsi-krater-spor-2026.jpg": {
+    "small": "/assets/article-images/north-pole-dome-nejstarsi-krater-spor-2026-720.webp",
+    "large": "/assets/article-images/north-pole-dome-nejstarsi-krater-spor-2026-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/tutanchamon-skryte-komory-vesmir-v2.jpg": {
+    "small": "/assets/article-images/tutanchamon-skryte-komory-vesmir-v2-720.webp",
+    "large": "/assets/article-images/tutanchamon-skryte-komory-vesmir-v2-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/giza-pilire-vesmir-v2.jpg": {
+    "small": "/assets/article-images/giza-pilire-vesmir-v2-720.webp",
+    "large": "/assets/article-images/giza-pilire-vesmir-v2-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/dendera-zverokruh-vesmir-v2.jpg": {
+    "small": "/assets/article-images/dendera-zverokruh-vesmir-v2-720.webp",
+    "large": "/assets/article-images/dendera-zverokruh-vesmir-v2-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/mars-leopardi-skvrny-vesmir-v2.jpg": {
+    "small": "/assets/article-images/mars-leopardi-skvrny-vesmir-v2-720.webp",
+    "large": "/assets/article-images/mars-leopardi-skvrny-vesmir-v2-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/tremonton-filmovy-dukaz-hero-v01.png": {
+    "small": "/assets/article-images/tremonton-filmovy-dukaz-hero-v01-720.webp",
+    "large": "/assets/article-images/tremonton-filmovy-dukaz-hero-v01-1600.webp",
+    "width": 1672,
+    "height": 941
+  }
+}
