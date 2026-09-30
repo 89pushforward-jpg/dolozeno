@@ -526,5 +526,47 @@
     "large": "/assets/article-images/tutanchamon-dyka-vesmir-v2-1600.webp",
     "width": 1672,
     "height": 941
+  },
+  "img/neptun-planeta-z-vypoctu-hero-v1.jpg": {
+    "small": "/assets/article-images/neptun-planeta-z-vypoctu-hero-v1-720.webp",
+    "large": "/assets/article-images/neptun-planeta-z-vypoctu-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/beta-pictoris-b-radiovy-signal-hero-v1.jpg": {
+    "small": "/assets/article-images/beta-pictoris-b-radiovy-signal-hero-v1-720.webp",
+    "large": "/assets/article-images/beta-pictoris-b-radiovy-signal-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/anita-signaly-pod-ledem-hero-v1.jpg": {
+    "small": "/assets/article-images/anita-signaly-pod-ledem-hero-v1-720.webp",
+    "large": "/assets/article-images/anita-signaly-pod-ledem-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/norimberk-1561-nebesky-ukaz-hero-v1.jpg": {
+    "small": "/assets/article-images/norimberk-1561-nebesky-ukaz-hero-v1-720.webp",
+    "large": "/assets/article-images/norimberk-1561-nebesky-ukaz-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/novy-krater-mesic-2024-hero-v1.jpg": {
+    "small": "/assets/article-images/novy-krater-mesic-2024-hero-v1-720.webp",
+    "large": "/assets/article-images/novy-krater-mesic-2024-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/bagdadska-baterie-elektrina-2026-hero-v01.jpg": {
+    "small": "/assets/article-images/bagdadska-baterie-elektrina-2026-hero-v01-720.webp",
+    "large": "/assets/article-images/bagdadska-baterie-elektrina-2026-hero-v01-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/chandra-84-neviditelnych-objektu-hero-v1.jpg": {
+    "small": "/assets/article-images/chandra-84-neviditelnych-objektu-hero-v1-720.webp",
+    "large": "/assets/article-images/chandra-84-neviditelnych-objektu-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
   }
 }
