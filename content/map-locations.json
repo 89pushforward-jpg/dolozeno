@@ -1,0 +1,1150 @@
+{
+  "franta2": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Gíza · pyramidový komplex",
+        "lat": 29.977,
+        "lon": 31.131,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://en.wikipedia.org/wiki/Diary_of_Merer"
+      }
+    ]
+  },
+  "pod-pyramidami-neco-je-ale-co-skeny-spory-a-jedno-poctive-ne": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Gíza · pyramidový komplex",
+        "lat": 29.977,
+        "lon": 31.131,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.nationalgeographic.com/history/article/is-there-a-secret-city-under-the-pyramids-"
+      }
+    ]
+  },
+  "giza-pilire-pod-pyramidou": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Gíza · pyramidový komplex",
+        "lat": 29.977,
+        "lon": 31.131,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://codigooculto.com/wp-content/uploads/2025/03/project-khafre-2025.pdf"
+      }
+    ]
+  },
+  "menkaure-dve-dutiny-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Menkaureova pyramida",
+        "lat": 29.9725,
+        "lon": 31.1282,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://doi.org/10.1016/j.ndteint.2025.103331"
+      }
+    ]
+  },
+  "tutanchamon-skryte-komory": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Tutanchamonova hrobka KV62 · Údolí králů",
+        "lat": 25.7402,
+        "lon": 32.6014,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.academia.edu/175580520/An_Archaeo_Geophysical_Review_and_Assessment_of_the_Structure_and_Morphology_of_Tutankhamuns_Tomb_KV_62_The_Burial_of_Nefertiti_IV_2026_"
+      }
+    ]
+  },
+  "tutanchamon-dyka-z-vesmiru": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Tutanchamonova hrobka KV62 · Údolí králů",
+        "lat": 25.7402,
+        "lon": 32.6014,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://pure.courtauld.ac.uk/en/publications/the-meteoritic-origin-of-tutankhamuns-iron-dagger-blade/"
+      }
+    ]
+  },
+  "dendera-zverokruh": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Hathořin chrám · Dendera",
+        "lat": 26.1418,
+        "lon": 32.6702,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://collections.louvre.fr/en/ark:/53355/cl010028871"
+      }
+    ]
+  },
+  "neil-armstrong-cueva-tayos-1976": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Jeskyně Tayos · Ekvádor",
+        "lat": -3.104,
+        "lon": -78.207,
+        "precision": "region",
+        "note": "Oblast jeskynního systému; bod není přesná poloha konkrétní chodby.",
+        "articleSource": "https://repositorio.flacsoandes.edu.ec/server/api/core/bitstreams/6ec5de29-1831-4e6c-ae0e-6aebd6c9adf5/content"
+      }
+    ]
+  },
+  "norimberk-1561-nebesky-ukaz": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Norimberk",
+        "lat": 49.4521,
+        "lon": 11.0767,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.graphikportal.org/document/gpo00139754?medium=327D1F2D"
+      }
+    ]
+  },
+  "bagdadska-baterie-elektrina-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Khujut Rabu · okolí Bagdádu",
+        "lat": 33.34,
+        "lon": 44.4,
+        "precision": "region",
+        "note": "Přibližná oblast nálezu. Přesné archeologické místo není v podkladech článku určeno.",
+        "articleSource": "https://sino-platonic.org/complete/spp377_baghdad_battery.pdf"
+      }
+    ]
+  },
+  "franta-ariel": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Škola Ariel · Ruwa, Zimbabwe",
+        "lat": -17.89,
+        "lon": 31.24,
+        "precision": "region",
+        "note": "Bod označuje okolí města Ruwa, nikoli přesné souřadnice školního dvora.",
+        "articleSource": "https://en.wikipedia.org/wiki/Ariel_School_UFO_incident"
+      }
+    ]
+  },
+  "langley-drony": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Letecká základna Langley",
+        "lat": 37.083,
+        "lon": -76.36,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://thehill.com/policy/defense/5942796-pentagon-us-bases-ufo-sightings/"
+      }
+    ]
+  },
+  "byvala-pilotka-navy-znovu-mluvi-o-svem-setkani": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Pacifik u San Diega · případ Nimitz",
+        "lat": 32,
+        "lon": -118,
+        "precision": "region",
+        "note": "Přibližná oblast na moři. Souřadnice setkání nejsou v článku doloženy.",
+        "articleSource": "https://www.cbsnews.com/tag/ufo"
+      }
+    ]
+  },
+  "jal-1628": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Aljaška · okolí Fairbanks",
+        "lat": 64.84,
+        "lon": -147.72,
+        "precision": "region",
+        "note": "Oblast letu JAL 1628, nikoli přesná poloha objektu.",
+        "articleSource": "https://documents.theblackvault.com/documents/ufos/jal1628/733667-001-024.pdf"
+      }
+    ]
+  },
+  "tremonton-filmovy-dukaz-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Tremonton · Utah",
+        "lat": 41.712,
+        "lon": -112.165,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.dvidshub.net/video/1023402/dow-uap-pr159-historical-film-reported-ufos-utah-1952"
+      }
+    ]
+  },
+  "prusvitny-trojuhelnik-colorado-springs-2023": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Colorado Springs",
+        "lat": 38.834,
+        "lon": -104.821,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.war.gov/medialink/ufo/release_05/Aug_07/documents/FBI-UAP-D026_FD-302_Dark-Translucent-Triangle_2023.pdf"
+      }
+    ]
+  },
+  "trojuhelnik-bagram-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Bagram · Afghánistán",
+        "lat": 34.946,
+        "lon": 69.265,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.war.gov/medialink/ufo/release_05/Aug_07/documents/FBI-UAP-D024_FD-302_Airborne-Lights-and-Triangle_2002_2023-2024.pdf"
+      }
+    ]
+  },
+  "zelene-koule-los-alamos-1949": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Los Alamos · Nové Mexiko",
+        "lat": 35.88,
+        "lon": -106.3,
+        "precision": "region",
+        "note": "Oblast hlášení, ne přesná dráha světel.",
+        "articleSource": "https://www.war.gov/medialink/ufo/071026/release_04/documents/DOE-UAP-D004_Los-Alamos-Conference-on-Aerial-Phenomena_1949.pdf"
+      }
+    ]
+  },
+  "hvezdice-zlute-more-2025": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Žluté moře",
+        "lat": 35.5,
+        "lon": 123,
+        "precision": "region",
+        "note": "Přibližná oblast moře; přesné souřadnice záznamu nejsou známy.",
+        "articleSource": "https://www.war.gov/UFO/"
+      }
+    ]
+  },
+  "meduza-atlantik-2020": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Atlantský oceán",
+        "lat": 30,
+        "lon": -45,
+        "precision": "region",
+        "note": "Pouze označení oceánu podle podkladů. Bod není místem konkrétní události.",
+        "articleSource": "https://www.dvidshub.net/video/1014124/dow-uap-pr116-unresolved-uap-report-atlantic-ocean-2020"
+      }
+    ]
+  },
+  "orby3": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Severovýchod USA",
+        "lat": 42,
+        "lon": -74,
+        "precision": "region",
+        "note": "Přibližná oblast; konkrétní místo hlášení není zveřejněné.",
+        "articleSource": "https://www.war.gov/UFO/"
+      }
+    ]
+  },
+  "cervena-koule-plazma": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Severovýchod USA",
+        "lat": 42,
+        "lon": -74,
+        "precision": "region",
+        "note": "Přibližná oblast; konkrétní místo hlášení není zveřejněné.",
+        "articleSource": "https://abc7ny.com/post/new-batch-ufo-files-released-pentagon-donald-trump-administration-describe-spinning-discs-more/19288671/"
+      }
+    ]
+  },
+  "uap-virginie-100-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Moře u pobřeží Virginie",
+        "lat": 36.5,
+        "lon": -74.5,
+        "precision": "region",
+        "note": "Přibližná oblast záznamu, nikoli určená poloha jednotlivých objektů.",
+        "articleSource": "https://www.aaro.mil/Portals/136/PDFs/FY25%20UAP%20Annual%20Report/AARO_FY2025_Consolidated_Annual_Report_on_UAP.pdf"
+      }
+    ]
+  },
+  "meteor-sopka-svetlo": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Filipíny",
+        "lat": 13,
+        "lon": 123,
+        "precision": "region",
+        "note": "Článek uvádí Filipíny. Bod označuje region, ne určenou sopku či dopad meteoritu.",
+        "articleSource": "https://www.youtube.com/watch?v=kRntP5h3AqI"
+      }
+    ]
+  },
+  "cern-lhc-odstavka": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "CERN · Ženeva",
+        "lat": 46.234,
+        "lon": 6.055,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.sciencenews.org/article/cern-large-hadron-collider-upgrade"
+      }
+    ]
+  },
+  "supervulkan-kikai-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Kaldera Kikai · Japonsko",
+        "lat": 30.79,
+        "lon": 130.31,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.kobe-u.ac.jp/en/news/article/20260327-67665/"
+      }
+    ]
+  },
+  "bermudy-skryta-vrstva-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Bermudy",
+        "lat": 32.3,
+        "lon": -64.75,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2025GL118279"
+      }
+    ]
+  },
+  "kamen-co-zabil-dinosaury": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Kráter Chicxulub · Yucatán",
+        "lat": 21.4,
+        "lon": -89.5,
+        "precision": "locality",
+        "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
+        "articleSource": "https://www.sciencedaily.com/releases/2026/07/260718010142.htm"
+      }
+    ]
+  },
+  "north-pole-dome-nejstarsi-krater-spor-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "North Pole Dome · Pilbara",
+        "lat": -21.13,
+        "lon": 119.38,
+        "precision": "region",
+        "note": "Přibližná geologická oblast, nikoli jediný bod dopadu.",
+        "articleSource": "https://doi.org/10.1130/G54866.1"
+      }
+    ]
+  },
+  "antarktida-vejir-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Východní Antarktida",
+        "lat": -78,
+        "lon": 100,
+        "precision": "region",
+        "note": "Rozsáhlá soustava pánví. Bod je orientační střed oblasti.",
+        "articleSource": "https://www.nature.com/articles/s41561-026-01991-6"
+      }
+    ]
+  },
+  "anita-signaly-pod-ledem": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Antarktida · experiment ANITA",
+        "lat": -82,
+        "lon": 0,
+        "precision": "region",
+        "note": "Balónový experiment nad kontinentem. Bod nepředstavuje přesné místo ani původ dvou signálů.",
+        "articleSource": "https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.134.121003"
+      }
+    ]
+  },
+  "ztraceny-svet-meteorit": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Severozápadní Afrika · Sahara",
+        "lat": 25,
+        "lon": -8,
+        "precision": "region",
+        "note": "Přibližná oblast nálezu NWA 12774; místo původu mateřského tělesa neznáme.",
+        "articleSource": "https://www.colorado.edu/today/2026/06/01/rare-meteorite-provides-evidence-giant-early-planet"
+      }
+    ]
+  },
+  "velrybi-kost-pacifik-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Pacifik u Cookových ostrovů",
+        "lat": -20,
+        "lon": -160,
+        "precision": "region",
+        "note": "Orientační oblast expedice. Přesné souřadnice podmořské hory Pepe nejsou převzaty z článku.",
+        "articleSource": "https://oceanexplorer.noaa.gov/ex2605-dailyupdates-aug12/"
+      }
+    ]
+  },
+  "zmizele-hvezdy-1952": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Palomarská observatoř",
+        "lat": 33.356,
+        "lon": -116.864,
+        "precision": "locality",
+        "note": "Místo pořízení fotodesek. Není to poloha zmizelých objektů na obloze.",
+        "articleSource": "https://thedebrief.org/the-vanishing-star-enigma-and-the-1952-washington-d-c-ufo-wave/"
+      }
+    ]
+  },
+  "whistleblower-david-grusch-promluvil-u-kapitolu": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Kapitól · Washington",
+        "lat": 38.89,
+        "lon": -77.009,
+        "precision": "locality",
+        "note": "Místo veřejného vystoupení; bod neoznačuje pozorování UFO.",
+        "articleSource": "https://www.prnewswire.com/news-releases/push-for-uap-ufo-transparency-intensifies-as-members-of-congress-and-whistleblowers-call-for-release-of-groundbreaking-conclusive-files-302784861.html"
+      }
+    ]
+  },
+  "disclosure-forum-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Kapitól · Washington",
+        "lat": 38.89,
+        "lon": -77.009,
+        "precision": "locality",
+        "note": "Místo veřejného vystoupení; bod neoznačuje pozorování UFO.",
+        "articleSource": "https://www.newsnationnow.com/space/ufo/ufo-experts-lawmakers-disclosure-forum/"
+      }
+    ]
+  },
+  "robertson-panel": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Washington D.C.",
+        "lat": 38.907,
+        "lon": -77.037,
+        "precision": "locality",
+        "note": "Město jednání Robertsonova panelu v roce 1953.",
+        "articleSource": "https://sgp.fas.org/library/ciaufo.html"
+      }
+    ]
+  },
+  "ve-spisech-je-pres-40-videi-i-materialy-z-misi-apollo": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.cbsnews.com/tag/ufo"
+      }
+    ]
+  },
+  "posadka-apolla-17-hlasila-zahadna-svetla": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.cbsnews.com/tag/ufo"
+      }
+    ]
+  },
+  "nasa-audio": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.war.gov/UFO/"
+      }
+    ]
+  },
+  "mesic-skryte-sopky-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2026GL121908"
+      }
+    ]
+  },
+  "mikroby-mesic-jizni-pol-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.science.org/doi/10.1126/sciadv.aec0811"
+      }
+    ]
+  },
+  "novy-krater-mesic-2024": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · mise a povrch",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://science.nasa.gov/solar-system/moon/nasas-moon-orbiter-spots-new-once-in-century-moon-crater/"
+      }
+    ]
+  },
+  "mars-leopardi-skvrny": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Mars",
+        "place": "Mars · kráter Jezero / Cheyava Falls",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.nasa.gov/news-release/nasa-says-mars-rover-discovered-potential-biosignature-last-year/"
+      }
+    ]
+  },
+  "mars-leopardi-skvrny-2": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Mars",
+        "place": "Mars · kráter Jezero / Cheyava Falls",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.nasa.gov/news-release/nasa-says-mars-rover-discovered-potential-biosignature-last-year/"
+      }
+    ]
+  },
+  "zeme-zmizela-za-phobosem-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Phobos",
+        "place": "Phobos · zatmění Země z Marsu",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-watches-earth-vanish-behind-martian-moon/"
+      }
+    ]
+  },
+  "deimos-naraz-hladky-povrch-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Deimos",
+        "place": "Deimos",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.nature.com/articles/s41550-026-02956-w"
+      }
+    ]
+  },
+  "europa-ocean-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Europa",
+        "place": "Europa",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.sciencedaily.com/releases/2026/07/260727214604.htm"
+      }
+    ]
+  },
+  "io-zar-pod-povrchem-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Io",
+        "place": "Io",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JE009622"
+      }
+    ]
+  },
+  "slunce-skryty-vypinac": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Slunce",
+        "place": "Slunce",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://ras.ac.uk/news-and-press/research-highlights/nam-2026-how-sun-goes-sleep-could-reveal-future-space-weather"
+      }
+    ]
+  },
+  "slunce-spolklo-superzemi-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Slunce",
+        "place": "Slunce",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://academic.oup.com/mnras/article/551/4/stag1527/8787825"
+      }
+    ]
+  },
+  "pluto-tekuty-dusik-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Pluto",
+        "place": "Pluto",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.swri.org/newsroom/press-releases/swri-study-finds-evidence-of-liquid-recently-flowing-pluto-s-surface"
+      }
+    ]
+  },
+  "saturn-jizni-pol-dekagon-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Saturn",
+        "place": "Saturn · jižní polární oblast",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.science.org/doi/10.1126/sciadv.aee4251"
+      }
+    ]
+  },
+  "neptun-planeta-z-vypoctu": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Neptun",
+        "place": "Neptun",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.nasa.gov/history/175-years-ago-astronomers-discover-neptune-the-eighth-planet/"
+      }
+    ]
+  },
+  "merkur-smrstovani-skryte-vrasky-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Merkur",
+        "place": "Merkur",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://apnews.com/article/mercury-shrinking-planet-47b010ee65287f76565bc4859c7c09b3"
+      }
+    ]
+  },
+  "quaoar-prstence-misto-mesice-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Quaoar",
+        "place": "Quaoar",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.nature.com/articles/s41586-022-05629-6"
+      }
+    ]
+  },
+  "asteroid-nysa-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Pás asteroidů",
+        "place": "(44) Nysa · hlavní pás",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://lowell.edu/press-release-asteroid-44-nysa-may-be-the-first-known-three-lobed-world/"
+      }
+    ]
+  },
+  "1998-sh2-skryta-kometa-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "1998 SH2",
+        "precision": "body",
+        "note": "Samostatná položka v přehledu malých těles; ne aktuální poloha komety.",
+        "articleSource": "https://www.nature.com/articles/s41550-026-02913-7"
+      }
+    ]
+  },
+  "3i-atlas": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "3I/ATLAS",
+        "precision": "body",
+        "note": "Mezihvězdný návštěvník. Bod slouží jako položka ve schématu, nikoli jako aktuální efemerida.",
+        "articleSource": "https://science.nasa.gov/solar-system/comets/3i-atlas/3i-atlas-facts-and-faqs/"
+      }
+    ]
+  },
+  "voyager-svetelny-den": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Mezihvězdný prostor",
+        "place": "Voyager 1",
+        "precision": "body",
+        "note": "Sonda za heliopauzou. Schéma znázorňuje kontext, ne aktuální směr či vzdálenost.",
+        "articleSource": "https://science.nasa.gov/mission/voyager/where-are-voyager-1-and-voyager-2-now/"
+      }
+    ]
+  },
+  "zatmeni-slunce-2026": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Země",
+        "place": "Zatmění · Země–Měsíc–Slunce",
+        "precision": "body",
+        "note": "Umístění na příslušném tělese. Schéma neukazuje aktuální oběžnou polohu ani vzdálenosti.",
+        "articleSource": "https://www.astro.cz/na-obloze/slunce/zatmeni-slunce/zatmeni-slunce-v-letech-2021-2030/uplne-zatmeni-slunce-12-srpna-2026.html"
+      }
+    ]
+  },
+  "zahadny-signal-pluto-titan": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Pluto",
+        "place": "Pluto",
+        "precision": "body",
+        "note": "Tentýž článek se týká obou těles. Schematické umístění.",
+        "articleSource": "https://observatoiredeparis.psl.eu/an-unknown-spectral-signature.html"
+      },
+      {
+        "body": "Titan",
+        "place": "Titan",
+        "precision": "body",
+        "note": "Tentýž článek se týká obou těles. Schematické umístění.",
+        "articleSource": "https://observatoiredeparis.psl.eu/an-unknown-spectral-signature.html"
+      }
+    ]
+  },
+  "k2-18b": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "K2-18 b",
+        "ra": 172.560141,
+        "dec": 7.5878315,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://www.astronomy.com/science/no-signs-of-technology-on-exoplanet-k2-18-b/"
+      }
+    ]
+  },
+  "webb-99-zivot": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "K2-18 b",
+        "ra": 172.560141,
+        "dec": 7.5878315,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://www.cbsnews.com/boston/news/evidence-life-distant-planet-k218b/"
+      }
+    ]
+  },
+  "toi-1452b": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "TOI-1452 b",
+        "ra": 290.1739741,
+        "dec": 73.1951082,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://science.nasa.gov/universe/exoplanets/discovery-alert-intriguing-new-super-earth-could-get-a-closer-look/"
+      }
+    ]
+  },
+  "atmosfera-lhs1140b": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "LHS 1140 b",
+        "ra": 11.248632,
+        "dec": -15.2741085,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://www.cfa.harvard.edu/news/first-atmosphere-detected-habitable-zone-rocky-world"
+      }
+    ]
+  },
+  "lhs3844b-povrch-exoplanety-2026": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "LHS 3844 b",
+        "ra": 340.4962038,
+        "dec": -69.1721081,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://www.nature.com/articles/s41550-026-02860-3"
+      }
+    ]
+  },
+  "beta-pictoris-b-radiovy-signal": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Soustava Beta Pictoris",
+        "ra": 86.8212337,
+        "dec": -51.066148,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://arxiv.org/abs/2609.16720"
+      }
+    ]
+  },
+  "beta-pictoris-d": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Soustava Beta Pictoris",
+        "ra": 86.8212337,
+        "dec": -51.066148,
+        "precision": "direction",
+        "source": "https://exoplanetarchive.ipac.caltech.edu/",
+        "note": "Směr objektu na obloze v souřadnicích J2000/ICRS. Mapa neukazuje vzdálenost.",
+        "articleSource": "https://science.nasa.gov/missions/webb/nasas-webb-discovers-hidden-planet-in-famous-star-system/"
+      }
+    ]
+  },
+  "tabbyina-hvezda": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "KIC 8462852",
+        "ra": 301.56438605,
+        "dec": 44.45688635,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=KIC%208462852",
+        "note": "Směr objektu na obloze · J2000/ICRS.",
+        "articleSource": "https://www.jpl.nasa.gov/news/mysterious-dimming-of-tabbys-star-may-be-caused-by-dust/"
+      }
+    ]
+  },
+  "signal-male-zelene-muzicky": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "PSR B1919+21",
+        "ra": 290.43672917,
+        "dec": 21.88395833,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=PSR%20B1919%2B21",
+        "note": "Směr objektu na obloze · J2000/ICRS.",
+        "articleSource": "https://www.cam.ac.uk/stories/journeysofdiscovery-pulsars"
+      }
+    ]
+  },
+  "magnetar-prazdny-vesmir-2026": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "1E 1547.0-5408",
+        "ra": 237.72575,
+        "dec": -54.30664,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=1E%201547.0-5408",
+        "note": "Směr objektu na obloze · J2000/ICRS.",
+        "articleSource": "https://www.nature.com/articles/s41586-026-10859-z"
+      }
+    ]
+  },
+  "s301-nejrychlejsi-hvezda-2026": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Sgr A*",
+        "ra": 266.41681662,
+        "dec": -29.00782497,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Sgr%20A*",
+        "note": "Směr středu Galaxie; hvězda S301 leží v bezprostředním okolí Sagittarius A*.",
+        "articleSource": "https://www.nature.com/articles/s41586-026-10894-w"
+      }
+    ]
+  },
+  "m57-zelezna-pricka-2026": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "M57",
+        "ra": 283.39623652,
+        "dec": 33.02913425,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=M57",
+        "note": "Směr objektu na obloze · J2000/ICRS.",
+        "articleSource": "https://academic.oup.com/mnras/article/546/1/staf2139/8425243"
+      }
+    ]
+  },
+  "cerna-dira-starsi-galaxie": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Abell 2744",
+        "ra": 3.58345833,
+        "dec": -30.38827778,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=Abell%202744",
+        "note": "Směr kupy Abell 2744, která gravitačně čočkuje QSO1; nikoli přesná poloha jednotlivého čočkovaného obrazu.",
+        "articleSource": "https://esawebb.org/news/weic2609/"
+      }
+    ]
+  },
+  "wow-signal": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Střelec · oblast signálu Wow!",
+        "ra": 285,
+        "dec": -27,
+        "precision": "direction",
+        "source": "https://www.seti.org/research/seti-101/the-wow-signal",
+        "note": "Orientační oblast ve Střelci. Signál měl dvě možné polohy a neznámou vzdálenost; bod není identifikovaný zdroj.",
+        "articleSource": "https://phys.org/news/2025-08-wow-stronger-thought.html"
+      }
+    ]
+  },
+  "franta1": {
+    "view": "hluboky-vesmir",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "film": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "pentagon-spustil-pursue-a-zacal-poustet-utajene-ufo-spisy": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "avi-loeb-cast-slavnych-snimku-je-nejspis-jen-opticky-klam": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "slavna-zahadna-tecka-z-videa-nejspis-jen-racek": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "dalsi-vlna-odhaleni-pry-prijde-brzy": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "vedci-varuji-znamky-zivota-jsme-mozna-prehlizeli": {
+    "view": "hluboky-vesmir",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "pursue-release-2026": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "pursue3": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "rekonstrukce": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "franta3": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "dyson-sfery": {
+    "view": "hluboky-vesmir",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "u2-spy": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "franta4": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "aaro-40": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "humanoid-video": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "signal-magnetar": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "SN 2024afav",
+        "ra": 192.30020833,
+        "dec": -18.10350278,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=SN%202024afav",
+        "note": "Katalogový směr zdroje na obloze (J2000/ICRS), nikoli vzdálenost.",
+        "articleSource": "https://news.berkeley.edu/2026/03/11/astronomers-capture-birth-of-a-magnetar-confirming-link-to-some-of-universes-brightest-exploding-stars/"
+      }
+    ]
+  },
+  "zahadne-signaly-transienty": {
+    "view": "hluboky-vesmir",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "ztraceni-kosmonauti": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Turín · místo údajných rádiových nahrávek",
+        "lat": 45.07,
+        "lon": 7.69,
+        "precision": "locality",
+        "note": "Město, kde bratři pořizovali údajné nahrávky. Ne místo úmrtí ani potvrzeného kosmického letu.",
+        "articleSource": "https://en.wikipedia.org/wiki/Valentin_Bondarenko"
+      }
+    ]
+  },
+  "bloudici-cerna-dira-2026": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "AT2024tvd",
+        "ra": 257.6774375,
+        "dec": 28.83753056,
+        "precision": "direction",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=AT2024tvd",
+        "note": "Katalogový směr zdroje na obloze (J2000/ICRS), nikoli vzdálenost.",
+        "articleSource": "https://www.sci.news/astronomy/wandering-supermassive-black-hole-14953.html"
+      }
+    ]
+  },
+  "project-sign-spis-1947-2026": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "uap-pr149-rychlost-2026": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "ruda-svetla-hodinky-2026": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Podklady článku zatím neurčují jedno jednoznačné místo. Článek je v seznamu; přesný bod nedoplňujeme odhadem."
+  },
+  "chandra-84-neviditelnych-objektu": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "M101 · jedna ze šesti zkoumaných galaxií",
+        "ra": 210.80242917,
+        "dec": 54.34875,
+        "precision": "direction",
+        "source": "https://science.nasa.gov/missions/chandra/nasas-chandra-unveils-mysterious-x-ray-objects/",
+        "note": "Dvě ze šesti galaxií jsou výslovně pojmenované v textu NASA. Body označují galaxie, nikoli všech 84 jednotlivých zdrojů.",
+        "articleSource": "https://www.nature.com/articles/s41550-026-02959-7"
+      },
+      {
+        "place": "M31 · jedna ze šesti zkoumaných galaxií",
+        "ra": 10.68470833,
+        "dec": 41.26875,
+        "precision": "direction",
+        "source": "https://science.nasa.gov/missions/chandra/nasas-chandra-unveils-mysterious-x-ray-objects/",
+        "note": "Dvě ze šesti galaxií jsou výslovně pojmenované v textu NASA. Body označují galaxie, nikoli všech 84 jednotlivých zdrojů.",
+        "articleSource": "https://www.nature.com/articles/s41550-026-02959-7"
+      }
+    ]
+  }
+}

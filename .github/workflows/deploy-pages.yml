@@ -25,6 +25,7 @@ jobs:
           node-version: '22'
       - run: node --test tools/publication.test.cjs
       - run: npm run build:production
+      - run: npm run test:maps
       - run: node tools/verify-production.cjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

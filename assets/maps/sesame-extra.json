@@ -1,0 +1,22 @@
+[
+  {
+    "id": "M101",
+    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sesame xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:noNamespaceSchemaLocation=\"https://vizier.cds.unistra.fr/xml/sesame_4x.xsd\">\n<Target option=\"SNV\">\n  <name>M101</name>\n  <!-- Q8628364 #1 -->\n  <Resolver name=\"Sc=Simbad (CDS, via client/server)\"><!--delay: 157ms [1] -->\n    <oid>529086</oid>\n    <otype>GiP</otype>\n    <jpos>14:03:12.58 +54:20:55.5</jpos>\n    <jradeg>210.80242917</jradeg>\n    <jdedeg>54.34875</jdedeg>\n    <refPos>2006AJ....131.1163S</refPos>\n    <z><v>0.000811</v><e>0.000016</e><q>C</q><r>2012A&amp;A...545A..15S</r></z>\n    <MType>S_AB</MType>\n    <oname>M 101</oname>\n    <nrefs>3172</nrefs>\n  </Resolver>\n</Target>\n</Sesame>\n<!--- ****Total of 1 crashes -->\n<!-- Configuration tested: /run/sesame.conf -->\n"
+  },
+  {
+    "id": "M31",
+    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sesame xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:noNamespaceSchemaLocation=\"https://vizier.cds.unistra.fr/xml/sesame_4x.xsd\">\n<Target option=\"SNV\">\n  <name>M31</name>\n  <!-- Q8628365 #1 -->\n  <Resolver name=\"Sc=Simbad (CDS, via client/server)\"><!--delay: 0ms [0] -->\n    <INFO>from cache</INFO>\n    <oid>1575544</oid>\n    <otype>AGN</otype>\n    <jpos>00:42:44.32 +41:16:07.5</jpos>\n    <jradeg>10.68470833</jradeg>\n    <jdedeg>41.26875</jdedeg>\n    <refPos>2006AJ....131.1163S</refPos>\n    <Vel><v>-300.0</v><e>4.0</e><q>C</q><r>2012AJ....144....4M</r></Vel>\n    <MType>SA(s)b</MType>\n    <oname>M  31</oname>\n    <nrefs>13826</nrefs>\n  </Resolver>\n</Target>\n</Sesame>\n<!--- ====Done (2026-Sep-30,23:44:50z)==== -->\n"
+  },
+  {
+    "id": "SN 2024afav",
+    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sesame xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:noNamespaceSchemaLocation=\"https://vizier.cds.unistra.fr/xml/sesame_4x.xsd\">\n<Target option=\"SNV\">\n  <name>SN 2024afav</name>\n  <!-- Q8628366 #1 -->\n  <Resolver name=\"Sc=Simbad (CDS, via client/server)\"><!--delay: 71ms [2] -->\n    <oid>28268996</oid>\n    <otype>SN*</otype>\n    <jpos>12:49:12.04 -18:06:12.6</jpos>\n    <jradeg>192.30020833</jradeg>\n    <jdedeg>-18.10350278</jdedeg>\n    <z><v>0.0724</v><e>0.0001</e><q>D</q><r>2026ApJ...998L...3K</r></z>\n    <spType>SLSN-I</spType><spNum>0.001AFF00.0000.0000000000000000</spNum>\n    <oname>SN 2024afav</oname>\n    <nrefs>3</nrefs>\n  </Resolver>\n</Target>\n</Sesame>\n<!--- ****Total of 1 crashes -->\n<!-- Configuration tested: /run/sesame.conf -->\n"
+  },
+  {
+    "id": "ASKAP J1745",
+    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sesame xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:noNamespaceSchemaLocation=\"https://vizier.cds.unistra.fr/xml/sesame_4x.xsd\">\n<Target option=\"SNV\">\n  <name>ASKAP J1745</name>\n  <!-- Q8628367 #1 -->\n  <INFO> *** NNNothing found *** </INFO>\n</Target>\n</Sesame>\n<!--- ****Total of 1 crashes -->\n<!-- Configuration tested: /run/sesame.conf -->\n"
+  },
+  {
+    "id": "AT2024tvd",
+    "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Sesame xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n xsi:noNamespaceSchemaLocation=\"https://vizier.cds.unistra.fr/xml/sesame_4x.xsd\">\n<Target option=\"SNV\">\n  <name>AT2024tvd</name>\n  <!-- Q8628368 #1 -->\n  <Resolver name=\"Sc=Simbad (CDS, via client/server)\"><!--delay: 82ms [3] -->\n    <oid>27618369</oid>\n    <otype>ev</otype>\n    <jpos>17:10:42.58 +28:50:15.1</jpos>\n    <jradeg>257.6774375</jradeg>\n    <jdedeg>28.83753056</jdedeg>\n    <z><v>0.044938</v><q>D</q></z>\n    <oname>AT 2024tvd</oname>\n    <nrefs>16</nrefs>\n  </Resolver>\n</Target>\n</Sesame>\n<!--- ****Total of 1 crashes -->\n<!-- Configuration tested: /run/sesame.conf -->\n"
+  }
+]

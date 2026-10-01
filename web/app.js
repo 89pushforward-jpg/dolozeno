@@ -1,13 +1,17 @@
 (()=>{
  'use strict';
  const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#nav');
- menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Zavřít nabídku':'Otevřít nabídku');nav.classList.toggle('open',open)});
- nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu?.setAttribute('aria-expanded','false')}));
- document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav?.classList.contains('open')){nav.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.focus()}});
+ const mobileNav=matchMedia('(max-width:600px)');
+ function setMenu(open){if(!menu||!nav)return;menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Zavřít nabídku':'Otevřít nabídku');nav.classList.toggle('open',open);nav.inert=mobileNav.matches&&!open;}
+ menu?.addEventListener('click',()=>setMenu(menu.getAttribute('aria-expanded')!=='true'));
+ nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav?.classList.contains('open')){setMenu(false);menu.focus()}});
+ document.addEventListener('click',e=>{if(nav?.classList.contains('open')&&!nav.contains(e.target)&&!menu.contains(e.target))setMenu(false)});
+ mobileNav.addEventListener('change',()=>setMenu(false));setMenu(false);
  for(const b of document.querySelectorAll('[data-video]'))b.addEventListener('click',()=>{const id=b.dataset.video;if(!/^[\w-]{11}$/.test(id))return;const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1';f.title='Video k článku';f.allow='autoplay; encrypted-media; picture-in-picture';f.allowFullscreen=true;b.replaceWith(f)});
  const form=document.querySelector('#filters');if(!form)return;
  const q=document.querySelector('#q'),topic=document.querySelector('#topic'),month=document.querySelector('#month'),legacy=document.querySelector('#legacy-type'),cards=[...document.querySelectorAll('#article-grid .article-card')],pagers=[...document.querySelectorAll('.pagination')],count=document.querySelector('#result-count'),empty=document.querySelector('#empty');
- let type='',page=1,index=null,pending=false;const size=9;
+ let type='',page=1,index=null,pending=false;const size=10;
  const normal=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const indexPromise=fetch('/search.json').then(r=>{if(!r.ok)throw Error('search');return r.json()}).then(rows=>{index=new Map(rows.map(r=>[r.id,normal(r.text)]));return true}).catch(()=>{q.disabled=true;q.placeholder='Hledání se nepodařilo načíst. Obnovte stránku.';return false});
  function readUrl(){const params=new URLSearchParams(location.search);q.value=params.get('q')||'';topic.value=params.get('tema')||'';month.value=params.get('mesic')||'';type=params.get('typ')||'';if(!['','overeno','spekulace','svedectvi','franta','uap'].includes(type))type='';page=Math.max(1,Number.parseInt(params.get('strana')||'1',10)||1);legacy.value=['franta','uap'].includes(type)?type:''}

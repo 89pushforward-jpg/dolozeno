@@ -14,4 +14,5 @@ jobs:
           node-version: '22'
       - run: npm run test:publication
       - run: npm run build:production
+      - run: npm run test:maps
       - run: npm run test:production

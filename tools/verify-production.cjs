@@ -4,7 +4,7 @@ const read=p=>fs.readFileSync(path.join(ROOT,'dist',p),'utf8');
 const model=load(),published=model.articles.filter(a=>a.status==='published');
 const xml=read('sitemap.xml'),urls=[...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>m[1]);
 assert.equal(urls.length,new Set(urls).size,'duplicate sitemap URL');
-assert.equal(urls.length,published.length+2,'unexpected sitemap entries');
+assert.equal(urls.length,published.length+3,'unexpected sitemap entries');
 for(const url of urls){
  const u=new URL(url);assert.equal(u.origin,'https://dolozeno.cz');
  const file=u.pathname==='/'?'index.html':u.pathname.slice(1),html=read(file);
