@@ -568,5 +568,29 @@
     "large": "/assets/article-images/chandra-84-neviditelnych-objektu-hero-v1-1600.webp",
     "width": 1600,
     "height": 900
+  },
+  "img/ufo-teheran-barevna-svetla-2026-hero-v1.jpg": {
+    "small": "/assets/article-images/ufo-teheran-barevna-svetla-2026-hero-v1-720.webp",
+    "large": "/assets/article-images/ufo-teheran-barevna-svetla-2026-hero-v1-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/arendsee-10500-let-drevene-konstrukce-hero-v1.jpg": {
+    "small": "/assets/article-images/arendsee-10500-let-drevene-konstrukce-hero-v1-720.webp",
+    "large": "/assets/article-images/arendsee-10500-let-drevene-konstrukce-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 940
+  },
+  "img/enceladus-zivot-pod-ledem-hero-v1.jpg": {
+    "small": "/assets/article-images/enceladus-zivot-pod-ledem-hero-v1-720.webp",
+    "large": "/assets/article-images/enceladus-zivot-pod-ledem-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/noemova-archa-durupinar-vrty-2026-hero-v1.jpg": {
+    "small": "/assets/article-images/noemova-archa-durupinar-vrty-2026-hero-v1-720.webp",
+    "large": "/assets/article-images/noemova-archa-durupinar-vrty-2026-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
   }
 }

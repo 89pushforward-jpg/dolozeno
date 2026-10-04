@@ -1146,5 +1146,58 @@
         "articleSource": "https://www.nature.com/articles/s41550-026-02959-7"
       }
     ]
+  },
+  "ufo-teheran-barevna-svetla-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Teherán · udávaná oblast u dálnice Azadegan",
+        "lat": 35.62,
+        "lon": 51.34,
+        "precision": "region",
+        "note": "Orientační bod v udávané oblasti. Přesná poloha kamery ani objektu nebyla potvrzena.",
+        "articleSource": "https://www.reutersconnect.com/item/iran-unidentified-object-hovers-over-tehran-night-sky/dGFnOnJldXRlcnMuY29tLDIwMjY6bmV3c21sX09XU1BDQzI2MDIwMDcwMQ"
+      }
+    ]
+  },
+  "arendsee-10500-let-drevene-konstrukce": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Jezero Arendsee · Sasko-Anhaltsko",
+        "lat": 52.89,
+        "lon": 11.4759,
+        "precision": "region",
+        "note": "Bod označuje jezero, nikoli přesnou polohu podvodních nálezů; ta v podkladech není zveřejněná.",
+        "source": "https://essd.copernicus.org/articles/12/2311/2020/",
+        "articleSource": "https://www.lda-lsa.de/presse-und-oeffentlichkeitsarbeit/presseinformationen/30926-arendsee-mesolithikum"
+      }
+    ]
+  },
+  "enceladus-zivot-pod-ledem": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "place": "Enceladus · měsíc Saturnu",
+        "body": "Enceladus",
+        "precision": "body",
+        "note": "Schematická poloha měsíce u Saturnu; není to aktuální oběžná poloha ani bod jednotlivého výtrysku.",
+        "articleSource": "https://science.nasa.gov/missions/cassini/cassini-at-enceladus-a-decade-plus-of-discovery/"
+      }
+    ]
+  },
+  "noemova-archa-durupinar-vrty-2026": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Durupınar · východní Turecko",
+        "lat": 39.4406,
+        "lon": 44.2348,
+        "precision": "locality",
+        "note": "Bod označuje útvar Durupınar, nikoli přesné umístění letošních vrtů.",
+        "source": "https://www.wikidata.org/wiki/Q1267546",
+        "articleSource": "https://www.globenewswire.com/news-release/2026/09/23/3367545/0/en/core-drilling-begins-at-durupinar-noah-s-ark-site-drill-bit-shatters-on-possible-layer-of-petrified-wood.html"
+      }
+    ]
   }
 }
