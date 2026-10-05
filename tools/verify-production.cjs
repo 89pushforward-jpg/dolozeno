@@ -31,6 +31,9 @@ for(const a of model.articles){
   if(a.verdikt&&a.verdikt.proPct!=null)assert.ok(html.includes('width:'+a.verdikt.proPct+'%'));
  }
 }
+for(const s of JSON.parse(fs.readFileSync(path.join(ROOT,'content/spisy.json'),'utf8')).filter(s=>s.status==='published'))for(const id of s.articleIds||[]){
+ const html=read('clanky/'+id+'.html');assert.ok(html.includes('class="section article-spis"'),id+' dossier card');assert.ok(html.includes('href="'+esc(s.url)+'"'),id+' direct dossier link');assert.ok(html.includes('src="'+esc(s.image)+'"'),id+' dossier cover');assert.ok(html.indexOf('class="section article-spis"')>html.indexOf('class="sources"'),id+' dossier after sources');
+}
 assert.ok(read('robots.txt').includes('Allow: /'));
 assert.ok(!read('robots.txt').includes('Disallow: /\n'));
 assert.ok(!read('_headers').includes('noindex'));

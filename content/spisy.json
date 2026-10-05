@@ -8,7 +8,10 @@
     "order": 1,
     "status": "published",
     "url": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovpudiseckbcwindnxetpna",
-    "published": "2026-10-05"
+    "published": "2026-10-05",
+    "articleIds": [
+      "noemova-archa-durupinar-vrty-2026"
+    ]
   },
   {
     "id": "bagdadska-baterie",
@@ -19,6 +22,9 @@
     "order": 2,
     "status": "published",
     "url": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovpoeagqhjmgjqbnjvatabq",
-    "published": "2026-09-29"
+    "published": "2026-09-29",
+    "articleIds": [
+      "bagdadska-baterie-elektrina-2026"
+    ]
   }
 ]
