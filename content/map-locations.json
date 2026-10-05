@@ -1196,7 +1196,21 @@
         "precision": "locality",
         "note": "Bod označuje útvar Durupınar, nikoli přesné umístění letošních vrtů.",
         "source": "https://www.wikidata.org/wiki/Q1267546",
-        "articleSource": "https://www.globenewswire.com/news-release/2026/09/23/3367545/0/en/core-drilling-begins-at-durupinar-noah-s-ark-site-drill-bit-shatters-on-possible-layer-of-petrified-wood.html"
+        "articleSource": "https://www.noahsarkscans.com/the-ark-project"
+      }
+    ]
+  },
+  "ufo-vranov-1987": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Vranovská přehrada · udávaná oblast pozorování",
+        "lat": 48.9108,
+        "lon": 15.8097,
+        "precision": "region",
+        "note": "Orientační bod u přehrady. Přesná poloha vrtulníku ani objektu v okamžiku kontaktu není doložena.",
+        "source": "https://www.wikidata.org/wiki/Q23809171",
+        "articleSource": "https://www.kpufo.cz/wzn/u_3.htm"
       }
     ]
   }

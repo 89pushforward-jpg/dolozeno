@@ -22,6 +22,11 @@ for(const a of model.articles){
  if(a.status==='published'){
   assert.ok(xml.includes('https://dolozeno.cz'+a._url),a._slug+' sitemap');
   const html=read(a._url);assert.ok(html.includes(esc(a.title)));
+  const updated=jsonDate(a);
+  const ld=[...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m=>JSON.parse(m[1])).find(x=>['Article','NewsArticle'].includes(x['@type']));
+  assert.equal(ld.datePublished,a._date,a._slug+' original publication date');
+  assert.equal(ld.dateModified,updated,a._slug+' modification date');
+  assert.ok(xml.includes('<loc>https://dolozeno.cz'+a._url+'</loc><lastmod>'+updated+'</lastmod>'),a._slug+' lastmod');
   for(const source of a.sources||[])assert.ok(html.includes(esc(source.url)));
   if(a.verdikt&&a.verdikt.proPct!=null)assert.ok(html.includes('width:'+a.verdikt.proPct+'%'));
  }
@@ -35,3 +40,4 @@ assert.ok(!fs.existsSync(path.join(ROOT,'dist','vesmirna-laborator')));
 assert.equal(read('CNAME').trim(),'dolozeno.cz');
 assert.ok(read('sw.js').includes('unregister'));
 console.log(`Production verified: ${published.length} articles, ${urls.length} sitemap URLs, metadata, local links, admin and publication visibility.`);
+function jsonDate(a){const p=path.join(ROOT,'content/article-updates.json');const updates=JSON.parse(fs.readFileSync(p,'utf8'));return updates[a._slug]||a._date}

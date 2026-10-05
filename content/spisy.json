@@ -1,11 +1,22 @@
 [
   {
+    "id": "noemova-archa",
+    "title": "Noemova archa: Co leží pod zemí?",
+    "description": "Útvar v tureckých horách připomíná loď. Porovnáváme biblické rozměry, zveřejněné radarové skeny a geologické vysvětlení, abychom zjistili, co dostupné stopy skutečně dokládají.",
+    "image": "/assets/spis-noemova-archa.webp",
+    "format": "VIDEO SPIS · 39:25",
+    "order": 1,
+    "status": "published",
+    "url": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovpudiseckbcwindnxetpna",
+    "published": "2026-10-05"
+  },
+  {
     "id": "bagdadska-baterie",
     "title": "Bagdádská baterie – elektřina před 2000 lety?",
     "description": "Mohla Bagdádská baterie vyrábět elektřinu už před 2000 lety? Prozkoumáme její konstrukci, nové experimenty i otázky, které po zmizení originálu zůstávají otevřené.",
     "image": "/assets/spis-bagdadska-baterie.webp",
     "format": "VIDEO SPIS · 31:07",
-    "order": 1,
+    "order": 2,
     "status": "published",
     "url": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovpoeagqhjmgjqbnjvatabq",
     "published": "2026-09-29"
