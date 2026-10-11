@@ -23,7 +23,8 @@
         "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
         "articleSource": "https://www.nationalgeographic.com/history/article/is-there-a-secret-city-under-the-pyramids-"
       }
-    ]
+    ],
+    "mapEntryId": "spis-giza"
   },
   "giza-pilire-pod-pyramidou": {
     "view": "zeme",
@@ -36,7 +37,8 @@
         "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
         "articleSource": "https://codigooculto.com/wp-content/uploads/2025/03/project-khafre-2025.pdf"
       }
-    ]
+    ],
+    "mapEntryId": "spis-giza"
   },
   "menkaure-dve-dutiny-2026": {
     "view": "zeme",
@@ -49,7 +51,8 @@
         "note": "Místo popsané v článku; bod označuje lokalitu, nikoli přesné stanoviště pozorovatele.",
         "articleSource": "https://doi.org/10.1016/j.ndteint.2025.103331"
       }
-    ]
+    ],
+    "mapEntryId": "spis-giza"
   },
   "tutanchamon-skryte-komory": {
     "view": "zeme",
@@ -1255,5 +1258,18 @@
     "view": "zeme",
     "locations": [],
     "note": "Místo údajného střetu není ve veřejných podkladech uvedeno. Svědectví proto nemá uměle přiřazený bod."
+  },
+  "spis-giza": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Gíza · Velký spis o pyramidovém komplexu",
+        "lat": 29.9792,
+        "lon": 31.1342,
+        "precision": "region",
+        "note": "Bod označuje pyramidový komplex Gízy. Neoznačuje potvrzený nález podzemního města; spis rozlišuje doložené dutiny a sporné interpretace.",
+        "articleSource": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovphmtwtnxnervaiyizrq"
+      }
+    ]
   }
 }

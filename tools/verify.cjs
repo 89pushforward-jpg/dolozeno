@@ -8,7 +8,7 @@ const historicalFeed=model.original.slice(0,originalSnapshot.length).map((a,i)=>
 check('93 historical entries preserved; approved duplicate ID repaired',JSON.stringify(historicalFeed)===JSON.stringify(originalSnapshot)&&model.original[91].id==='mars-leopardi-skvrny-2');
 check('93 existing article URLs preserved',urls.length===93&&urls.every(u=>model.articles.some(a=>a._url===u)));
 check('all article URLs unique',new Set(model.articles.map(a=>a._url)).size===model.articles.length);
-for(const a of model.articles){const before=model.original[a._index];if(!before)continue;const html=fs.readFileSync(path.join(ROOT,'dist',a._url),'utf8');
+for(const a of model.articles){if(a.status==='retired'){check(a._slug+' removed from sitemap',!sitemap.includes('https://dolozeno.cz'+a._url));check(a._slug+' removed page',!fs.existsSync(path.join(ROOT,'dist',a._url)));continue;}const before=model.original[a._index];if(!before)continue;const html=fs.readFileSync(path.join(ROOT,'dist',a._url),'utf8');
 for(const field of ['id','title','published','sources','verdikt','image','fact','tag'])check(a._slug+' preserve '+field,JSON.stringify(a[field])===JSON.stringify(before[field]));
 const removed=new Set(model.removed.filter(r=>r.index===a._index&&r.field==='body').map(r=>r.paragraph));check(a._slug+' retained body exact',JSON.stringify(a.body)===JSON.stringify(before.body.filter((_,i)=>!removed.has(i))));
 check(a._slug+' sitemap exactly once',sitemap.split('<loc>https://dolozeno.cz'+a._url+'</loc>').length===2);

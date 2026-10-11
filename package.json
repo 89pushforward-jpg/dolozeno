@@ -9,7 +9,8 @@
     "test:browser": "node tools/browser-test.cjs",
     "test:publication": "node --test tools/publication.test.cjs",
     "test:maps": "node --test tools/maps.test.cjs tools/maps-runtime.test.cjs",
-    "test:production": "node tools/verify-production.cjs"
+    "test:production": "node tools/verify-production.cjs",
+    "test:editorial": "node --test tools/editorial.test.cjs"
   },
   "engines": {
     "node": ">=20"

@@ -39,6 +39,8 @@ function load(options={}){
   if(!/^[a-z0-9-]+$/.test(a.id))throw Error('Neplatné ID '+a.id);
   articles.push({...a,status:publicationStatus(a,today),_index:original.length+i,_slug:a.id,_url:'/clanky/'+a.id+'.html',_date:date(a.published),_category:a.category,_image:a.image||null,_type:labels[a.tag]});
  }
+ const retired=new Set(json('content/retired-articles.json'));
+ for(const a of articles)if(retired.has(a._slug))a.status='retired';
  return {original,articles,removed,ambiguous};
 }
 module.exports={ROOT,read,json,esc,slug,date,plain,categories,labels,load,publicationStatus};
