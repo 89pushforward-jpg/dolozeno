@@ -1213,5 +1213,47 @@
         "articleSource": "https://www.kpufo.cz/wzn/u_3.htm"
       }
     ]
+  },
+  "milicin-1991-svetelna-koule": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Miličín · udávaná oblast pozorování",
+        "lat": 49.57,
+        "lon": 14.66,
+        "precision": "region",
+        "note": "Orientační bod u Miličína. Přesná trasa svědkyň ani poloha světelného objektu není doložena.",
+        "articleSource": "https://ceskasibir.cz/milicin/dok/ufo.php"
+      }
+    ]
+  },
+  "suncatcher-ai-na-obezne-draze-chlazeni": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "place": "Země · experiment na oběžné dráze",
+        "body": "Země",
+        "precision": "body",
+        "note": "Schematický bod u Země; nejde o aktuální polohu experimentální družice.",
+        "articleSource": "https://blog.google/innovation-and-ai/models-and-research/google-research/project-suncatcher-prototype/"
+      }
+    ]
+  },
+  "venuse-ztraceny-mesic": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "place": "Venuše · hypotéza ztraceného měsíce",
+        "body": "Venuše",
+        "precision": "body",
+        "note": "Bod označuje planetu, které se model týká. Historická existence jejího měsíce není prokázána.",
+        "articleSource": "https://arxiv.org/html/2608.25036v2"
+      }
+    ]
+  },
+  "grusch-rogan-strety-s-mimozemstany-svedectvi": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Místo údajného střetu není ve veřejných podkladech uvedeno. Svědectví proto nemá uměle přiřazený bod."
   }
 }
