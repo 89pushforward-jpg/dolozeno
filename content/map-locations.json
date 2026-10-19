@@ -1271,5 +1271,92 @@
         "articleSource": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovphmtwtnxnervaiyizrq"
       }
     ]
+  },
+  "mesicni-jeskyne-more-klidu-2024": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · jáma v Moři klidu",
+        "precision": "body",
+        "note": "Schematický bod Měsíce; neoznačuje detailní polohu vstupu ani úplný rozsah podzemní chodby.",
+        "articleSource": "https://www.nature.com/articles/s41550-024-02302-y"
+      }
+    ]
+  },
+  "apophis-prulet-2029-zemska-gravitace": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "Apophis · asteroid u Země",
+        "precision": "body",
+        "note": "Schematický bod malých těles. Nejde o aktuální polohu asteroidu ani předpověď srážky se Zemí.",
+        "articleSource": "https://science.nasa.gov/solar-system/asteroids/apophis/"
+      }
+    ]
+  },
+  "antikythera-stroj-na-zatmeni": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Antikythéra · oblast nálezu mechanismu",
+        "lat": 35.88,
+        "lon": 23.3,
+        "precision": "region",
+        "note": "Orientační bod u ostrova Antikythéra, nikoli přesná poloha jednotlivých fragmentů vraku.",
+        "articleSource": "https://www.ucl.ac.uk/news/2021/mar/experts-recreate-mechanical-cosmos-worlds-first-computer"
+      }
+    ]
+  },
+  "2020-so-asteroid-raketovy-stupen-centaur": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "2020 SO · raketový stupeň na dráze kolem Slunce",
+        "precision": "body",
+        "note": "Schematický bod malých těles; nejde o aktuální efemeridu ani trvalý měsíc Země.",
+        "articleSource": "https://www.jpl.nasa.gov/news/earth-may-have-captured-a-1960s-era-rocket-booster/"
+      }
+    ]
+  },
+  "hessdalen-svetla-radar-mereni": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Hessdalen · norské údolí",
+        "lat": 62.8,
+        "lon": 11.2,
+        "precision": "region",
+        "note": "Bod označuje širší oblast výzkumu, nikoli přesné místo každého světla nebo radarové registrace.",
+        "articleSource": "https://old.hessdalen.org/reports/hpreport84.shtml"
+      }
+    ]
+  },
+  "reiner-gamma-mesicni-viry-magneticke-pole": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Měsíc",
+        "place": "Měsíc · světlý útvar Reiner Gamma",
+        "precision": "body",
+        "note": "Schematický bod Měsíce. Reiner Gamma leží přibližně na 7,5° severní šířky a 58,6° západní délky měsíčního povrchu; nejde o pozemské souřadnice.",
+        "articleSource": "https://science.nasa.gov/image-detail/20100521/"
+      }
+    ]
+  },
+  "spis-roswell": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Roswell · oblast případu z roku 1947",
+        "lat": 33.39,
+        "lon": -104.52,
+        "precision": "region",
+        "note": "Orientační bod u Roswellu. Není to potvrzené přesné místo nálezu trosek a nezobrazuje prokázanou havárii mimozemského plavidla.",
+        "articleSource": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovptwyzwywijshotuimvq"
+      }
+    ]
   }
 }

@@ -628,5 +628,41 @@
     "large": "/assets/article-images/grusch-rogan-strety-s-mimozemstany-svedectvi-hero-v1-1600.webp",
     "width": 1600,
     "height": 900
+  },
+  "img/mesicni-jeskyne-more-klidu-2024-hero-v1.jpg": {
+    "small": "/assets/article-images/mesicni-jeskyne-more-klidu-2024-hero-v1-720.webp",
+    "large": "/assets/article-images/mesicni-jeskyne-more-klidu-2024-hero-v1-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/apophis-prulet-2029-zemska-gravitace-hero-v1.jpg": {
+    "small": "/assets/article-images/apophis-prulet-2029-zemska-gravitace-hero-v1-720.webp",
+    "large": "/assets/article-images/apophis-prulet-2029-zemska-gravitace-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/antikythera-stroj-na-zatmeni-hero-v1.jpg": {
+    "small": "/assets/article-images/antikythera-stroj-na-zatmeni-hero-v1-720.webp",
+    "large": "/assets/article-images/antikythera-stroj-na-zatmeni-hero-v1-1600.webp",
+    "width": 1599,
+    "height": 900
+  },
+  "img/2020-so-asteroid-raketovy-stupen-centaur-hero-v1.jpg": {
+    "small": "/assets/article-images/2020-so-asteroid-raketovy-stupen-centaur-hero-v1-720.webp",
+    "large": "/assets/article-images/2020-so-asteroid-raketovy-stupen-centaur-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/hessdalen-svetla-radar-mereni-hero-v1.jpg": {
+    "small": "/assets/article-images/hessdalen-svetla-radar-mereni-hero-v1-720.webp",
+    "large": "/assets/article-images/hessdalen-svetla-radar-mereni-hero-v1-1600.webp",
+    "width": 1599,
+    "height": 900
+  },
+  "img/reiner-gamma-mesicni-viry-magneticke-pole-hero-v1.jpg": {
+    "small": "/assets/article-images/reiner-gamma-mesicni-viry-magneticke-pole-hero-v1-720.webp",
+    "large": "/assets/article-images/reiner-gamma-mesicni-viry-magneticke-pole-hero-v1-1600.webp",
+    "width": 1599,
+    "height": 900
   }
 }
