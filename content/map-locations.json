@@ -1358,5 +1358,66 @@
         "articleSource": "https://herohero.co/zestfulbjtkaipdhbovp/post/bjtkaipdhbovptwyzwywijshotuimvq"
       }
     ]
+  },
+  "zelena-hvezda-wd-j1330-6435": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "WD J1330+6435 · bílý trpaslík",
+        "ra": 202.504875,
+        "dec": 64.58991388888889,
+        "precision": "object",
+        "note": "Směr ke hvězdě podle úplného souřadnicového označení WD J133001.17+643523.69 v tabulce C5 studie; nejde o rozměr hvězdy ani potvrzenou polohu planetárních úlomků.",
+        "source": "https://academic.oup.com/rasti/article/doi/10.1093/rasti/rzag069/8914458?login=false",
+        "articleSource": "https://academic.oup.com/rasti/article/doi/10.1093/rasti/rzag069/8914458?login=false"
+      }
+    ]
+  },
+  "j0705-hvezda-za-oponou": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "J0705+0612 · ASASSN-24fw",
+        "ra": 106.32904166666665,
+        "dec": 6.205388888888889,
+        "precision": "object",
+        "note": "Směr ke hvězdě podle souřadnic Gaia J2016 uvedených v úvodu studie. Nezobrazuje skutečnou velikost ani prostorovou polohu zakrývajícího disku.",
+        "source": "https://arxiv.org/html/2507.05367v3",
+        "articleSource": "https://arxiv.org/html/2507.05367v3"
+      }
+    ]
+  },
+  "twa7-planeta-ve-stopach-prachu": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "TWA 7 · hvězda s planetárním systémem",
+        "ra": 160.625425,
+        "dec": -33.671175,
+        "precision": "object",
+        "note": "Směr k hostitelské hvězdě podle metadat NASA snímku TWA 7. Planeta a disk nejsou v měřítku této mapy prostorově rozlišené.",
+        "source": "https://science.nasa.gov/asset/webb/twa-7-miri-vlt-image/",
+        "articleSource": "https://www.nature.com/articles/s41586-025-09150-4"
+      }
+    ]
+  },
+  "shag-harbour-svetla-v-mori": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Shag Harbour · Nové Skotsko",
+        "lat": 43.49405,
+        "lon": -65.718023,
+        "precision": "region",
+        "note": "Orientační bod obce z kanadské databáze geografických názvů. Neoznačuje doložené přesné místo dopadu ani nálezu objektu.",
+        "source": "https://geonames.nrcan.gc.ca/search-place-names/unique?id=CBIDE",
+        "articleSource": "https://files.ncas.org/condon/text/case34.htm"
+      }
+    ]
+  },
+  "vela-dvoji-zablesk-1979": {
+    "view": "zeme",
+    "locations": [],
+    "note": "Původ dvojzáblesku Vela není spolehlivě lokalizovaný. Podklady pracují s rozsáhlou oblastí jižního Atlantiku a Indického oceánu; přesný bod by vytvářel falešnou jistotu."
   }
 }

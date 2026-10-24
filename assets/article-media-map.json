@@ -664,5 +664,35 @@
     "large": "/assets/article-images/reiner-gamma-mesicni-viry-magneticke-pole-hero-v1-1600.webp",
     "width": 1599,
     "height": 900
+  },
+  "img/zelena-hvezda-wd-j1330-6435-hero-v1.jpg": {
+    "small": "/assets/article-images/zelena-hvezda-wd-j1330-6435-hero-v1-720.webp",
+    "large": "/assets/article-images/zelena-hvezda-wd-j1330-6435-hero-v1-1600.webp",
+    "width": 1599,
+    "height": 900
+  },
+  "img/j0705-hvezda-za-oponou-hero-v1.jpg": {
+    "small": "/assets/article-images/j0705-hvezda-za-oponou-hero-v1-720.webp",
+    "large": "/assets/article-images/j0705-hvezda-za-oponou-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/twa7-planeta-ve-stopach-prachu-hero-v1.jpg": {
+    "small": "/assets/article-images/twa7-planeta-ve-stopach-prachu-hero-v1-720.webp",
+    "large": "/assets/article-images/twa7-planeta-ve-stopach-prachu-hero-v1-1600.webp",
+    "width": 1672,
+    "height": 941
+  },
+  "img/shag-harbour-svetla-v-mori-hero-v1.jpg": {
+    "small": "/assets/article-images/shag-harbour-svetla-v-mori-hero-v1-720.webp",
+    "large": "/assets/article-images/shag-harbour-svetla-v-mori-hero-v1-1600.webp",
+    "width": 1920,
+    "height": 1080
+  },
+  "img/vela-dvoji-zablesk-1979-hero-v1.jpg": {
+    "small": "/assets/article-images/vela-dvoji-zablesk-1979-hero-v1-720.webp",
+    "large": "/assets/article-images/vela-dvoji-zablesk-1979-hero-v1-1600.webp",
+    "width": 1599,
+    "height": 900
   }
 }
