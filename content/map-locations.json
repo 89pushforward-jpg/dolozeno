@@ -1419,5 +1419,87 @@
     "view": "zeme",
     "locations": [],
     "note": "Původ dvojzáblesku Vela není spolehlivě lokalizovaný. Podklady pracují s rozsáhlou oblastí jižního Atlantiku a Indického oceánu; přesný bod by vytvářel falešnou jistotu."
+  },
+  "almahata-sitta-diamanty-zanikla-planeta": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Almahata Sitta · oblast nálezů v Núbijské poušti",
+        "lat": 20.717333333333332,
+        "lon": 32.50966666666667,
+        "precision": "region",
+        "note": "Orientační poloha meteoritu z Meteoritical Bulletin. Označuje oblast nálezů; nevymezuje všechny fragmenty a není polohou hypotetické zaniklé planety.",
+        "source": "https://www.lpi.usra.edu/meteor/metbull.php?code=48915",
+        "articleSource": "https://www.nature.com/articles/s41467-018-03808-6"
+      }
+    ]
+  },
+  "amaterasu-castice-bez-zpatecni-adresy": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Amaterasu · naměřený směr příletu",
+        "ra": 255.9,
+        "dec": 16.1,
+        "precision": "direction",
+        "note": "Zrekonstruovaný směr příletu z tabulky 1 studie: RA 255,9 ± 0,6°, DEC 16,1 ± 0,5°. Bod neoznačuje potvrzený zdroj; magnetická pole mohou směr letu nabité částice změnit.",
+        "source": "https://arxiv.org/html/2311.14231v1",
+        "articleSource": "https://arxiv.org/abs/2311.14231"
+      }
+    ]
+  },
+  "blc1-proxima-centauri-pozemsti-dvojnici": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "Proxima Centauri · směr pozorování BLC1",
+        "ra": 217.42891666666665,
+        "dec": -62.67948888888888,
+        "precision": "direction",
+        "note": "Poloha pozorované hvězdy podle metadat NASA/Hubble. BLC1 byl podle zveřejněné analýzy pozemským rušením; tento bod neoznačuje mimozemský vysílač.",
+        "source": "https://science.nasa.gov/asset/hubble/proxima-centauri/",
+        "articleSource": "https://www.nature.com/articles/s41550-021-01479-w"
+      }
+    ]
+  },
+  "nabta-playa-kameny-a-obloha": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Nabta Playa · jižní Egypt",
+        "lat": 22.5,
+        "lon": 30.7,
+        "precision": "region",
+        "note": "Orientační bod širší archeologické oblasti. Nejde o přesný plán jednotlivých kamenů ani potvrzení konkrétní hvězdné orientace.",
+        "source": "https://www.nature.com/articles/33131",
+        "articleSource": "https://www.nature.com/articles/33131"
+      }
+    ]
+  },
+  "kessleruv-efekt-srazky-vesmirny-odpad": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Země",
+        "place": "Země · oblasti oběžných drah",
+        "precision": "body",
+        "note": "Schematický bod Země pro téma orbitálního odpadu. Nezobrazuje polohu aktuální srážky, konkrétní družice ani hustotu trosek v jednotlivých výškách.",
+        "articleSource": "https://www.esa.int/Space_Safety/Space_Debris/ESA_Space_Environment_Report_2026"
+      }
+    ]
+  },
+  "tunguska-vybuch-bez-krateru": {
+    "view": "zeme",
+    "locations": [
+      {
+        "place": "Tunguska · oblast polomu z roku 1908",
+        "lat": 60.9,
+        "lon": 101.9,
+        "precision": "region",
+        "note": "Orientační bod oblasti vzdušného výbuchu; neoznačuje impaktní kráter, přesnou dráhu ani nalezený původní objekt.",
+        "source": "https://repository.hou.usra.edu/server/api/core/bitstreams/d8a5960d-f339-493e-9dba-dc4647a99442/content",
+        "articleSource": "https://www.nasa.gov/history/115-years-ago-the-tunguska-asteroid-impact-event/"
+      }
+    ]
   }
 }
