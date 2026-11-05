@@ -730,5 +730,35 @@
     "large": "/assets/article-images/tunguska-vybuch-bez-krateru-hero-v1-1600.webp",
     "width": 1672,
     "height": 941
+  },
+  "img/2024-pt5-mesicni-ulomek-hero-v1.jpg": {
+    "small": "/assets/article-images/2024-pt5-mesicni-ulomek-hero-v1-720.webp",
+    "large": "/assets/article-images/2024-pt5-mesicni-ulomek-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/sr1-freedom-jaderna-sonda-mars-hero-v1.jpg": {
+    "small": "/assets/article-images/sr1-freedom-jaderna-sonda-mars-hero-v1-720.webp",
+    "large": "/assets/article-images/sr1-freedom-jaderna-sonda-mars-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/dart-hera-zmena-drahy-asteroidu-hero-v1.jpg": {
+    "small": "/assets/article-images/dart-hera-zmena-drahy-asteroidu-hero-v1-720.webp",
+    "large": "/assets/article-images/dart-hera-zmena-drahy-asteroidu-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/glow-chybejici-kyslik-galaxie-hero-v1.jpg": {
+    "small": "/assets/article-images/glow-chybejici-kyslik-galaxie-hero-v1-720.webp",
+    "large": "/assets/article-images/glow-chybejici-kyslik-galaxie-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
+  },
+  "img/arsia-mons-ledovy-mrak-hero-v1.jpg": {
+    "small": "/assets/article-images/arsia-mons-ledovy-mrak-hero-v1-720.webp",
+    "large": "/assets/article-images/arsia-mons-ledovy-mrak-hero-v1-1600.webp",
+    "width": 1600,
+    "height": 900
   }
 }

@@ -6,7 +6,7 @@ function catalog(articles,mappings){
  for(const s of json('content/spisy.json').filter(s=>config.spisIds.includes(s.id)&&s.status==='published'&&s.published<=today)){
   const id='spis-'+s.id;
   if(!/^https:\/\/herohero\.co\//.test(s.url)||!mappings[id])throw Error('Invalid map dossier '+s.id);
-  items.push({kind:'spis',_slug:id,_url:s.url,_date:s.published,_image:s.image,_category:'civilizace',title:s.title,teaser:s.description,published:s.published,body:[]});
+  items.push({kind:'spis',_slug:id,_url:s.url,_date:s.published,_image:s.image,_category:s.category||'civilizace',title:s.title,teaser:s.description,published:s.published,body:[]});
  }
  return items.sort((a,b)=>b._date.localeCompare(a._date));
 }

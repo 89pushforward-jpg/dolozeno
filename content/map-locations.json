@@ -1501,5 +1501,81 @@
         "articleSource": "https://www.nasa.gov/history/115-years-ago-the-tunguska-asteroid-impact-event/"
       }
     ]
+  },
+  "2024-pt5-mesicni-ulomek": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "2024 PT5 · blízkozemní asteroid",
+        "precision": "body",
+        "note": "Schematická značka asteroidu na dráze kolem Slunce. Měsíční původ je hypotéza; značka neukazuje zdrojový kráter ani aktuální polohu.",
+        "articleSource": "https://arxiv.org/abs/2412.10264"
+      }
+    ]
+  },
+  "sr1-freedom-jaderna-sonda-mars": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Mars",
+        "place": "Mars · plánovaná mise SR-1 Freedom / SkyFall",
+        "precision": "body",
+        "note": "Cíl plánované mise. Značka neurčuje místo přistání vrtulníků ani dnešní polohu sondy.",
+        "articleSource": "https://www.nasa.gov/mission/space-reactor-1-freedom/"
+      }
+    ]
+  },
+  "dart-hera-zmena-drahy-asteroidu": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Malá tělesa",
+        "place": "Didymos a Dimorphos · mise DART a Hera",
+        "precision": "body",
+        "note": "Schematická značka dvojice asteroidů; nejde o aktuální polohu ani předpověď jejich pohybu.",
+        "articleSource": "https://www.nasa.gov/missions/dart/nasas-dart-mission-changed-orbit-of-asteroid-didymos-around-sun/"
+      }
+    ]
+  },
+  "glow-chybejici-kyslik-galaxie": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "NGC 4449 · jedna z galaxií projektu GLOW",
+        "ra": 187.046325,
+        "dec": 44.093558333333334,
+        "precision": "object",
+        "note": "Bod označuje jednu z 37 zkoumaných galaxií. Neurčuje, kde se nachází chybějící kyslík.",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=NGC+4449",
+        "articleSource": "https://science.nasa.gov/missions/hubble/nasas-hubble-uncovers-case-of-missing-oxygen-in-nearby-dwarf-galaxies/"
+      }
+    ]
+  },
+  "arsia-mons-ledovy-mrak": {
+    "view": "slunecni-soustava",
+    "locations": [
+      {
+        "body": "Mars",
+        "place": "Mars · Arsia Mons a jeho ledový mrak",
+        "precision": "body",
+        "note": "Schematická značka Marsu pro pozorování v okolí sopky Arsia Mons; nezobrazuje momentální oblačnost.",
+        "articleSource": "https://www.esa.int/Science_Exploration/Space_Science/Mars_Express/Mars_s_oddest_cloud_may_be_even_odder_than_we_thought?channel=MSN"
+      }
+    ]
+  },
+  "spis-cerne-diry": {
+    "view": "hluboky-vesmir",
+    "locations": [
+      {
+        "place": "M87* · černá díra v centru galaxie M87",
+        "ra": 187.70593076725,
+        "dec": 12.391123246083334,
+        "precision": "object",
+        "note": "Skutečný astronomický objekt z rozboru ve spisu. Filmový příběh posádky je fikce.",
+        "source": "https://simbad.cds.unistra.fr/simbad/sim-id?Ident=M87",
+        "articleSource": "https://eventhorizontelescope.org/blog/wobbling-shadow-m87-black-hole"
+      }
+    ]
   }
 }
